@@ -1,26 +1,16 @@
 ---
-title: A title
-subtitle: A subtitle
+title: Atelier du réseau sondage
+subtitle: Estimation de la variance par approche analytique - application avec Gustave
 format: clean-revealjs
 html-math-method:
   method: mathjax
   url: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
 author:
-  - name: Your Name
-    orcid: 0000-0000-0000-0000
-    email: alias@email.com
-    affiliations: Your Institution
+  - name: Khaled Larbi
+    email: prenom point nom arobase insee point fr
+    affiliations: Insee
 date: last-modified
 ---
 
-## Example slide
+## Définitions usuelles et notations. 
 
-### This is a subtitle
-
-Here we have some text that may run over several lines of the slide frame,
-depending on how long it is.
-
-- first item 
-    - A sub item
-
-Next, we'll brief review some theme-specific components.
