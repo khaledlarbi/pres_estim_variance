@@ -1,6 +1,6 @@
 ---
 title: Atelier du réseau sondage
-subtitle: Estimation de la variance par approche analytique - application avec Gustave
+subtitle: Estimation de la variance par approche analytique - application avec **gustave**
 format: clean-revealjs
 html-math-method:
   method: mathjax
@@ -13,4 +13,18 @@ date: last-modified
 ---
 
 ## Définitions usuelles et notations. 
+
+Dans cette présentation, on notera :
+
+- $\mathcal{U}$, une population finie de taille $N$,
+- $p$, un plan de sondage défini sur $\mathcal{U}$,
+- $S$ un échantillon aléatoire tiré selon le plan $p$.
+
+Pour l'inférence, il est commode d'introduire : 
+
+- pour tout individu $k \in \mathcal{U}, ~ \pi_k = \mathbb{P}(k \in S)$ $\to$ probabilité d'inclusion d'ordre 1.
+  - Il s'agit de la probabilité que l'individu $k$ soit dans l'échantillon $S$.
+- pour tout couple d'individus $(k,l) \in \mathcal{U}^2, ~ \pi_{kl} = \mathbb{P}(k \in S \cap l \in S)$ $\to$ probabilité d'inclusion d'ordre 2.
+
+## 
 
