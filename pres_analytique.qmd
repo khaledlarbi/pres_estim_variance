@@ -1,0 +1,26 @@
+---
+title: A title
+subtitle: A subtitle
+format: clean-revealjs
+html-math-method:
+  method: mathjax
+  url: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+author:
+  - name: Your Name
+    orcid: 0000-0000-0000-0000
+    email: alias@email.com
+    affiliations: Your Institution
+date: last-modified
+---
+
+## Example slide
+
+### This is a subtitle
+
+Here we have some text that may run over several lines of the slide frame,
+depending on how long it is.
+
+- first item 
+    - A sub item
+
+Next, we'll brief review some theme-specific components.
