@@ -18,6 +18,13 @@ author:
     email: prenom point nom arobase insee point fr
     affiliations: Insee
 date: last-modified
+filters:
+  - webr
+webr:
+  packages: ['gustave']
+date-format: "DD MMM YYYY"
+lang: fr
+bibliography: references.bib
 ---
 
 # Pourquoi estimer la variance d'un estimateur ? 
@@ -46,6 +53,8 @@ Pour l'inférence, il est commode d'introduire :
 
 ## Estimateur d'Horvitz-Thompson
 
+:::: {.columns}
+
 - Comment estimer le total $t_y = \sum_{k \in \mathcal{U}} y_k$ en utilisant l'information disponible uniquement sur l'échantillon $S$ ?
 
 ::: {#def-estHT}
@@ -54,12 +63,9 @@ L'estimateur $\hat{t}_{y,\text{HT}} = \sum_{k \in S} \frac{y_k}{\pi_k}$ est appe
 :::
 
 - Est-ce un *bon* estimateur ? 
-  - Critère de biais et de variance.  
-- 
+- Critère de biais et de variance.
 
 
-
-:::: {.columns}
 
 ::: {.column width="50%"}
 ::: {.callout-caution icon="false"}
@@ -85,7 +91,7 @@ La variance permet de quantifier la variabilité d'un estimateur.
 
 
 ## Arbitrage biais/variance
-
+![](illustrations/biais_variance.svg){fig-align="center"}
 
 ## Estimateur d'Horvitz-Thompson : biais et variance
 
@@ -95,8 +101,8 @@ La variance permet de quantifier la variabilité d'un estimateur.
 
 - Quid de la variance de $\hat{t}_{y,\text{HT}}$ ?
   - $$\mathbb{V}(\hat t_{y,\text{HT}}) = \sum_{k \in \color{red}{\mathcal{U}}} \sum_{l \in \color{red}{\mathcal{U}}} \frac{y_k}{\pi_k} \frac{y_l}{\pi_l} \Delta_{kl}$$ où $\Delta_{kl} = \pi_{kl} - \pi_k \pi_l$
-  - Problème : la variance est fonction des valeurs de $\{y_k\}$ sur $\color{red}{\mathcal{U}}$ mais cette information n'est disponible que sur $\mathcal{S}$
-  - Solution : estimer la variance.
+  - <u>Problème</u> : la variance est fonction des valeurs de $\{y_k\}$ sur $\color{red}{\mathcal{U}}$ mais cette information n'est disponible que sur $\mathcal{S}$
+  - <u>Solution</u> : estimer la variance.
 
 
 :::: {.columns}
@@ -106,7 +112,7 @@ La variance permet de quantifier la variabilité d'un estimateur.
 ## Estimateur de variance d'Horvitz-Thompson
  $$\hat{\mathbb{V}}_\text{HT}(\hat t_{y,\text{HT}}) = \sum_{k \in \mathcal{U}} \sum_{k \in \mathcal{U}} \frac{y_k}{\pi_k} \frac{y_l}{\pi_l} \Delta_{kl} \color{red}{\frac{I_{kl}}{\pi_{kl}}} \color{black} = \sum_{k \in S} \sum_{l \in S} \frac{y_k}{\pi_k} \frac{y_l}{\pi_l} {\frac{\Delta_{kl}}{\pi_{kl}}} $$ 
 
- Propriétés : 
+ <u>Propriétés</u> : 
 
  - Si pour tout $(k,l) \in \mathcal{U}^2$, $\pi_{kl} > 0$, $\hat{\mathbb{V}}_\text{HT}(\hat t_{y,\text{HT}})$ est sans biais pour $\mathbb{V}_\text{HT}(\hat t_{y,\text{HT}})$
 :::
@@ -117,7 +123,7 @@ La variance permet de quantifier la variabilité d'un estimateur.
 ## Estimateur de Sen-Yates-Grundy
 $$\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}}) =  - \frac{1}{2} \sum_{k \in \mathcal{S}} \sum_{l \in \mathcal{S} | k \neq l} \left(\frac{y_k}{\pi_k} - \frac{y_l}{\pi_l} \right)^2 \frac{\Delta_{kl}}{\pi_{kl}}$$
 
- Propriétés : 
+ <u>Propriétés</u> : 
  
  - Si pour tout $(k,l) \in \mathcal{U}^2$, $\pi_{kl} > 0$ et le plan $p$ est de taille fixe alors $\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}})$ est sans biais pour $\mathbb{V}_\text{HT}(\hat t_{y,\text{HT}})$.
 - Si pour tout $(k,l) \in \mathcal{U}^2$, $\pi_{kl} - \pi_k \pi_l \leq 0$ alors $\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}}) \geq 0$.
@@ -126,22 +132,103 @@ $$\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}}) =  - \frac{1}{2} \sum_{k \in
 ::::
 
 
-# Application à quelques plans de sondage.
+## Application à quelques plans de sondage.
 
 ::: {.callout-caution icon="false"}
 ## Plan aléatoire simple sans remise 
+$p_{\text{SASSR}(n;N)}$ est un plan aléatoire simple sans remise de taille $n$ parmi $N$ si :
 
+- tous les échantillons de taille $n$ ont même probabilité d'être tiré,
+- si tous les échantillons de taille différente de $n$ ont une probabilité nulle d'être tiré.
+
+Si $S \sim $p_{\text{SASSR}(n;N)}$ alors pour tout $(k,l) \in \mathcal{U}^2, ~~ \pi_k = \frac{n}{N}$ et si $k \neq l~~$, $\pi_{kl} = \frac{n(n-1)}{N(N-1)}$
+
+<u>Application</u> : $\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}}) = \hat{\mathbb{V}}_\text{HT}(\hat t_{y,\text{HT}}) = \frac{N^2}{n} (1 - \frac{n}{N}) s^2_y$ où $s^2_y$ est la dispersion de la variable $\{y_k\}$ sur l'échantillon $S$.
 :::
 
+
+
+
+```{webr-r}
+n <- 100
+N <- 10000
+y <- 1:n
+pik <- rep(n/N, n)
+gustave::var_srs(y = y, pik =  pik, strata = NULL, w = NULL, precalc = NULL)
+#Le plan est de taille fixe, il est donc possible d'utiliser l'estimateur de Sen-Yates-Grundy
+
+#Définition de la matrice des probabilités doubles
+pikl <- matrix(n*(n-1)/(N*(N-1)), ncol = n, nrow = n)
+diag(pikl) <- pik
+gustave::varSYG(y = y, pikl = pikl)
+```
+
+##
 
 ::: {.callout-caution icon="false"}
 ## Plan poissonien
+$p_{\text{Poisson}(\textbf{p})}$ où $\textbf{p} = (p_1, ..., p_N) \in [0;1]^N$ est un plan de Poisson si :
 
+- tous les individus sont tirés indépendamment les uns des autres, 
+- la probabilité d'un individu $k$ soit dans l'échantillon est $p_k$.
+
+Si $S \sim $p_{\text{Poisson}(\textbf{p})}$ alors pour tout $(k,l) \in \mathcal{U}^2, ~~ \pi_k = \textbf{p}_k$ et si $k \neq l~~$, $\pi_{kl} = \textbf{p}_k \textbf{p}_l$
+
+<u>Application</u> : $\displaystyle \hat{\mathbb{V}}_\text{HT}(\hat t_{y,\text{HT}}) = \sum_{k \in S} y_k^2 \frac{1-\textbf{p}_k}{\textbf{p}_k}$
 :::
 
-::: {.callout-caution icon="false"}
-## Plan de l'enquête Histoire de Vie et Patrimoine 
+```{webr-r}
+n <- 100
+y <- 1:n
+pik <- rep(0.5, n)
+gustave::var_srs(y = y, pik =  pik, w = NULL)
+```
 
-- Calcul des probabilités d'inclusion ? 
+## Approximations classiques
 
+- Parfois, il est délicat de calculer les probabilités d'inclusion d'ordre 2.
+
+- Pour certains plans, des approximations sont utilisées.
+
+- Pour les plans équilibrés à forte entropie : formule de Deville-Tiilé (@varDT).
+$$\hat{\mathbb{V}}_\text{DT}(\hat{t}_{y,\text{HT}}) = \sum_{k \in S} (1 - \pi_k) \left(\frac{y_k}{\pi_k} - \frac{x_k}{\pi_k} \hat{\beta} \right)^2$$ où $\hat{\beta}$ est le coefficient estimé de la régression de $\{\frac{y_k}{\pi_k}\}$ par $\{\frac{x_k}{\pi_k}\}$ pondérée par $1-\pi_k$. 
+  - Remarque : le plan aléatoire simple sans remise $p_{\text{SASSR}(n;N)}$ est un plan équilibré sur la variable $\{pi_k\}$ $\to$ il est donc possible d'utiliser l'approximation de Deville-Tillé et $\hat{\mathbb{V}}_\text{DT}(\hat{t}_{y,\text{HT}}) = \hat{\mathbb{V}}_\text{SYG}(\hat{t}_{y,\text{HT}}) = \hat{\mathbb{V}}_\text{HT}(\hat{t}_{y,\text{HT}})$
+
+
+
+- Pour le tirage systématique : approximation par la variance sous un plan aléatoire simple. 
+
+
+## 
+Plan de l'enquête Histoire de Vie et Patrimoine
+
+::: fragment
+-   <ins>Idée 1</ins> : utiliser les résultats présentés. :x:
 :::
+
+
+::: fragment
+-   <ins>Problème 1</ins>  : le calcul des probabilités d'inclusion d'ordre deux est (très)
+        délicat.
+:::
+
+::: fragment
+-   <ins>Idée 2</ins> : estimer les probabilités d'inclusion d'ordre deux par
+        simulation.
+:::
+
+::: fragment
+-   <ins>Problème 2</ins> : l'estimation des probabilités d'inclusion d'ordre deux est très
+        gourmande en ressource informatique et peut conduire à des
+        estimations instables.
+:::
+
+::: fragment
+-   <ins>Idée 3</ins> : décomposer le calcul de l'estimateur de la variance degré par degré.
+:::
+
+::: fragment
+-   <ins>Idée 4</ins> : utiliser des méthodes de réplication.
+:::
+
+## 
