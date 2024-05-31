@@ -11,7 +11,7 @@
   <meta name="generator" content="quarto-1.4.553">
 
   <meta name="author" content="Khaled Larbi">
-  <meta name="dcterms.date" content="2024-05-30">
+  <meta name="dcterms.date" content="2024-05-31">
   <title>Atelier du réseau sondage</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -328,7 +328,7 @@
 
 <section id="title-slide" class="quarto-title-block center">
   <h1 class="title">Atelier du réseau sondage</h1>
-  <p class="subtitle">Estimation de la variance par approche analytique - application avec Gustave</p>
+  <p class="subtitle">Estimation de la variance par approche analytique - application avec <strong>gustave</strong></p>
 
 <div class="quarto-title-authors">
 <div class="quarto-title-author">
@@ -344,10 +344,171 @@ Khaled Larbi
     </div>
 </div>
 
-  <p class="date">May 30, 2024</p>
+  <p class="date">May 31, 2024</p>
+</section>
+<section id="pourquoi-estimer-la-variance-dun-estimateur" class="title-slide slide level1 center">
+<h1>Pourquoi estimer la variance d’un estimateur ?</h1>
+
+</section>
+
+<section>
+<section id="estimation-de-variance-simple" class="title-slide slide level1 center">
+<h1>Estimation de variance simple</h1>
+
 </section>
 <section id="définitions-usuelles-et-notations." class="slide level2">
 <h2>Définitions usuelles et notations.</h2>
+<p>Dans cette présentation, on notera :</p>
+<ul>
+<li><p><span class="math inline">\(\mathcal{U}\)</span>, une population finie de taille <span class="math inline">\(N\)</span>,</p></li>
+<li><p><span class="math inline">\(p\)</span>, un plan de sondage défini sur <span class="math inline">\(\mathcal{U}\)</span>,</p></li>
+<li><p><span class="math inline">\(S\)</span> un échantillon aléatoire tiré selon le plan <span class="math inline">\(p\)</span>.</p></li>
+<li><p><span class="math inline">\(\{y_k\}\)</span> : une variable d’intérêt,</p></li>
+<li><p><span class="math inline">\(\{x_k\}\)</span> : une variable auxiliaire.</p></li>
+</ul>
+<p>Pour l’inférence, il est commode d’introduire :</p>
+<ul>
+<li>pour tout individu <span class="math inline">\(k \in \mathcal{U}, ~ \pi_k = \mathbb{P}(k \in S)\)</span> <span class="math inline">\(\to\)</span> probabilité d’inclusion d’ordre 1.
+<ul>
+<li>il s’agit de la probabilité que l’individu <span class="math inline">\(k\)</span> soit dans l’échantillon <span class="math inline">\(S\)</span>.</li>
+</ul></li>
+<li>pour tout couple d’individus <span class="math inline">\((k,l) \in \mathcal{U}^2, ~ \pi_{kl} = \mathbb{P}(k \in S \cap l \in S)\)</span> <span class="math inline">\(\to\)</span> probabilité d’inclusion d’ordre 2.
+<ul>
+<li>il s’agit de la probabilité que les individus <span class="math inline">\(k\)</span> et <span class="math inline">\(l\)</span> soient conjointement dans l’échantillon <span class="math inline">\(S\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="estimateur-dhorvitz-thompson" class="slide level2">
+<h2>Estimateur d’Horvitz-Thompson</h2>
+<ul>
+<li>Comment estimer le total <span class="math inline">\(t_y = \sum_{k \in \mathcal{U}} y_k\)</span> en utilisant l’information disponible uniquement sur l’échantillon <span class="math inline">\(S\)</span> ?</li>
+</ul>
+<div id="def-estHT" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 1 (Estimateur d’Horvitz-Thompson)</strong></span> L’estimateur <span class="math inline">\(\hat{t}_{y,\text{HT}} = \sum_{k \in S} \frac{y_k}{\pi_k}\)</span> est appelé estimateur d’Hovitz-Thompson du total.</p>
+</div>
+<ul>
+<li>Est-ce un <em>bon</em> estimateur ?
+<ul>
+<li>Critère de biais et de variance.<br>
+</li>
+</ul></li>
+<li></li>
+</ul>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="callout callout-caution no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Caution</strong></p>
+</div>
+<div class="callout-content">
+<div id="def-biais" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 2 (Biais d’un estimation)</strong></span> Le biais d’un estimateur <span class="math inline">\(\hat \theta\)</span> d’une fonction d’intérêt <span class="math inline">\(\theta\)</span> est donné par <span class="math inline">\(\mathbb{B}(\hat \theta; \theta) = \mathbb{E}(\hat \theta) - \theta\)</span>.</p>
+</div>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="callout callout-caution no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Caution</strong></p>
+</div>
+<div class="callout-content">
+<div id="def-var" class="theorem definition">
+<p><span class="theorem-title"><strong>Definition 3 (Variance)</strong></span> La variance d’un estimateur <span class="math inline">\(\hat \theta\)</span> d’une fonction d’intérêt <span class="math inline">\(\theta\)</span> est donné par <span class="math inline">\(\mathbb{V}(\hat \theta) = \mathbb{E}(\left(\hat \theta  - \mathbb{E}(\hat \theta) \right)^2)\)</span>.</p>
+<p>La variance permet de quantifier la variabilité d’un estimateur.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="arbitrage-biaisvariance" class="slide level2">
+<h2>Arbitrage biais/variance</h2>
+</section>
+<section id="estimateur-dhorvitz-thompson-biais-et-variance" class="slide level2">
+<h2>Estimateur d’Horvitz-Thompson : biais et variance</h2>
+<ul>
+<li><p>Si pour tout <span class="math inline">\(k \in \mathcal{U},~~ \pi_k &gt; 0\)</span> alors <span class="math inline">\(\hat{t}_{y,\text{HT}}\)</span> est un estimateur sans biais de <span class="math inline">\(t_y\)</span>.</p></li>
+<li><p>Si il existe un individu <span class="math inline">\(j\)</span> tel que <span class="math inline">\(\pi_j = 0\)</span>, alors il y a un défaut de couverture <span class="math inline">\(\to\)</span> biais.</p></li>
+<li><p>Quid de la variance de <span class="math inline">\(\hat{t}_{y,\text{HT}}\)</span> ?</p>
+<ul>
+<li><span class="math display">\[\mathbb{V}(\hat t_{y,\text{HT}}) = \sum_{k \in \color{red}{\mathcal{U}}} \sum_{l \in \color{red}{\mathcal{U}}} \frac{y_k}{\pi_k} \frac{y_l}{\pi_l} \Delta_{kl}\]</span> où <span class="math inline">\(\Delta_{kl} = \pi_{kl} - \pi_k \pi_l\)</span></li>
+<li>Problème : la variance est fonction des valeurs de <span class="math inline">\(\{y_k\}\)</span> sur <span class="math inline">\(\color{red}{\mathcal{U}}\)</span> mais cette information n’est disponible que sur <span class="math inline">\(\mathcal{S}\)</span></li>
+<li>Solution : estimer la variance.</li>
+</ul></li>
+</ul>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="callout callout-caution no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Estimateur de variance d’Horvitz-Thompson</strong></p>
+</div>
+<div class="callout-content">
+<p><span class="math display">\[\hat{\mathbb{V}}_\text{HT}(\hat t_{y,\text{HT}}) = \sum_{k \in \mathcal{U}} \sum_{k \in \mathcal{U}} \frac{y_k}{\pi_k} \frac{y_l}{\pi_l} \Delta_{kl} \color{red}{\frac{I_{kl}}{\pi_{kl}}} \color{black} = \sum_{k \in S} \sum_{l \in S} \frac{y_k}{\pi_k} \frac{y_l}{\pi_l} {\frac{\Delta_{kl}}{\pi_{kl}}} \]</span></p>
+<p>Propriétés :</p>
+<ul>
+<li>Si pour tout <span class="math inline">\((k,l) \in \mathcal{U}^2\)</span>, <span class="math inline">\(\pi_{kl} &gt; 0\)</span>, <span class="math inline">\(\hat{\mathbb{V}}_\text{HT}(\hat t_{y,\text{HT}})\)</span> est sans biais pour <span class="math inline">\(\mathbb{V}_\text{HT}(\hat t_{y,\text{HT}})\)</span></li>
+</ul>
+</div>
+</div>
+</div>
+</div><div class="column" style="width:50%;">
+<div class="callout callout-caution no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Estimateur de Sen-Yates-Grundy</strong></p>
+</div>
+<div class="callout-content">
+<p><span class="math display">\[\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}}) =  - \frac{1}{2} \sum_{k \in \mathcal{S}} \sum_{l \in \mathcal{S} | k \neq l} \left(\frac{y_k}{\pi_k} - \frac{y_l}{\pi_l} \right)^2 \frac{\Delta_{kl}}{\pi_{kl}}\]</span></p>
+<p>Propriétés :</p>
+<ul>
+<li>Si pour tout <span class="math inline">\((k,l) \in \mathcal{U}^2\)</span>, <span class="math inline">\(\pi_{kl} &gt; 0\)</span> et le plan <span class="math inline">\(p\)</span> est de taille fixe alors <span class="math inline">\(\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}})\)</span> est sans biais pour <span class="math inline">\(\mathbb{V}_\text{HT}(\hat t_{y,\text{HT}})\)</span>.</li>
+<li>Si pour tout <span class="math inline">\((k,l) \in \mathcal{U}^2\)</span>, <span class="math inline">\(\pi_{kl} - \pi_k \pi_l \leq 0\)</span> alors <span class="math inline">\(\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}}) \geq 0\)</span>.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section></section>
+<section id="application-à-quelques-plans-de-sondage." class="title-slide slide level1 center">
+<h1>Application à quelques plans de sondage.</h1>
+<div class="callout callout-caution no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Plan aléatoire simple sans remise</strong></p>
+</div>
+<div class="callout-content">
+
+</div>
+</div>
+</div>
+<div class="callout callout-caution no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Plan poissonien</strong></p>
+</div>
+<div class="callout-content">
+
+</div>
+</div>
+</div>
+<div class="callout callout-caution no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Plan de l’enquête Histoire de Vie et Patrimoine</strong></p>
+</div>
+<div class="callout-content">
+<ul>
+<li>Calcul des probabilités d’inclusion ?</li>
+</ul>
+</div>
+</div>
+</div>
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
@@ -385,7 +546,7 @@ Khaled Larbi
 'autoAnimateDuration': 1,
 'autoAnimateUnmatched': true,
 'menu': {"side":"left","useTextContentForMissingTitles":true,"markers":false,"loadIcons":false,"custom":[{"title":"Tools","icon":"<i class=\"fas fa-gear\"></i>","content":"<ul class=\"slide-menu-items\">\n<li class=\"slide-tool-item active\" data-item=\"0\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.fullscreen(event)\"><kbd>f</kbd> Fullscreen</a></li>\n<li class=\"slide-tool-item\" data-item=\"1\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.speakerMode(event)\"><kbd>s</kbd> Speaker View</a></li>\n<li class=\"slide-tool-item\" data-item=\"2\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.overview(event)\"><kbd>o</kbd> Slide Overview</a></li>\n<li class=\"slide-tool-item\" data-item=\"3\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.togglePdfExport(event)\"><kbd>e</kbd> PDF Export Mode</a></li>\n<li class=\"slide-tool-item\" data-item=\"4\"><a href=\"#\" onclick=\"RevealMenuToolHandlers.keyboardHelp(event)\"><kbd>?</kbd> Keyboard Help</a></li>\n</ul>"}],"openButton":true},
-'smaller': false,
+'smaller': true,
  
         // Display controls in the bottom right corner
         controls: false,
@@ -507,10 +668,10 @@ Khaled Larbi
         hideCursorTime: 5000,
 
         // Opens links in an iframe preview overlay
-        previewLinks: false,
+        previewLinks: true,
 
         // Transition style (none/fade/slide/convex/concave/zoom)
-        transition: 'none',
+        transition: 'slide',
 
         // Transition speed (default/fast/slow)
         transitionSpeed: 'default',
@@ -530,12 +691,12 @@ Khaled Larbi
         // The "normal" size of the presentation, aspect ratio will be preserved
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
-        width: 1050,
+        width: 1500,
 
         height: 700,
 
         // Factor of the display size that should remain empty around the content
-        margin: 0.1,
+        margin: 5.0e-2,
 
         math: {
           mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js',
