@@ -527,11 +527,11 @@ L'estimateur de la variance par $\mathbb{V}(\hat{R}_{y^1, y^2, \text{sub}})$ est
 - D'où
 \begin{align}
 (\hat{\theta} - \theta) &\approx \sum_{k \in S}  (-\sum_{j \in S} \frac{\text{Jac}(\phi)(\theta; x_j, y_j))}{\pi_j})^{-1} \frac{\phi(\theta; x_k, y_k)}{\pi_k} \\
-&:= \sum_{k \in S} \frac{u^\text{lin}_k(\theta)}{\pi_k}
+&:= \sum_{k \in S} \frac{u^\text{est}_k(\theta)}{\pi_k}
 \end{align}
 
-- La variable $\{ u^\text{lin}_k(\theta) \}$ est la variable linéarisée associée à l'estimateur $\hat{\theta}$ $\to$ $\theta$ est inconnu.
+- La variable $\{ u^\text{est}_k(\theta) \}$ est la variable linéarisée associée à l'estimateur $\hat{\theta}$ $\to$ $\theta$ est inconnu.
 
-- La variable $\{ u^\text{lin}_k(\hat{\theta}) \}$ est la variable linéarisée estimée associée à l'estimateur.
+- La variable $\{ u^\text{est}_k(\hat{\theta}) \}$ est la variable linéarisée estimée associée à l'estimateur.
 
 ## 
