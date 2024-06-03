@@ -247,9 +247,11 @@ primaires et secondaires obtenus.
 On note : 
 
 - $\pi_u^{(1)}$, les probabilités d'inclusion d'ordre 1 d'une
-unité primaire $u \in U_\text{UP}$ - $\pi_l^{(2|1)}$, les probabilités
+unité primaire $u \in U_\text{UP}$. 
+- $\pi_l^{(2|1)}$, les probabilités
 d'inclusion d'ordre 1 d'une unité secondaire $l \in U_\text{UP}$
-conditionnellement à l'échantillon des UP. - $\pi_l^{(1,2)}$, les
+conditionnellement à l'échantillon des UP.
+- $\pi_l^{(1,2)}$, les
 probabilités d'inclusion d'ordre 1 d'une unité secondaire
 $l \in U_\text{UP}$.
 
@@ -283,5 +285,253 @@ $$\hat{\mathbb{V}}^{(1,2)}(\hat y_{(u)}) = \hat{\mathbb{V}}^{(1,2)}(\{ y_{l} : l
 :::
 ::::
 
+## Récaptulatif
+
+# Estimation de variance par linéarisation 
+
+## Estimation par subtitution
+
+- Nous savons calculer la variance d'estimateurs d'Horvitz-Thompson $\hat{t}_{y,\text{HT}} = \sum_{k \in S} \frac{y_k}{pi_k}$ du total.
+
+- En pratique, on s'intéresse à d'autres paramètres (univariés) : $\theta = f(t_{y^{(1)}}, ..., t_{y^{(d)}})$
+  - Exemple 1 : la moyenne de la variable $\mu_{y^{(1)}} = \frac{1}{N} t_{y^{(1)}}$
+  - Exemple 2 : le rapport des totaux des variables $\{y_1\}$ $\{y_2\}$ $R_{\mu_{y^{(1)}}, \mu_{y^{(2)}}} = \frac{t_{y^{(1)}}}{t_{y^{(2)}}}$
+  
+- Comment trouver un estimateur (approximativement) sans biais ?
+  
+- Principe de subtitution : on remplace les paramètres inconnus par des estimations.
+  - Exemple 1 : la moyenne de la variable $\frac{1}{N} t_{y^{(1)}}$
+  - Exemple 2 : la moyenne de la variable $\frac{1}{N} t_{y^{(1)}}$
+
+- Quid de la variance ?
+
+## Principe de linéarisation
+
+- Le principe de linéarisation va permettre d'estimer la variance d'estimateurs par subtitution.
+
+- L'idée est d'approximer la variance de l'estimateur par subtitution $\hat{\theta} = \mathbb{V}f(\hat{t}_{y^{(1),\text{HT}}, \text{HT}}, ..., \hat{t}_{y^{(d),\text{HT}}})$ par celle de l'estimateur du total d'Horvitz-Thompson d'une variable $\mathbb{V}(\hat{t}_{u,\text{HT}})$.
+
+- Comment construire $\{u_k\}$ ? 
+
+- Plusieurs approches différentes :
+  - Si $\hat{\theta} = \mathbb{V}f(\hat{t}_{y^{(1),\text{HT}}, \text{HT}}, ..., \hat{t}_{y^{(d),\text{HT}}})$ où $f$ est différentiable. 
+  - Si $\hat{\theta}$ est solution d'une équation estimante.
+  - Si $\hat{\theta}$ est une fonctionnelle. 
+
+
+## Approche 1 : si $f$ différentiable
+
+- Supposons de plus que $f$ est régulière : $f$ différentiable. 
+
+::: {.fragment}
+- En utilisant un développement de Taylor (cas où $f : \mathbb{R} \to \mathbb{R}$): 
+$$f(\hat{t}_{y,\text{HT}}) \approx f(t_y) + (\hat{t}_{y,\text{HT}} - t_y) f'(t_y)$$
+:::
+
+
+::: {.fragment}
+- Par passage à l'espérance :
+$$\mathbb{E}(f(\hat{t}_{y,\text{HT}})) \approx \mathbb{E}(f(t_y)) + \mathbb{E}((\hat{t}_{y,\text{HT}} - t_y) f'(t_y)) \approx \mathbb{E}(f(t_y))$$
+$\to$ <span style="color: red;">Si l'estimateur d'Horvitz-Thompson $\hat{t}_{y,\text{HT}}$ est sans biais pour $t_y$ alors $f(t_{y,\text{HT}})$ l'est approximativement pour $f(t_{y})$. </span>
+:::
+
+::: {.fragment}
+- Par passage à la variance :
+$$\mathbb{V}(f(\hat{t}_{y,\text{HT}})) \approx \mathbb{V}((\hat{t}_{y,\text{HT}} - t_y) f'(t_y)) \approx  \color{red}{\mathbb{V}((\hat{t}_{ f'(t_y) \times y,\text{HT}}))}$$
+:::
+
+::: {.fragment}
+::: {#thm-biasub}
+## Biais de l'estimateur par subtitution
+
+Si l'estimateur d'Horvitz-Thompson $\hat{t}_{y,\text{HT}}$ est sans biais pour $t_y$ alors $\mathbb{E}(f(\hat{t}_{y,\text{HT}})) - f(t_y) \approx 0$.
+:::
+:::
+
+## Approche 1 : si $f$ différentiable
+
+::: {.fragment}
+- La variance d'un estimateur de la forme $f(\hat t_{y,\text{HT}})$ est approximativement égale à la variance de l'estimateur du total de la variable $u$ définie pour tout individu $k, ~~ u_k = f'(t_y) \times y_k$ : $$ \mathbb{V}(f(\hat t_{y,\text{HT}})) \approx \mathbb{V}(\hat t_{u,HT}) $$
+:::
+
+::: {.fragment}
+- Intuitivement : la variance de $f(\hat t_{y,\text{HT}})$ est approximativement la même que celle d'un estimateur d'Horvitz-Thompson pour une variable d'intérêt bien choisie $\to$ rôle central de l'estimation du total. 
+:::
+
+::: {.fragment}
+- La variable $\{u_k\}_{k \in \mathcal{U}}$ est appelée *variable linéarisée* associée à $f$.
+:::
+
+::: {.fragment}
+- Problème : cette variable est définie par pour tout individu $k \in \mathcal{U} ~~ u_k = f'(\color{red}{t_y}\color{black}) \times y_k \to$ il est donc nécessaire de connaître $\displaystyle t_y = \sum_{k \in \mathcal{U}} y_k$ qui est inconnu.
+:::
+
+::: {.fragment}
+- Solution : estimer par subtitution la variable linéarisée $\{u_k\}$.
+    - Pour l'individu $k \in \mathcal{U}$, $u_k = f'(t_y) \times y_k$ sera estimé par $\hat{u}_k = f'(\hat{t}_{y,\text{HT}}) \times y_k$.
+:::
+
+::: {.fragment}
+- La variable $\hat{u}_k$ est la variable linéarisée estimée.
+:::
+
+
+::: {.fragment}
+::: {#thm-lin}
+## Estimation de la variance par linéarisation - cas unidimensionnel
+
+L'estimateur de la variance par linéarisation d'une fonction d'intérêt de la forme $f(t_{y})$ est donné par $\displaystyle \hat{\mathbb{V}}_\text{lin}(f(\hat{t}_{y,\text{HT}})) = \mathbb{V}(\hat t_{\hat{u},HT})$
+:::
+:::
+
+
+## Exemple de linéarisation - cas unidimensionnel
+
+
+::: {.fragment}
+- On suppose que l'échantillon $s$ dont nous disposons est tiré selon un plan de sondage tel que pour tout individu $k \in \mathcal{U}, ~ \pi_k > 0$
+$\to$ l'estimateur du total d'Horvitz-Thompson $\hat{t}_{y,\text{HT}}$ est un estimateur sans biais de $t_y$.  
+:::
+
+::: {.fragment}
+- Dans cet exemple, la variable d'intérêt prend des valeurs strictement positives. 
+:::
+
+
+::: {.fragment}
+- Nous souhaitons estimer $\log{t_y}$ : un estimateur par subtitution est donné par $\log{\hat{t}_{y,\text{HT}}}$.
+:::
+
+
+::: {.fragment}
+- Cet estimateur est approximativement sans biais pour $\log{t_y}$ car $\hat{t}_{y,\text{HT}}$ est sans biais pour $t_y$.
+:::
+
+::: {.fragment}
+- L'estimateur de la variance par linéarisation est donné par $\mathbb{V}(\hat t_{\hat{u},HT})$ où pour tout $k \in \mathcal{U}$, $\hat{u}_k = \frac{y_k}{\hat{t}_{y,\text{HT}}}$.
+
+Il reste à utiliser les résultats propres au plan de sondage afin de déterminer un estimateur de la variance. 
+:::
+
+
+## Simulation
+
+A FAIRE
+
+
+## Linéarisation d'une fonction de plusieurs totaux
+
+::: {.fragment}
+- Il est possible d'utiliser cette approche pour des fonctions de totaux de plusieurs variables d'intérêt $f(t_{y^1}, ..., t_{y^d})$ où $f : \mathbb{R}^d \to \mathbb{R}$ est une fonction différentiable.
+:::
+
+::: {.fragment}
+- Principe de subtitution : un estimateur de $f(t_{y^1}, ..., t_{y^d})$ est donné par $f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d,\text{HT}}})$.
+:::
+
+::: {.fragment}
+- Même idée : en utilisant la formule de Taylor $$  f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d,\text{HT}}}) \approx f(t_{y^1}, ..., t_{y^d}) +  \nabla f(t_{y^1}, ..., t_{y^d})( \hat{t}_{y^1, \text{HT}} - t_{y^1} , ..., \hat{t}_{y^d,\text{HT}} - t_{y^d})^T  $$
+:::
+
+::: {.fragment}
+- Il est possible d'obtenir l'approximation de la variance suivante :
+$$\mathbb{V}(f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d,\text{HT}}})) \approx \mathbb{V}(\nabla f(t_{y^1}, ..., t_{y^d})  ( \hat{t}_{y^1, \text{HT}}  , ..., \hat{t}_{y^d,\text{HT}})^T) = \hat{t}_{u,\text{HT}}$$ 
+
+où la variable $\{u_k\}_{k \in \mathcal{U}}$ est définie pour tout $k \in \mathcal{U}$ par $u_k = \nabla f(t_{y^1}, ..., t_{y^d}) (y^1_k, ..., y^d_k)^T$
+:::
+
+::: {.fragment}
+- $u_k$ est la variable linéarisée associée à $f$ $\to$ même problème que dans les cas univarié : pas accès aux totaux.
+:::
+
+## Linéarisation d'une fonction de plusieurs totaux (2)
+
+::: {.fragment}
+- $u_k$ est la variable linéarisée associée à $f$ $\to$ même problème que dans les cas univarié : pas accès aux totaux.
+
+$\to$ utilisation de la variable linéarisée estimée : $\hat u_k = \nabla f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{y^d,\text{HT}}) (y^1_k, ..., y^d_k)^T$.
+:::
+
+::: {.fragment}
+- Estimation par subtitution : $\hat{V}_\text{lin}(f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d,\text{HT}}})) =  \mathbb{V}( \nabla f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d},\text{HT}}) ( \hat{t}_{y^1, \text{HT}} , ..., \hat{t}_{y^d,\text{HT}} )^T) = \mathbb{V}(\hat{t}_{\hat{u},\text{HT}})$
+:::
+
+::: {.fragment}
+::: {#thm-linmul}
+## Estimation de la variance par linéarisation
+
+L'estimateur de la variance par linéarisation d'une fonction d'intérêt de la forme $f(t_{y^1}, ..., t_{y^d})$ est donné par $\displaystyle \hat{\mathbb{V}}_\text{lin}(f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d,\text{HT}}})) = \mathbb{V}( \nabla f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d},\text{HT}}) ( \hat{t}_{y^1, \text{HT}} , ..., \hat{t}_{y^d,\text{HT}})^T)$
+:::
+:::
+
+## Exemple de linéarisation
+
+- Supposons que nous disposons de deux variables d'intérêt $y^{(1)}$ (par exemple, la part de transferts sociaux) et $y^{(2)}$ (par exemple, le revenu total) et que nous souhaitons connaître un estimateur du ratio des totaux $R_{y^{(1)}, y^{(2)}} = \frac{t_{y^{(1)}}}{t_{y^{(2)}}}$.
+
+- L'estimateur par subtitution de $R_{y^{(1)}, y^{(2)}}$ noté $\hat{R}_{\y^{(1)}, y^{(2)}, \text{sub}}$ est donné par $\hat{R}_{y^{(1)}, y^{(2)}, \text{sub}} = \frac{\hat{t}_{y^{(1)},\text{HT}}}{\hat{t}_{y^{(2)},\text{HT}}}$ .
+
+- Cet estimateur est approximativement sans biais (le biais est d'autant plus faible que les estimateurs des totaux ont une faible variance et que la fonction d'intérêt *ne fluctue pas trop* - on suppose que pour tout $k \in \mathcal{U}, \pi_k > 0$).
+
+- Quid de la variance ? 
+    - Malheureusement, $\mathbb{V}(\hat{R}_{\text{sub}}) = \mathbb{V}(\frac{\hat{t}_{y^{(1)},\text{HT}}}{\hat{t}_{y^{(2)},\text{HT}}}) \neq  \frac{\mathbb{V}(\hat{t}_{y^{(1)},\text{HT}})}{\mathbb{V}({\hat{t}_{y^{(2)},\text{HT}})}}$
+    - Utilisation du principe de substitution.
+
+## Exemple de linéarisation (2)
+
+- $f : (x,y) \in \mathbb{R} \times \mathbb{R}^* \to \frac{x}{y}$
+- Pour tout $(x,y) \in \mathbb{R} \times \mathbb{R}^*$, $\nabla f(x,y) = (\frac{1}{y}, \frac{-x}{y})$
+
+- La variable linéarisée pour un individu $k$ vaut donc $u_k = \frac{y^{(1)}_k}{t_{y^{(2)}}} - \frac{t_{y^{(1)}}}{t_{y^{(2)}}^2} y^{(2)}_k = \frac{1}{t_{y^{(2)}}} (y^{(1)}_k - R_{y^{(1)}, y^{(2)}} y^{(2)}_k)$
+
+- La variable linéarisée estimée pour un individu $k$ vaut $\hat{u}_k =  \frac{1}{\hat{t}_{y^{(2)},\text{HT}}} (y^{(1)}_k - \hat{R}_{y^{(1)}, y^{(2)},\text{sub}} y^{(2)}_k)$
+
+
+L'estimateur de la variance par $\mathbb{V}(\hat{R}_{y^1, y^2, \text{sub}})$ est approximativement $\mathbb{V(\hat{t}_{\hat{u}, \text{HT}})}$ où $\hat{u}_k =  \frac{1}{\hat{t}_{y^{(2)},\text{HT}}} (y^{(1)}_k - \hat{R}_{y^{(1)}, y^{(2)},\text{sub}} y^{(2)}_k)$.
+
+
+## Linéarisation par fonction objective
+
+- Certains paramètres d'intérêt et estimateurs sont solution d'une équation estimante.
+
+- Dans certains cas, une expression close du paramètre ou de l'estimateur n'existe pas.
+  - Formellement, il n'est pas possible d'écrire simple 
+
+- Il est cependant possible d'obtenir une estimation de la variance de l'estimateur par linéarisation de la fonction objective.
+
+- Soit $\theta \in \mathbb{R}^d$, un paramètre tel que 
+\begin{equation} 
+\frac{1}{N} \sum_{k \in \mathcal{U}} \phi(\theta; x_k, y_k) = 0 \text{  où  } \phi : \mathbb{R}^d \to \mathbb{R}^{d} \text{ différentiable.}
+\label{defparameq}
+\end{equation}
+
+  - Exemple 1 : la moyenne $\displaystyle {\mu}_y = \frac{1}{N} \sum_{k \in \mathcal{U}} y_k$ avec $\phi(\theta; x_k, y_k) = y_k - \theta$
+  - Exemple 2 : le coefficient de régression $\beta$ de la régression de $y$ sur $x$ avec $\phi(\theta; x_k, y_k) = x_k (y_k - x_k^T \theta)$
+
+- Il est possible de construire un estimateur associé $\hat{\theta}$ tel que
+\begin{equation} 
+\frac{1}{N} \sum_{k \in S} \frac{\phi(\hat{\theta}; x_k, y_k)}{\pi_k} = 0 \text{  où  } \phi : \mathbb{R}^d \to \mathbb{R}^{d} \text{ différentiable.}
+\label{defestimeq}
+\end{equation}
+
+  - Exemple 1 : l'estimateur $\displaystyle \hat{\mu}_{y, \text{Hayek}} = \frac{1}{\sum_{k \in S}\frac{1}{\pi_k}} \sum_{k \in S} \frac{y_k}{\pi_k}$ avec $\phi(\theta; x_k, y_k) = y_k - \theta$
+  - Exemple 2 : le coefficient de régression estimée $\displaystyle \hat{\beta} = \left(\sum_{k \in S} \frac{x_k x_k^T}{\pi_k} \right)^{-1} \sum_{k \in S} \frac{x_k y_k}{\pi_k}$ de la régression de $y$ sur $x$ avec $\phi(\theta; x_k, y_k) = x_k (y_k - x_k^T \theta)$
 
 ##
+
+- Si $\phi$ est différentiable,  $$\phi(\hat{\theta}; x_k, y_k) \approx \phi(\theta; x_k, y_k) + (\text{Jac}(\phi)(\theta)) (\hat{\theta} - \theta)$$
+
+- D'où $$\sum_{k \in S} \frac{\phi(\hat{\theta}; x_k, y_k)}{\pi_k} \approx \sum_{k \in S} \frac{\phi(\theta; x_k, y_k)}{\pi_k} + (\sum_{k \in S} \frac{\text{Jac}(\phi)(\theta; x_k, y_k))}{\pi_k}) (\hat{\theta} - \theta)$$
+
+- Or $\sum_{k \in S} \frac{\phi(\hat{\theta}; x_k, y_k)}{\pi_k} = 0$
+
+- D'où
+\begin{align}
+(\hat{\theta} - \theta) &\approx \sum_{k \in S}  (-\sum_{j \in S} \frac{\text{Jac}(\phi)(\theta; x_j, y_j))}{\pi_j})^{-1} \frac{\phi(\theta; x_k, y_k)}{\pi_k} \\
+&:= \sum_{k \in S} \frac{u^\text{lin}_k(\theta)}{\pi_k}
+\end{align}
+
+- La variable $\{ u^\text{lin}_k(\theta) \}$ est la variable linéarisée associée à l'estimateur $\hat{\theta}$ $\to$ $\theta$ est inconnu.
+
+- La variable $\{ u^\text{lin}_k(\hat{\theta}) \}$ est la variable linéarisée estimée associée à l'estimateur.
+
+## 
