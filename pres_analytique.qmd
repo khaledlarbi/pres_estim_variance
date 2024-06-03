@@ -25,6 +25,7 @@ webr:
 date-format: "DD MMM YYYY"
 lang: fr
 bibliography: references.bib
+from: markdown+emoji
 ---
 
 # Pourquoi estimer la variance d'un estimateur ? 
@@ -214,7 +215,7 @@ Plan de l'enquête Histoire de Vie et Patrimoine
 
 ::: fragment
 -   <ins>Idée 2</ins> : estimer les probabilités d'inclusion d'ordre deux par
-        simulation.
+        simulation. :x: 
 :::
 
 ::: fragment
@@ -224,11 +225,63 @@ Plan de l'enquête Histoire de Vie et Patrimoine
 :::
 
 ::: fragment
--   <ins>Idée 3</ins> : décomposer le calcul de l'estimateur de la variance degré par degré.
+-   <ins>Idée 3</ins> : décomposer le calcul de l'estimateur de la variance degré par degré. :white_check_mark:
 :::
 
 ::: fragment
--   <ins>Idée 4</ins> : utiliser des méthodes de réplication.
+-   <ins>Idée 4</ins> : utiliser des méthodes de réplication. :white_check_mark:
 :::
 
-## 
+## Estimation de variance pour des plans à plusieurs degrés (@Rao75, Caron et al 1998)
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+Soit $p$ un plan de sondage à deux degrés où $p_1$ désigne le plan de
+sondage des unités primaires et $p_{2|1}$ le plan de sondage des unités
+secondaires conditionnellement aux unités primaires. On notera
+respectivement $s_\text{UP}$ et $s_\text{US}$, les échantillons d'unités
+primaires et secondaires obtenus.
+
+On note : 
+
+- $\pi_u^{(1)}$, les probabilités d'inclusion d'ordre 1 d'une
+unité primaire $u \in U_\text{UP}$ - $\pi_l^{(2|1)}$, les probabilités
+d'inclusion d'ordre 1 d'une unité secondaire $l \in U_\text{UP}$
+conditionnellement à l'échantillon des UP. - $\pi_l^{(1,2)}$, les
+probabilités d'inclusion d'ordre 1 d'une unité secondaire
+$l \in U_\text{UP}$.
+
+Soit $\hat y$, l'estimateur d'Horvitz-Thompson d'une variable d'intérêt
+$y$ :
+$$\hat y = \sum_{k \in S_{\text{US}}} \frac{y_k}{\pi_k^{(1,2)}} = \sum_{u \in S_\text{UP}} \frac{\hat{y}_{(u)}}{\pi_u^{(1)}} \text{  avec  } \hat{y}_{(u)} = \sum_{k \in u \cap S_\text{US}} \frac{y_k}{\pi_k^{(2|1)}}$$
+:::
+
+::: {.column width="50%"}
+
+Supposons que :
+
+-   le tirage des unités secondaires au sein des unités primaires sont
+    indépendants d'une unité primaire à l'autre.
+-   l'existence d'un estimateur $\hat{\mathbb{V}^{1}}(\hat y)$ sans
+    biais de la variance lié au premier degré d'échantillonnage
+    $\mathbb{V}^{1}(\hat y)$ pouvant s'écrire sous la forme
+    $\displaystyle \hat{\mathbb{V}} (\hat y) = Q(y_{(1)}, ..., y_{(n_\text{UP})}) = \sum_{i} \sum_{j \neq i} q_{ij} y_{(i)} y_{(j)} + \sum_{i} q_{i} y_{(i)}^2$
+    .
+-   pour tout $u \in \mathcal{U}_\text{UP}$, l'existence d'un estimateur
+    sans biais $\hat y_{(u)}$ (sous le deuxième degré) de
+    $\displaystyle y_{(u)} = \sum_{k \in u} y_k$
+-   pour tout $u \in \mathcal{U}_\text{UP}$, l'existence d'un estimateur
+    sans biais $\hat{\mathbb{V}}^{2|1}(\hat{y}_{(u)})$ (sous le deuxième
+    degré) de la variance de l'estimateur $\hat y_(u)$.
+
+Sous ces hypothèses, la variance totale de l'estimateur
+d'Horvitz-Thompson sous le plan $p$ peut être estimée sans biais par
+$$\hat{\mathbb{V}}^{(1,2)}(\hat y_{(u)}) = \hat{\mathbb{V}}^{(1,2)}(\{ y_{l} : l \in S_\text{US} \}) =  Q(\hat{y}_{(1)}, ..., \hat{y}_{(n_\text{UP})}) + \sum_{u \in S_\text{UP}} \left( \frac{1}{(\pi_u^{(1)})^2} - q_u \right) \hat{\mathbb{V}}^{2|1}(\hat{y}_{(u)}) $$
+:::
+:::
+::::
+
+
+##
