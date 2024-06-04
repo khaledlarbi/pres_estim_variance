@@ -22,6 +22,8 @@ filters:
   - webr
 webr:
   packages: ['gustave']
+  cell-options:
+    editor-max-height: 250
 date-format: "DD MMM YYYY"
 lang: fr
 bibliography: references.bib
@@ -133,6 +135,11 @@ $$\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}}) =  - \frac{1}{2} \sum_{k \in
 ::::
 
 
+
+
+
+
+
 ## Application à quelques plans de sondage.
 
 ::: {.callout-caution icon="false"}
@@ -232,6 +239,23 @@ Plan de l'enquête Histoire de Vie et Patrimoine
 -   <ins>Idée 4</ins> : utiliser des méthodes de réplication. :white_check_mark:
 :::
 
+## 
+![Récapitulatif](illustrations/resume/resume1.drawio.svg)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Estimation de variance pour des plans à plusieurs degrés (@Rao75, Caron et al 1998)
 
 :::: {.columns}
@@ -285,7 +309,9 @@ $$\hat{\mathbb{V}}^{(1,2)}(\hat y_{(u)}) = \hat{\mathbb{V}}^{(1,2)}(\{ y_{l} : l
 :::
 ::::
 
-## Récaptulatif
+## Récapitulatif
+
+![Récapitulatif](illustrations/resume/resume0.drawio.svg)
 
 # Estimation de variance par linéarisation 
 
@@ -567,9 +593,105 @@ L'approximation suivante $\displaystyle \mathbb{V}(\hat{\theta}) \approx \mathbb
 :::
 
 
+## Récapitulatif
+
+![Récapitulatif](illustrations/resume/resume2.drawio.svg)
 
 # Prise en compte des redressements dans l'estimation de variance
 
+## Calage sur marges
+
+- La calage sur marges consiste à chercher les poids les plus proches des poids initiaux en respectant des contraintes sur l'estimation des marges. 
+
+- Formellement, les poids calés sont solution du programme d'optimisation :
+$$\min_{w \in \mathbb{R}^n} \sum_{k \in S} d_k G(\frac{w_k}{d_k}) \text{ sous contrainte que } \sum_{k \in S} w_k \textbf{x}_k = t_\textbf{x}$$ où $G$ est une pseudo-distance/divergence qui quantifie l'écart entre les poids initiaux et les poids calés.
+
+- L'estimateur calé du total d'une variable $\{y_k\}$ s'écrit $\displaystyle t_{y,\text{cal}} = \sum_{k \in S} w_k(\color{red}S\color{black}) y_k$ $\to$ il n'est pas possible d'utiliser les estimateurs de la variance d'un estimateur du total classique. :cry:
+
+- @devcal[^1] montre qu'il est possible d'approximer la variance d'un estimateur calé en utilisant :
+  - un estimateur de la variance d'un estimateur du total classique. :grin:
+  - les résidus de la régression de la variable d'intérêt $\{y_k\}$ sur $\{\textbf{x}_k\}$ pondérée par les poids initiaux. 
+
+- Pas de dépendances au choix de $G$[^2] : toutes les méthodes sont asymptotiquement équivalentes au sens de la variance. 
+
+## Calage sur marges
+
+::: {#thm-linmul}
+## Estimation de la variance d'un estimateur du total calé
+L'estimateur de la variance d'un estimateur du total calé est $\hat{\mathbb{V}}^\text{cal}(\hat{t}_{y,\text{cal}}) = \hat{\mathbb{V}}(\hat{t}_{\varepsilon,\text{HT}})$ où $\hat{\mathbb{V}}$ est un estimateur de la variance d'un estimateur du total d'Horvitz-Tompson.
+:::
+
+- `gustave` dispose d'une fonction permettant de récupérer les résidus de la régression :
+  - Exemple d'un estimateur calé tiré selon un $\text{SASSR}(100;1000)$
+
+```{webr-r}
+#| fig-cap : 'Récupération des résidus'
+
+n <- 100
+d <- 5 #Nombre de variables auxiliaires
+y <- matrix(1:n, ncol = 1)
+x <- matrix(rnorm(n*d), ncol = d)
+
+pik <- rep(0.5, n)
+
+residus <- gustave::res_cal(y = y, 
+ x = x,
+ w = 1/pik
+ )
+
+str(residus)
+
+var_srs(y = matrix(residus, ncol = 1), 
+  pik = pik)
+```
+## Récapitulatif
+
+![Récapitulatif](illustrations/resume/resume3.drawio.svg)
+
+
+## Partage des poids
+
+::: columns
+::: {.column width="50%"}
+![Partage des poids](illustrations/partagedespoids.svg)
+:::
+
+::: {.column width="50%"}
+-   Le partage des poids permet de calculer les poids lorsque :
+
+    -   le plan de sondage est indirect,
+    -   plusieurs bases de sondage sont mobilisées,
+    -   un panel est utilisé.
+
+-   Cette méthode permet de prendre en compte qu'un individu de la
+    *population-fille* aurait pu être tiré de plusieurs manières / à
+    plusieurs instants différents.
+
+- $L_{ij} = 1$ si l'individu $i$ est la mère de l'individu $j$ et $\displaystyle L_{\bullet j} = \sum_{k \in \color{red} \mathcal{U} \color{black}} L_{kj}$.
+
+-   Application : le poids d'un ménage $j \in S_\text{fille}$ est
+    $\displaystyle w^\text{fille}_{j} = \sum_{k \in \mathcal{U_\text{mère}}} w^\text{mère}_{k} \frac{L_{kj}}{L_{\bullet j}}I^\text{mère}_k$
+
+-   Application à l'estimation de la variance :
+    $$\mathbb{V}(\sum_{j \in S_\text{fille}} w^\text{fille}_{j} y_j) = \mathbb{V}(\sum_{k \in S_\text{mère}} w^\text{mère}_{k} z_k)$$
+    où
+    $\displaystyle z_k = \sum_{j \in S_\text{fille}} \frac{L_{kj}}{L_{\bullet j}} y_i$
+:::
+:::
+
+
+## Récapitulatif
+
+![Récapitulatif](illustrations/resume/resume4.drawio.svg)
+
+
+
+Faire des liens avec les théoremes 
 
 
 # Logique de `gustave`
+
+
+# Bibliographie
+[^1]: @kimcal pour une lecture plus détaillée.
+[^2]: Pour les formes usuelles.
