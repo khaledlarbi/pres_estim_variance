@@ -56,25 +56,21 @@ Pour l'inférence, il est commode d'introduire :
 
 ## Estimateur d'Horvitz-Thompson
 
-:::: {.columns}
 
-- Comment estimer le total $t_y = \sum_{k \in \mathcal{U}} y_k$ en utilisant l'information disponible uniquement sur l'échantillon $S$ ?
-
-::: {#def-estHT}
-## Estimateur d'Horvitz-Thompson
-L'estimateur $\hat{t}_{y,\text{HT}} = \sum_{k \in S} \frac{y_k}{\pi_k}$ est appelé estimateur d'Hovitz-Thompson du total. 
-:::
+- Comment estimer le total $\displaystyle t_y = \sum_{k \in \mathcal{U}} y_k$ en utilisant l'information disponible uniquement sur l'échantillon $S$ ?
+  - L'estimateur $\hat{t}_{y,\text{HT}} = \sum_{k \in S} \frac{y_k}{\pi_k}$ est appelé estimateur d'Hovitz-Thompson du total. 
 
 - Est-ce un *bon* estimateur ? 
 - Critère de biais et de variance.
 
 
+:::: {.columns}
 
 ::: {.column width="50%"}
-::: {.callout-caution icon="false"}
+::: {.callout-caution}
 ::: {#def-biais}
-## Biais d'un estimation
-Le biais d'un estimateur $\hat \theta$ d'une fonction d'intérêt $\theta$ est donné par $\mathbb{B}(\hat \theta; \theta) = \mathbb{E}(\hat \theta) - \theta$. 
+## Biais d'un estimateur
+Le biais d'un estimateur $\hat{\theta}$ d'une fonction d'intérêt $\theta$ est donné par $\mathbb{B}(\hat{\theta}; \theta) = \mathbb{E}(\hat{\theta}) - \theta$. 
 :::
 :::
 :::
@@ -100,7 +96,7 @@ La variance permet de quantifier la variabilité d'un estimateur.
 
 - Si pour tout $k \in \mathcal{U},~~ \pi_k > 0$ alors $\hat{t}_{y,\text{HT}}$ est un estimateur sans biais de $t_y$.
 
-- Si il existe un individu $j$ tel que $\pi_j = 0$, alors il y a un défaut de couverture $\to$ biais. 
+- S'il existe un individu $j$ tel que $\pi_j = 0$, alors il y a un défaut de couverture $\to$ biais. 
 
 - Quid de la variance de $\hat{t}_{y,\text{HT}}$ ?
   - $$\mathbb{V}(\hat t_{y,\text{HT}}) = \sum_{k \in \color{red}{\mathcal{U}}} \sum_{l \in \color{red}{\mathcal{U}}} \frac{y_k}{\pi_k} \frac{y_l}{\pi_l} \Delta_{kl}$$ où $\Delta_{kl} = \pi_{kl} - \pi_k \pi_l$
@@ -117,7 +113,7 @@ La variance permet de quantifier la variabilité d'un estimateur.
 
  <u>Propriétés</u> : 
 
- - Si pour tout $(k,l) \in \mathcal{U}^2$, $\pi_{kl} > 0$, $\hat{\mathbb{V}}_\text{HT}(\hat t_{y,\text{HT}})$ est sans biais pour $\mathbb{V}_\text{HT}(\hat t_{y,\text{HT}})$
+ - Si pour tout $(k,l) \in \mathcal{U}^2$, $\pi_{kl} > 0$, $\hat{\mathbb{V}}_\text{HT}(\hat t_{y,\text{HT}})$ est sans biais pour $\mathbb{V}(\hat t_{y,\text{HT}})$
 :::
 :::
 
@@ -128,7 +124,7 @@ $$\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}}) =  - \frac{1}{2} \sum_{k \in
 
  <u>Propriétés</u> : 
  
- - Si pour tout $(k,l) \in \mathcal{U}^2$, $\pi_{kl} > 0$ et le plan $p$ est de taille fixe alors $\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}})$ est sans biais pour $\mathbb{V}_\text{HT}(\hat t_{y,\text{HT}})$.
+ - Si pour tout $(k,l) \in \mathcal{U}^2$, $\pi_{kl} > 0$ et le plan $p$ est de taille fixe alors $\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}})$ est sans biais pour $\mathbb{V}(\hat t_{y,\text{HT}})$.
 - Si pour tout $(k,l) \in \mathcal{U}^2$, $\pi_{kl} - \pi_k \pi_l \leq 0$ alors $\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}}) \geq 0$.
 :::
 :::
@@ -606,7 +602,7 @@ L'approximation suivante $\displaystyle \mathbb{V}(\hat{\theta}) \approx \mathbb
 - Formellement, les poids calés sont solution du programme d'optimisation :
 $$\min_{w \in \mathbb{R}^n} \sum_{k \in S} d_k G(\frac{w_k}{d_k}) \text{ sous contrainte que } \sum_{k \in S} w_k \textbf{x}_k = t_\textbf{x}$$ où $G$ est une pseudo-distance/divergence qui quantifie l'écart entre les poids initiaux et les poids calés.
 
-- L'estimateur calé du total d'une variable $\{y_k\}$ s'écrit $\displaystyle t_{y,\text{cal}} = \sum_{k \in S} w_k(\color{red}S\color{black}) y_k$ $\to$ il n'est pas possible d'utiliser les estimateurs de la variance d'un estimateur du total classique. :cry:
+- L'estimateur calé du total d'une variable $\{y_k\}$ s'écrit $\displaystyle \hat{t}_{y,\text{cal}} = \sum_{k \in S} w_k(\color{red}S\color{black}) y_k$ $\to$ il n'est pas possible d'utiliser les estimateurs de la variance d'un estimateur du total classique. :cry:
 
 - @devcal[^1] montre qu'il est possible d'approximer la variance d'un estimateur calé en utilisant :
   - un estimateur de la variance d'un estimateur du total classique. :grin:
@@ -622,7 +618,7 @@ L'estimateur de la variance d'un estimateur du total calé est $\hat{\mathbb{V}}
 :::
 
 - `gustave` dispose d'une fonction permettant de récupérer les résidus de la régression :
-  - Exemple d'un estimateur calé tiré selon un $\text{SASSR}(100;1000)$
+  - Exemple d'un estimateur calé tiré selon un $\text{SASSR}(100;200)$
 
 ```{webr-r}
 #| fig-cap : 'Récupération des résidus'
@@ -691,7 +687,137 @@ Faire des liens avec les théoremes
 
 # Logique de `gustave`
 
+## Il était une fois, `gustave` ...
+
+- `gustave` est un package développé en R à l'Insee en 2018.
+
+- Il permet de :
+  - aider au calcul de variance,
+  - proposer un cadre consistant,
+  - réutiliser des opérations déjà implementées,
+  - diffuser les résultats sans que l'utilisateur ait besoin de connaissance en sondage.
+
+- Ce que `gustave` n'est pas : 
+  - un package qui estime **automatiquement** la variance fonctionnant pour tous les plans. 
+  - 
+
+## `variance wrapper`
+
+- Les estimations de variance sont livrées sous la forme de fonction : les `variance wrappers`.
+
+- Ces fonctions permettent à l'utilisateur, à partir de ces données, d'obtenir une estimation de la variance mais aussi des intervalles de confiance. 
+
+- Pas besoin de chercher les données nécessaires (dans les méandres de nos coffres) : toutes les données sont **cachées**[^3] dans la fonction.
+
+:::{.callout-important}
+## Important 
+
+Pour certaines enquêtes, il est nécessaire de mobiliser des informations potentiellement confidentielles durant l'estimation de la variance (par exemple, des variables de calage sensibles) : la diffusion de la fonction `variance wrapper` entraîne la diffusion de ces données.
+:::
+
+
+```{webr-r}
+#| context: setup
+var_lfs <- function(y, ind, dwel, area){
+  
+  variance <- list()
+  
+  # Variance associated with the sampling of the dwellings
+  y <- sum_by(y, ind$id_dwel)
+  variance[["dwel"]] <- var_srs(
+    y = y, pik = dwel$pik_dwel, strata = dwel$id_area, 
+    w = (1 / dwel$pik_area^2 - dwel$q_area)
+  )
+  
+  # Variance associated with the sampling of the areas
+  y <- sum_by(y = y, by = dwel$id_area, w = 1 / dwel$pik_dwel) 
+  variance[["area"]] <- varDT(y = y, precalc = area)
+  
+  Reduce(`+`, variance)
+  
+}
+
+# where y is the matrix of variables of interest and ind, dwel and area the technical data:
+
+technical_data_lfs <- list()
+
+# Technical data at the area level
+# The varDT function allows for the pre-calculation of 
+# most of the methodological quantities needed.
+technical_data_lfs$area <- varDT(
+  y = NULL, 
+  pik = lfs_samp_area$pik_area, 
+  x = as.matrix(lfs_samp_area[c("pik_area", "income")]),
+  id = lfs_samp_area$id_area
+)
+
+# Technical data at the dwelling level
+# In order to implement Rao (1975) formula for two-stage samples,
+# we associate each dwelling with the diagonal term corresponding 
+# to its area in the first-stage variance estimator: 
+lfs_samp_dwel$q_area <- with(technical_data_lfs$area, setNames(diago, id))[lfs_samp_dwel$id_area]
+technical_data_lfs$dwel <- lfs_samp_dwel[c("id_dwel", "pik_dwel", "id_area", "pik_area", "q_area")]
+
+# Technical data at the individual level
+technical_data_lfs$ind <- lfs_samp_ind[c("id_ind", "id_dwel", "sampling_weight")]
+
+# Test of the variance function var_lfs
+y <- matrix(as.numeric(lfs_samp_ind$unemp), ncol = 1, dimnames = list(lfs_samp_ind$id_ind))
+with(technical_data_lfs, var_lfs(y = y, ind = ind, dwel = dwel, area = area))
+
+
+# Step 2 : Definition of the variance wrapper
+
+# Call of define_variance_wrapper
+precision_lfs <- define_variance_wrapper(
+  variance_function = var_lfs,
+  technical_data = technical_data_lfs, 
+  reference_id = technical_data_lfs$ind$id_ind,
+  reference_weight = technical_data_lfs$ind$sampling_weight,
+  default_id = "id_ind"
+)
+
+```
+
+```{webr-r}
+#| fig-cap: "Un variance wrapper"
+
+#Exemple d'un variance wrapper : precision_lfs
+
+#str(precision_lfs) #Il s'agit bien d'une fonction
+#str(lfs_samp_ind) #Données d'enquête
+precision_lfs(data = lfs_samp_ind, total(unemp), mean(unemp), alpha = 0.9)
+```
+
+## Construction d'un variance wrapper 
+
+- Comment ces estimations sont calculées ? 
+- Comment construire ce `variance wrapper` ? 
+\vspace{2cm}
+- Travail méthodologique en amont : 
+  - Proposition d'un estimateur de la variance d'un estimateur du total (calé, Hovitz-Thompson, ...)
+  - Implémentatiton sous la forme d'une fonction simple en R / les données utilisées dans ce calcul seront stockées dans une liste.
+  ```{webr-r}
+    str(var_lfs)
+    str(technical_data_lfs)
+  ```
+
+## Construction d'un variance wrapper 
+  - Création d'un variance wrapper à partir de cette fonction qui :
+    - aidera à gérer les linéarisations,
+    - incorporera les données. 
+
+```{webr-r}
+precision_lfs <- gustave::define_variance_wrapper(
+  variance_function = var_lfs, #Fonction d'estimations de la variance d'un total 
+  technical_data = technical_data_lfs, #Données utilisées par la fonction `var_lfs`
+  reference_id = technical_data_lfs$ind$id_ind, #Identifiant des individus
+  reference_weight = technical_data_lfs$ind$sampling_weight, #Poids utilisés pour calculer les estimations
+  default_id = "id_ind" #Identifiant des individus dans la table contenant les variables d'intérêt
+)
+```
 
 # Bibliographie
 [^1]: @kimcal pour une lecture plus détaillée.
 [^2]: Pour les formes usuelles.
+[^3]: Elles sont dans l'environnement associé à la fonction.
