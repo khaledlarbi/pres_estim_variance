@@ -516,7 +516,7 @@ L'estimateur de la variance par $\mathbb{V}(\hat{R}_{y^1, y^2, \text{sub}})$ est
   - Exemple 1 : l'estimateur $\displaystyle \hat{\mu}_{y, \text{Hayek}} = \frac{1}{\sum_{k \in S}\frac{1}{\pi_k}} \sum_{k \in S} \frac{y_k}{\pi_k}$ avec $\phi(\theta; x_k, y_k) = y_k - \theta$
   - Exemple 2 : le coefficient de régression estimée $\displaystyle \hat{\beta} = \left(\sum_{k \in S} \frac{x_k x_k^T}{\pi_k} \right)^{-1} \sum_{k \in S} \frac{x_k y_k}{\pi_k}$ de la régression de $y$ sur $x$ avec $\phi(\theta; x_k, y_k) = x_k (y_k - x_k^T \theta)$
 
-##
+## Intuition de la linéarisation par fonction estimante
 
 - Si $\phi$ est différentiable,  $$\phi(\hat{\theta}; x_k, y_k) \approx \phi(\theta; x_k, y_k) + (\text{Jac}(\phi)(\theta)) (\hat{\theta} - \theta)$$
 
@@ -527,11 +527,49 @@ L'estimateur de la variance par $\mathbb{V}(\hat{R}_{y^1, y^2, \text{sub}})$ est
 - D'où
 \begin{align}
 (\hat{\theta} - \theta) &\approx \sum_{k \in S}  (-\sum_{j \in S} \frac{\text{Jac}(\phi)(\theta; x_j, y_j))}{\pi_j})^{-1} \frac{\phi(\theta; x_k, y_k)}{\pi_k} \\
-&:= \sum_{k \in S} \frac{u^\text{est}_k(\theta)}{\pi_k}
+&\approx \sum_{k \in S}  (-\sum_{j \in \mathcal{U}} {\text{Jac}(\phi)(\theta; x_j, y_j))})^{-1} \frac{\phi(\theta; x_k, y_k)}{\pi_k} \\
+&\approx \sum_{k \in S} \frac{u^\text{est}_k(\theta)}{\pi_k}
 \end{align}
+
+
+
+::: {#thm-blineq}
+## Estimateur de la variance par linéarisation de l'équation estimante
+
+L'approximation suivante $\displaystyle \mathbb{V}(\hat{\theta}) \approx \mathbb{V}(\sum_{k \in S} \frac{u^\text{est}_k(\theta)}{\pi_k})$ permet de créer un estimateur $\displaystyle \hat{\mathbb{V}}(\hat{\theta}) \approx \hat{\mathbb{V}}(\sum_{k \in S} \frac{\widehat{u^\text{est}_k(\theta)}}{\pi_k})$
+:::
+## Exemple de linéarisation par fonction estimante
 
 - La variable $\{ u^\text{est}_k(\theta) \}$ est la variable linéarisée associée à l'estimateur $\hat{\theta}$ $\to$ $\theta$ est inconnu.
 
 - La variable $\{ u^\text{est}_k(\hat{\theta}) \}$ est la variable linéarisée estimée associée à l'estimateur.
 
-## 
+- Pour des développements plus rigoureux :
+  - Preuve de la normalité asymptotique des Z-estimateurs (iid) : 
+  - Preuve de la normalité asymptotique des Z-estimateurs (cas sondage) : 
+
+
+## Exemple d'application
+
+- Exemple 2 : le coefficient de régression estimée $\displaystyle \hat{\beta} = \left(\sum_{k \in S} \frac{x_k x_k^T}{\pi_k} \right)^{-1} \sum_{k \in S} \frac{x_k y_k}{\pi_k}$ de la régression de $y$ sur $x$ avec $\phi(\theta; x_k, y_k) = x_k (y_k - x_k^T \theta)$
+
+- $\text{Jac}(\phi)(\theta; x_j, y_j) = x_k x_k^T$ 
+
+- $u_k^\text{est}(\theta) = \left(- \sum_{k \in \mathcal{U}} x_j x_j^T \right)^{-1} {x_k}({y_k - x_k^T \theta})$
+
+- Application de l'estimateur $\displaystyle \hat{\mathbb{V}}$ de la variance d'un total à $\widehat{u_k^\text{est}(\hat{\beta})} = \left(- \sum_{k \in S} \frac{x_j x_j^T}{\pi_k} \right)^{-1} {x_k}({y_k - x_k^T \hat{\beta}})$
+
+
+::: {.callout-important}
+- Il s'agit d'une version allégée de la linéarisation sur équation estimante : beaucoup d'hypothèses ont été cachées.
+- Ces hypothèses sont parfois techniques et difficilement vérifiables en pratique.
+- Ne pas hésitez à vérifier l'implémentation des estimations par linéarisation sur des exemples simples en utilisant des simulations. 
+:::
+
+
+
+# Prise en compte des redressements dans l'estimation de variance
+
+
+
+# Logique de `gustave`
