@@ -545,7 +545,7 @@
   };
 
   // Store cell data
-  globalThis.qwebrCellDetails = [{"id":1,"code":"n <- 100\nN <- 10000\ny <- 1:n\npik <- rep(n/N, n)\ngustave::var_srs(y = y, pik =  pik, strata = NULL, w = NULL, precalc = NULL)\n#Le plan est de taille fixe, il est donc possible d'utiliser l'estimateur de Sen-Yates-Grundy\n\n#Définition de la matrice des probabilités doubles\npikl <- matrix(n*(n-1)/(N*(N-1)), ncol = n, nrow = n)\ndiag(pikl) <- pik\ngustave::varSYG(y = y, pikl = pikl)","options":{"output":"true","context":"interactive","comment":"","editor-quick-suggestions":"false","warning":"true","fig-height":5,"fig-cap":"","dpi":72,"message":"true","out-width":"700px","label":"unnamed-chunk-1","editor-max-height":"250","results":"markup","editor-font-scale":"0.5","out-height":"","classes":"","autorun":"false","read-only":"false","fig-width":7}},{"id":2,"code":"n <- 100\ny <- 1:n\npik <- rep(0.5, n)\ngustave::var_srs(y = y, pik =  pik, w = NULL)","options":{"output":"true","context":"interactive","comment":"","editor-quick-suggestions":"false","warning":"true","fig-height":5,"fig-cap":"","dpi":72,"message":"true","out-width":"700px","label":"unnamed-chunk-2","editor-max-height":"250","results":"markup","editor-font-scale":"0.5","out-height":"","classes":"","autorun":"false","read-only":"false","fig-width":7}},{"id":3,"code":"\nn <- 100\nd <- 5 #Nombre de variables auxiliaires\ny <- matrix(1:n, ncol = 1)\nx <- matrix(rnorm(n*d), ncol = d)\n\npik <- rep(0.5, n)\n\nresidus <- gustave::res_cal(y = y, \n x = x,\n w = 1/pik\n )\n\nstr(residus)\n\nvar_srs(y = matrix(residus, ncol = 1), \n  pik = pik)","options":{"output":"true","context":"interactive","comment":"","editor-quick-suggestions":"false","warning":"true","fig-height":5,"fig-cap":"","dpi":72,"fig-width":7,"message":"true","out-width":"700px","label":"unnamed-chunk-3","editor-max-height":"250","results":"markup","editor-font-scale":"0.5","out-height":"","classes":"","autorun":"false","read-only":"false","fig-cap ":"Récupération des résidus"}},{"id":4,"code":"var_lfs <- function(y, ind, dwel, area){\n  \n  variance <- list()\n  \n  # Variance associated with the sampling of the dwellings\n  y <- sum_by(y, ind$id_dwel)\n  variance[[\"dwel\"]] <- var_srs(\n    y = y, pik = dwel$pik_dwel, strata = dwel$id_area, \n    w = (1 / dwel$pik_area^2 - dwel$q_area)\n  )\n  \n  # Variance associated with the sampling of the areas\n  y <- sum_by(y = y, by = dwel$id_area, w = 1 / dwel$pik_dwel) \n  variance[[\"area\"]] <- varDT(y = y, precalc = area)\n  \n  Reduce(`+`, variance)\n  \n}\n\n# where y is the matrix of variables of interest and ind, dwel and area the technical data:\n\ntechnical_data_lfs <- list()\n\n# Technical data at the area level\n# The varDT function allows for the pre-calculation of \n# most of the methodological quantities needed.\ntechnical_data_lfs$area <- varDT(\n  y = NULL, \n  pik = lfs_samp_area$pik_area, \n  x = as.matrix(lfs_samp_area[c(\"pik_area\", \"income\")]),\n  id = lfs_samp_area$id_area\n)\n\n# Technical data at the dwelling level\n# In order to implement Rao (1975) formula for two-stage samples,\n# we associate each dwelling with the diagonal term corresponding \n# to its area in the first-stage variance estimator: \nlfs_samp_dwel$q_area <- with(technical_data_lfs$area, setNames(diago, id))[lfs_samp_dwel$id_area]\ntechnical_data_lfs$dwel <- lfs_samp_dwel[c(\"id_dwel\", \"pik_dwel\", \"id_area\", \"pik_area\", \"q_area\")]\n\n# Technical data at the individual level\ntechnical_data_lfs$ind <- lfs_samp_ind[c(\"id_ind\", \"id_dwel\", \"sampling_weight\")]\n\n# Test of the variance function var_lfs\ny <- matrix(as.numeric(lfs_samp_ind$unemp), ncol = 1, dimnames = list(lfs_samp_ind$id_ind))\nwith(technical_data_lfs, var_lfs(y = y, ind = ind, dwel = dwel, area = area))\n\n\n# Step 2 : Definition of the variance wrapper\n\n# Call of define_variance_wrapper\nprecision_lfs <- define_variance_wrapper(\n  variance_function = var_lfs,\n  technical_data = technical_data_lfs, \n  reference_id = technical_data_lfs$ind$id_ind,\n  reference_weight = technical_data_lfs$ind$sampling_weight,\n  default_id = \"id_ind\"\n)","options":{"output":"true","context":"setup","comment":"","editor-quick-suggestions":"false","warning":"true","fig-height":5,"fig-cap":"","dpi":72,"message":"true","out-width":"700px","label":"unnamed-chunk-4","editor-max-height":"250","results":"markup","editor-font-scale":"0.5","out-height":"","classes":"","autorun":"true","read-only":"false","fig-width":7}},{"id":5,"code":"\n#Exemple d'un variance wrapper : precision_lfs\n\n#str(precision_lfs) #Il s'agit bien d'une fonction\n#str(lfs_samp_ind) #Données d'enquête\nprecision_lfs(data = lfs_samp_ind, total(unemp), mean(unemp), alpha = 0.9)","options":{"output":"true","context":"interactive","comment":"","editor-quick-suggestions":"false","warning":"true","fig-height":5,"fig-cap":"Un variance wrapper","dpi":72,"message":"true","out-width":"700px","label":"unnamed-chunk-5","editor-max-height":"250","results":"markup","editor-font-scale":"0.5","out-height":"","classes":"","autorun":"false","read-only":"false","fig-width":7}},{"id":6,"code":"#Fonction qui calcule une estimation de la variance d'un estimateur du total de y. \n  str(var_lfs)\n#Liste contenant les données nécessaires à l'utilisation de la fonction var_lfs\n  str(technical_data_lfs)","options":{"output":"true","context":"interactive","comment":"","editor-quick-suggestions":"false","warning":"true","fig-height":5,"fig-cap":"","dpi":72,"message":"true","out-width":"700px","label":"unnamed-chunk-6","editor-max-height":"250","results":"markup","editor-font-scale":"0.5","out-height":"","classes":"","autorun":"false","read-only":"false","fig-width":7}},{"id":7,"code":"precision_lfs <- gustave::define_variance_wrapper(\n  variance_function = var_lfs, #Fonction d'estimations de la variance d'un total \n  technical_data = technical_data_lfs, #Données utilisées par la fonction `var_lfs`\n  reference_id = technical_data_lfs$ind$id_ind, #Identifiant des individus\n  reference_weight = technical_data_lfs$ind$sampling_weight, #Poids utilisés pour calculer les estimations\n  default_id = \"id_ind\" #Identifiant des individus dans la table contenant les variables d'intérêt\n)","options":{"output":"true","context":"interactive","comment":"","editor-quick-suggestions":"false","warning":"true","fig-height":5,"fig-cap":"","dpi":72,"message":"true","out-width":"700px","label":"unnamed-chunk-7","editor-max-height":"250","results":"markup","editor-font-scale":"0.5","out-height":"","classes":"","autorun":"false","read-only":"false","fig-width":7}},{"id":8,"code":"ratio2 <- define_statistic_wrapper(\n  statistic_function = function(num, denom, weight){\n    na <- is.na(num) | is.na(denom)\n    num[na] <- 0\n    denom[na] <- 0\n    est_num <- sum(num * weight)\n    est_denom <- sum(denom * weight)\n    #Définition de l'estimation du paramètre d'intérêt\n    point <- est_num / est_denom\n    #Définition de la variable linéarisée estimée\n    lin <- (num - point * denom ) / est_denom\n    list(point = point, lin = lin, n = length(num))\n  }, \n  arg_type = list(data = c(\"num\", \"denom\") , weight = \"weight\")\n)\n\n\n## Récapitulatif \n\n![](illustrations/resume/resume6.svg)\n\n\n#Utilisation\nlfs_samp_ind$rand_income <- rexp(nrow(lfs_samp_ind))\nprecision_lfs(data = lfs_samp_ind,\n ratio(income, rand_income),\n ratio2(income, rand_income), \n alpha = 0.9)","options":{"output":"true","context":"interactive","comment":"","editor-quick-suggestions":"false","warning":"true","fig-height":5,"fig-cap":"","dpi":72,"message":"true","out-width":"700px","label":"unnamed-chunk-8","editor-max-height":"250","results":"markup","editor-font-scale":"0.5","out-height":"","classes":"","autorun":"false","read-only":"false","fig-width":7}}];
+  globalThis.qwebrCellDetails = [{"options":{"fig-height":5,"out-height":"","classes":"","editor-quick-suggestions":"false","comment":"","results":"markup","fig-cap":"","output":"true","warning":"true","message":"true","fig-width":7,"label":"unnamed-chunk-1","dpi":72,"editor-font-scale":"0.5","autorun":"false","editor-max-height":"250","read-only":"false","context":"interactive","out-width":"700px"},"code":"n <- 100\nN <- 10000\ny <- 1:n\npik <- rep(n/N, n)\ngustave::var_srs(y = y, pik =  pik, strata = NULL, w = NULL, precalc = NULL)\n#Le plan est de taille fixe, il est donc possible d'utiliser l'estimateur de Sen-Yates-Grundy\n\n#Définition de la matrice des probabilités doubles\npikl <- matrix(n*(n-1)/(N*(N-1)), ncol = n, nrow = n)\ndiag(pikl) <- pik\ngustave::varSYG(y = y, pikl = pikl)","id":1},{"options":{"fig-height":5,"out-height":"","classes":"","editor-quick-suggestions":"false","comment":"","results":"markup","fig-cap":"","output":"true","warning":"true","message":"true","fig-width":7,"label":"unnamed-chunk-2","dpi":72,"editor-font-scale":"0.5","autorun":"false","editor-max-height":"250","read-only":"false","context":"interactive","out-width":"700px"},"code":"n <- 100\ny <- 1:n\npik <- rep(0.5, n)\ngustave::var_srs(y = y, pik =  pik, w = NULL)","id":2},{"options":{"fig-height":5,"out-height":"","classes":"","editor-quick-suggestions":"false","comment":"","results":"markup","fig-cap":"","output":"true","warning":"true","fig-cap ":"Récupération des résidus","message":"true","fig-width":7,"label":"unnamed-chunk-3","dpi":72,"editor-font-scale":"0.5","autorun":"false","editor-max-height":"250","read-only":"false","context":"interactive","out-width":"700px"},"code":"\nn <- 100\nd <- 5 #Nombre de variables auxiliaires\ny <- matrix(1:n, ncol = 1)\nx <- matrix(rnorm(n*d), ncol = d)\n\npik <- rep(0.5, n)\n\nresidus <- gustave::res_cal(y = y, \n x = x,\n w = 1/pik\n )\n\nstr(residus)\n\nvar_srs(y = matrix(residus, ncol = 1), \n  pik = pik)","id":3},{"options":{"fig-height":5,"out-height":"","classes":"","editor-quick-suggestions":"false","comment":"","results":"markup","fig-cap":"","output":"true","warning":"true","message":"true","fig-width":7,"label":"unnamed-chunk-4","dpi":72,"editor-font-scale":"0.5","autorun":"true","editor-max-height":"250","read-only":"false","context":"setup","out-width":"700px"},"code":"var_lfs <- function(y, ind, dwel, area){\n  \n  variance <- list()\n  \n  # Variance associated with the sampling of the dwellings\n  y <- sum_by(y, ind$id_dwel)\n  variance[[\"dwel\"]] <- var_srs(\n    y = y, pik = dwel$pik_dwel, strata = dwel$id_area, \n    w = (1 / dwel$pik_area^2 - dwel$q_area)\n  )\n  \n  # Variance associated with the sampling of the areas\n  y <- sum_by(y = y, by = dwel$id_area, w = 1 / dwel$pik_dwel) \n  variance[[\"area\"]] <- varDT(y = y, precalc = area)\n  \n  Reduce(`+`, variance)\n  \n}\n\n# where y is the matrix of variables of interest and ind, dwel and area the technical data:\n\ntechnical_data_lfs <- list()\n\n# Technical data at the area level\n# The varDT function allows for the pre-calculation of \n# most of the methodological quantities needed.\ntechnical_data_lfs$area <- varDT(\n  y = NULL, \n  pik = lfs_samp_area$pik_area, \n  x = as.matrix(lfs_samp_area[c(\"pik_area\", \"income\")]),\n  id = lfs_samp_area$id_area\n)\n\n# Technical data at the dwelling level\n# In order to implement Rao (1975) formula for two-stage samples,\n# we associate each dwelling with the diagonal term corresponding \n# to its area in the first-stage variance estimator: \nlfs_samp_dwel$q_area <- with(technical_data_lfs$area, setNames(diago, id))[lfs_samp_dwel$id_area]\ntechnical_data_lfs$dwel <- lfs_samp_dwel[c(\"id_dwel\", \"pik_dwel\", \"id_area\", \"pik_area\", \"q_area\")]\n\n# Technical data at the individual level\ntechnical_data_lfs$ind <- lfs_samp_ind[c(\"id_ind\", \"id_dwel\", \"sampling_weight\")]\n\n# Test of the variance function var_lfs\ny <- matrix(as.numeric(lfs_samp_ind$unemp), ncol = 1, dimnames = list(lfs_samp_ind$id_ind))\nwith(technical_data_lfs, var_lfs(y = y, ind = ind, dwel = dwel, area = area))\n\n\n# Step 2 : Definition of the variance wrapper\n\n# Call of define_variance_wrapper\nprecision_lfs <- define_variance_wrapper(\n  variance_function = var_lfs,\n  technical_data = technical_data_lfs, \n  reference_id = technical_data_lfs$ind$id_ind,\n  reference_weight = technical_data_lfs$ind$sampling_weight,\n  default_id = \"id_ind\"\n)","id":4},{"options":{"fig-height":5,"out-height":"","classes":"","editor-quick-suggestions":"false","comment":"","results":"markup","fig-cap":"Un variance wrapper","output":"true","warning":"true","message":"true","fig-width":7,"label":"unnamed-chunk-5","dpi":72,"editor-font-scale":"0.5","autorun":"false","editor-max-height":"250","read-only":"false","context":"interactive","out-width":"700px"},"code":"\n#Exemple d'un variance wrapper : precision_lfs\n\n#str(precision_lfs) #Il s'agit bien d'une fonction\n#str(lfs_samp_ind) #Données d'enquête\nprecision_lfs(data = lfs_samp_ind, total(unemp), mean(unemp), alpha = 0.9)","id":5},{"options":{"fig-height":5,"out-height":"","classes":"","editor-quick-suggestions":"false","comment":"","results":"markup","fig-cap":"","output":"true","warning":"true","message":"true","fig-width":7,"label":"unnamed-chunk-6","dpi":72,"editor-font-scale":"0.5","autorun":"false","editor-max-height":"250","read-only":"false","context":"interactive","out-width":"700px"},"code":"#Fonction qui calcule une estimation de la variance d'un estimateur du total de y. \n  str(var_lfs)\n#Liste contenant les données nécessaires à l'utilisation de la fonction var_lfs\n  str(technical_data_lfs)","id":6},{"options":{"fig-height":5,"out-height":"","classes":"","editor-quick-suggestions":"false","comment":"","results":"markup","fig-cap":"","output":"true","warning":"true","message":"true","fig-width":7,"label":"unnamed-chunk-7","dpi":72,"editor-font-scale":"0.5","autorun":"false","editor-max-height":"250","read-only":"false","context":"interactive","out-width":"700px"},"code":"precision_lfs <- gustave::define_variance_wrapper(\n  variance_function = var_lfs, #Fonction d'estimations de la variance d'un total \n  technical_data = technical_data_lfs, #Données utilisées par la fonction `var_lfs`\n  reference_id = technical_data_lfs$ind$id_ind, #Identifiant des individus\n  reference_weight = technical_data_lfs$ind$sampling_weight, #Poids utilisés pour calculer les estimations\n  default_id = \"id_ind\" #Identifiant des individus dans la table contenant les variables d'intérêt\n)","id":7},{"options":{"fig-height":5,"out-height":"","classes":"","editor-quick-suggestions":"false","comment":"","results":"markup","fig-cap":"","output":"true","warning":"true","message":"true","fig-width":7,"label":"unnamed-chunk-8","dpi":72,"editor-font-scale":"0.5","autorun":"false","editor-max-height":"250","read-only":"false","context":"interactive","out-width":"700px"},"code":"ratio2 <- define_statistic_wrapper(\n  statistic_function = function(num, denom, weight){\n    na <- is.na(num) | is.na(denom)\n    num[na] <- 0\n    denom[na] <- 0\n    est_num <- sum(num * weight)\n    est_denom <- sum(denom * weight)\n    #Définition de l'estimation du paramètre d'intérêt\n    point <- est_num / est_denom\n    #Définition de la variable linéarisée estimée\n    lin <- (num - point * denom ) / est_denom\n    list(point = point, lin = lin, n = length(num))\n  }, \n  arg_type = list(data = c(\"num\", \"denom\") , weight = \"weight\")\n)\n\n\n## Récapitulatif \n\n![](illustrations/resume/resume6.svg)\n\n\n#Utilisation\nlfs_samp_ind$rand_income <- rexp(nrow(lfs_samp_ind))\nprecision_lfs(data = lfs_samp_ind,\n ratio(income, rand_income),\n ratio2(income, rand_income), \n alpha = 0.9)","id":8}];
 
   </script>
   <script type="module">
@@ -1645,14 +1645,21 @@ Khaled Larbi
 </section>
 <section id="définitions-usuelles-et-notations." class="slide level2">
 <h2>Définitions usuelles et notations.</h2>
+<div class="fragment">
 <p>Dans cette présentation, on notera :</p>
 <ul>
-<li><p><span class="math inline">\(\mathcal{U}\)</span>, une population finie de taille <span class="math inline">\(N\)</span>,</p></li>
-<li><p><span class="math inline">\(p\)</span>, un plan de sondage défini sur <span class="math inline">\(\mathcal{U}\)</span>,</p></li>
-<li><p><span class="math inline">\(S\)</span> un échantillon aléatoire tiré selon le plan <span class="math inline">\(p\)</span>.</p></li>
-<li><p><span class="math inline">\(\{y_k\}\)</span> : une variable d’intérêt,</p></li>
-<li><p><span class="math inline">\(\{x_k\}\)</span> : une variable auxiliaire.</p></li>
+<li><span class="math inline">\(\mathcal{U}\)</span>, une population finie de taille <span class="math inline">\(N\)</span>,</li>
+<li><span class="math inline">\(p\)</span>, un plan de sondage défini sur <span class="math inline">\(\mathcal{U}\)</span>,</li>
+<li><span class="math inline">\(S\)</span> un échantillon aléatoire tiré selon le plan <span class="math inline">\(p\)</span>.</li>
 </ul>
+</div>
+<div class="fragment">
+<ul>
+<li><span class="math inline">\(\{y_k\}\)</span> : une variable d’intérêt,</li>
+<li><span class="math inline">\(\{x_k\}\)</span> : une variable auxiliaire.</li>
+</ul>
+</div>
+<div class="fragment">
 <p>Pour l’inférence, il est commode d’introduire :</p>
 <ul>
 <li>pour tout individu <span class="math inline">\(k \in \mathcal{U}, ~ \pi_k = \mathbb{P}(k \in S)\)</span> <span class="math inline">\(\to\)</span> probabilité d’inclusion d’ordre 1.
@@ -1661,28 +1668,37 @@ Khaled Larbi
 </ul></li>
 <li>pour tout couple d’individus <span class="math inline">\((k,l) \in \mathcal{U}^2, ~ \pi_{kl} = \mathbb{P}(k \in S \cap l \in S)\)</span> <span class="math inline">\(\to\)</span> probabilité d’inclusion d’ordre 2.
 <ul>
-<li>il s’agit de la probabilité que les individus <span class="math inline">\(k\)</span> et <span class="math inline">\(l\)</span> soient conjointement dans l’échantillon <span class="math inline">\(S\)</span></li>
+<li>il s’agit de la probabilité que les individus <span class="math inline">\(k\)</span> et <span class="math inline">\(l\)</span> soient conjointement dans l’échantillon <span class="math inline">\(S\)</span>.</li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="estimateur-dhorvitz-thompson" class="slide level2">
 <h2>Estimateur d’Horvitz-Thompson</h2>
+<div class="fragment">
 <ul>
 <li>Comment estimer le total <span class="math inline">\(\displaystyle t_y = \sum_{k \in \mathcal{U}} y_k\)</span> en utilisant l’information disponible uniquement sur l’échantillon <span class="math inline">\(S\)</span> ?
 <ul>
 <li>L’estimateur <span class="math inline">\(\hat{t}_{y,\text{HT}} = \sum_{k \in S} \frac{y_k}{\pi_k}\)</span> est appelé estimateur d’Hovitz-Thompson du total.</li>
 </ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li>Est-ce un <em>bon</em> estimateur ?</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li>Critère de biais et de variance.</li>
 </ul>
+</div>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div class="callout callout-caution callout-titled callout-style-default">
+<div class="fragment">
+<div class="callout callout-caution no-icon callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
 <p><strong>Mise en garde</strong></p>
 </div>
 <div class="callout-content">
@@ -1692,7 +1708,9 @@ Khaled Larbi
 </div>
 </div>
 </div>
+</div>
 </div><div class="column" style="width:50%;">
+<div class="fragment">
 <div class="callout callout-caution no-icon callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -1708,6 +1726,7 @@ Khaled Larbi
 </div>
 </div>
 </div>
+</div>
 </section>
 <section id="arbitrage-biaisvariance" class="slide level2">
 <h2>Arbitrage biais/variance</h2>
@@ -1715,18 +1734,29 @@ Khaled Larbi
 <img data-src="illustrations/biais_variance.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
 <section id="estimateur-dhorvitz-thompson-biais-et-variance" class="slide level2">
 <h2>Estimateur d’Horvitz-Thompson : biais et variance</h2>
+<div class="fragment">
 <ul>
-<li><p>Si pour tout <span class="math inline">\(k \in \mathcal{U},~~ \pi_k &gt; 0\)</span> alors <span class="math inline">\(\hat{t}_{y,\text{HT}}\)</span> est un estimateur sans biais de <span class="math inline">\(t_y\)</span>.</p></li>
-<li><p>S’il existe un individu <span class="math inline">\(j\)</span> tel que <span class="math inline">\(\pi_j = 0\)</span>, alors il y a un défaut de couverture <span class="math inline">\(\to\)</span> biais.</p></li>
-<li><p>Quid de la variance de <span class="math inline">\(\hat{t}_{y,\text{HT}}\)</span> ?</p>
+<li>Si pour tout <span class="math inline">\(k \in \mathcal{U},~~ \pi_k &gt; 0\)</span> alors <span class="math inline">\(\hat{t}_{y,\text{HT}}\)</span> est un estimateur sans biais de <span class="math inline">\(t_y\)</span>.</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>S’il existe un individu <span class="math inline">\(j\)</span> tel que <span class="math inline">\(\pi_j = 0\)</span>, alors il y a un défaut de couverture <span class="math inline">\(\to\)</span> biais.</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Quid de la variance de <span class="math inline">\(\hat{t}_{y,\text{HT}}\)</span> ?
 <ul>
 <li><span class="math display">\[\mathbb{V}(\hat t_{y,\text{HT}}) = \sum_{k \in \color{red}{\mathcal{U}}} \sum_{l \in \color{red}{\mathcal{U}}} \frac{y_k}{\pi_k} \frac{y_l}{\pi_l} \Delta_{kl}\]</span> où <span class="math inline">\(\Delta_{kl} = \pi_{kl} - \pi_k \pi_l\)</span></li>
 <li><u>Problème</u> : la variance est fonction des valeurs de <span class="math inline">\(\{y_k\}\)</span> sur <span class="math inline">\(\color{red}{\mathcal{U}}\)</span> mais cette information n’est disponible que sur <span class="math inline">\(\mathcal{S}\)</span></li>
 <li><u>Solution</u> : estimer la variance.</li>
 </ul></li>
 </ul>
+</div>
 <div class="columns">
 <div class="column" style="width:50%;">
+<div class="fragment">
 <div class="callout callout-caution no-icon callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -1741,7 +1771,9 @@ Khaled Larbi
 </div>
 </div>
 </div>
+</div>
 </div><div class="column" style="width:50%;">
+<div class="fragment">
 <div class="callout callout-caution no-icon callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
@@ -1754,6 +1786,7 @@ Khaled Larbi
 <li>Si pour tout <span class="math inline">\((k,l) \in \mathcal{U}^2\)</span>, <span class="math inline">\(\pi_{kl} &gt; 0\)</span> et le plan <span class="math inline">\(p\)</span> est de taille fixe alors <span class="math inline">\(\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}})\)</span> est sans biais pour <span class="math inline">\(\mathbb{V}(\hat t_{y,\text{HT}})\)</span>.</li>
 <li>Si pour tout <span class="math inline">\((k,l) \in \mathcal{U}^2\)</span>, <span class="math inline">\(\pi_{kl} - \pi_k \pi_l \leq 0\)</span> alors <span class="math inline">\(\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}}) \geq 0\)</span>.</li>
 </ul>
+</div>
 </div>
 </div>
 </div>
@@ -1782,7 +1815,7 @@ Khaled Larbi
 <li>Un théorème central limite pour tous les plans de sondage : <span class="emoji" data-emoji="x">❌</span>
 <ul>
 <li><span class="citation" data-cites="hajek1960limiting">Hájek (<a href="#/bibliographie" role="doc-biblioref" onclick="">1960</a>)</span> : pour le SRS.</li>
-<li><span class="citation" data-cites="Chauvet2015CouplingMF">Chauvet (<a href="#/bibliographie" role="doc-biblioref" onclick="">2015</a>)</span> : pour les sondages à plusieurs degrés avec un SRS au premier degré.</li>
+<li><span class="citation" data-cites="Chauvet2015CouplingMF">Chauvet (<a href="#/bibliographie" role="doc-biblioref" onclick="">2015</a>)</span> : pour les sondages à plusieurs degrés avec un <span class="math inline">\(\text{SASSR}\)</span> au premier degré.</li>
 <li><span class="citation" data-cites="Berger1998RateOC">Berger (<a href="#/bibliographie" role="doc-biblioref" onclick="">1998</a>)</span> : pour les plans à forte entropie. …</li>
 </ul></li>
 <li>Champ de recherche ouvert : théorie unifiée ? D’autres TCL ?</li>
@@ -1856,7 +1889,7 @@ Khaled Larbi
 <li>tous les individus sont tirés indépendamment les uns des autres,</li>
 <li>la probabilité d’un individu <span class="math inline">\(k\)</span> soit dans l’échantillon est <span class="math inline">\(p_k\)</span>.</li>
 </ul>
-<p>Si $S <span class="math inline">\(p_{\text{Poisson}(\textbf{p})}\)</span> alors pour tout <span class="math inline">\((k,l) \in \mathcal{U}^2, ~~ \pi_k = \textbf{p}_k\)</span> et si <span class="math inline">\(k \neq l~~\)</span>, <span class="math inline">\(\pi_{kl} = \textbf{p}_k \textbf{p}_l\)</span></p>
+<p>Si $<span class="math inline">\(p_{\text{Poisson}(\textbf{p})}\)</span> alors pour tout <span class="math inline">\((k,l) \in \mathcal{U}^2, ~~ \pi_k = \textbf{p}_k\)</span> et si <span class="math inline">\(k \neq l~~\)</span>, <span class="math inline">\(\pi_{kl} = \textbf{p}_k \textbf{p}_l\)</span></p>
 <p><u>Application</u> : <span class="math inline">\(\displaystyle \hat{\mathbb{V}}_\text{HT}(\hat t_{y,\text{HT}}) = \sum_{k \in S} y_k^2 \frac{1-\textbf{p}_k}{\textbf{p}_k}\)</span></p>
 </div>
 </div>
@@ -1866,15 +1899,29 @@ Khaled Larbi
 </section>
 <section id="approximations-classiques" class="slide level2">
 <h2>Approximations classiques</h2>
+<div class="fragment">
 <ul>
-<li><p>Parfois, il est délicat de calculer les probabilités d’inclusion d’ordre 2.</p></li>
-<li><p>Pour certains plans, des approximations sont utilisées.</p></li>
-<li><p>Pour les plans équilibrés à forte entropie : formule de Deville-Tiilé (<span class="citation" data-cites="varDT">Deville et Tillé (<a href="#/bibliographie" role="doc-biblioref" onclick="">2000</a>)</span>). <span class="math display">\[\hat{\mathbb{V}}_\text{DT}(\hat{t}_{y,\text{HT}}) = \sum_{k \in S} (1 - \pi_k) \left(\frac{y_k}{\pi_k} - \frac{x_k}{\pi_k} \hat{\beta} \right)^2\]</span> où <span class="math inline">\(\hat{\beta}\)</span> est le coefficient estimé de la régression de <span class="math inline">\(\{\frac{y_k}{\pi_k}\}\)</span> par <span class="math inline">\(\{\frac{x_k}{\pi_k}\}\)</span> pondérée par <span class="math inline">\(1-\pi_k\)</span>.</p>
+<li>Parfois, il est délicat de calculer les probabilités d’inclusion d’ordre 2.</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Pour certains plans, des approximations sont utilisées.</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Pour les plans équilibrés à forte entropie : formule de Deville-Tiilé (<span class="citation" data-cites="varDT">Deville et Tillé (<a href="#/bibliographie" role="doc-biblioref" onclick="">2000</a>)</span>). <span class="math display">\[\hat{\mathbb{V}}_\text{DT}(\hat{t}_{y,\text{HT}}) = \sum_{k \in S} (1 - \pi_k) \left(\frac{y_k}{\pi_k} - \frac{x_k}{\pi_k} \hat{\beta} \right)^2\]</span> où <span class="math inline">\(\hat{\beta}\)</span> est le coefficient estimé de la régression de <span class="math inline">\(\{\frac{y_k}{\pi_k}\}\)</span> par <span class="math inline">\(\{\frac{x_k}{\pi_k}\}\)</span> pondérée par <span class="math inline">\(1-\pi_k\)</span>.
 <ul>
 <li>Remarque : le plan aléatoire simple sans remise <span class="math inline">\(p_{\text{SASSR}(n;N)}\)</span> est un plan équilibré sur la variable <span class="math inline">\(\{pi_k\}\)</span> <span class="math inline">\(\to\)</span> il est donc possible d’utiliser l’approximation de Deville-Tillé et <span class="math inline">\(\hat{\mathbb{V}}_\text{DT}(\hat{t}_{y,\text{HT}}) = \hat{\mathbb{V}}_\text{SYG}(\hat{t}_{y,\text{HT}}) = \hat{\mathbb{V}}_\text{HT}(\hat{t}_{y,\text{HT}})\)</span></li>
 </ul></li>
-<li><p>Pour le tirage systématique : approximation par la variance sous un plan aléatoire simple.</p></li>
 </ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Pour le tirage systématique : approximation par la variance sous un plan aléatoire simple.</li>
+</ul>
+</div>
 </section>
 <section id="section" class="slide level2">
 <h2></h2>
@@ -1931,11 +1978,9 @@ Idée 4
 <section id="section-1" class="slide level2">
 <h2></h2>
 
-<img data-src="illustrations/resume/resume0.svg" class="r-stretch quarto-figure-center"><p class="caption">Récapitulatif</p></section>
+<img data-src="illustrations/resume/resume0.svg" class="r-stretch"></section>
 <section id="estimation-de-variance-pour-des-plans-à-plusieurs-degrés-rao75" class="slide level2">
 <h2>Estimation de variance pour des plans à plusieurs degrés (<span class="citation" data-cites="rao75">Rao (<a href="#/bibliographie" role="doc-biblioref" onclick="">1975</a>)</span>)</h2>
-<div class="columns">
-<div class="column" style="width:50%;">
 <p>Soit <span class="math inline">\(p\)</span> un plan de sondage à deux degrés où <span class="math inline">\(p_1\)</span> désigne le plan de sondage des unités primaires et <span class="math inline">\(p_{2|1}\)</span> le plan de sondage des unités secondaires conditionnellement aux unités primaires. On notera respectivement <span class="math inline">\(s_\text{UP}\)</span> et <span class="math inline">\(s_\text{US}\)</span>, les échantillons d’unités primaires et secondaires obtenus.</p>
 <p>On note :</p>
 <ul>
@@ -1944,7 +1989,9 @@ Idée 4
 <li><span class="math inline">\(\pi_l^{(1,2)}\)</span>, les probabilités d’inclusion d’ordre 1 d’une unité secondaire <span class="math inline">\(l \in U_\text{UP}\)</span>.</li>
 </ul>
 <p>Soit <span class="math inline">\(\hat y\)</span>, l’estimateur d’Horvitz-Thompson d’une variable d’intérêt <span class="math inline">\(y\)</span> : <span class="math display">\[\hat y = \sum_{k \in S_{\text{US}}} \frac{y_k}{\pi_k^{(1,2)}} = \sum_{u \in S_\text{UP}} \frac{\hat{y}_{(u)}}{\pi_u^{(1)}} \text{  avec  } \hat{y}_{(u)} = \sum_{k \in u \cap S_\text{US}} \frac{y_k}{\pi_k^{(2|1)}}\]</span></p>
-</div><div class="column" style="width:50%;">
+</section>
+<section id="section-2" class="slide level2">
+<h2></h2>
 <p>Supposons que :</p>
 <ul>
 <li>le tirage des unités secondaires au sein des unités primaires sont indépendants d’une unité primaire à l’autre.</li>
@@ -1953,14 +2000,11 @@ Idée 4
 <li>pour tout <span class="math inline">\(u \in \mathcal{U}_\text{UP}\)</span>, l’existence d’un estimateur sans biais <span class="math inline">\(\hat{\mathbb{V}}^{2|1}(\hat{y}_{(u)})\)</span> (sous le deuxième degré) de la variance de l’estimateur <span class="math inline">\(\hat y_(u)\)</span>.</li>
 </ul>
 <p>Sous ces hypothèses, la variance totale de l’estimateur d’Horvitz-Thompson sous le plan <span class="math inline">\(p\)</span> peut être estimée sans biais par <span class="math display">\[\hat{\mathbb{V}}^{(1,2)}(\hat y_{(u)}) = \hat{\mathbb{V}}^{(1,2)}(\{ y_{l} : l \in S_\text{US} \}) =  Q(\hat{y}_{(1)}, ..., \hat{y}_{(n_\text{UP})}) + \sum_{u \in S_\text{UP}} \left( \frac{1}{(\pi_u^{(1)})^2} - q_u \right) \hat{\mathbb{V}}^{2|1}(\hat{y}_{(u)}) \]</span></p>
-</div>
-</div>
-<p>::::</p>
 </section>
 <section id="récapitulatif" class="slide level2">
 <h2>Récapitulatif</h2>
 
-<img data-src="illustrations/resume/resume1.svg" class="r-stretch quarto-figure-center"><p class="caption">Récapitulatif</p></section></section>
+<img data-src="illustrations/resume/resume1.svg" class="r-stretch"></section></section>
 <section>
 <section id="estimation-de-variance-par-linéarisation" class="title-slide slide level1 center">
 <h1>Estimation de variance par linéarisation</h1>
@@ -1968,35 +2012,67 @@ Idée 4
 </section>
 <section id="estimation-par-subtitution" class="slide level2">
 <h2>Estimation par subtitution</h2>
+<div class="fragment">
 <ul>
-<li><p>Nous savons calculer la variance d’estimateurs d’Horvitz-Thompson <span class="math inline">\(\hat{t}_{y,\text{HT}} = \sum_{k \in S} \frac{y_k}{pi_k}\)</span> du total.</p></li>
-<li><p>En pratique, on s’intéresse à d’autres paramètres (univariés) : <span class="math inline">\(\theta = f(t_{y^{(1)}}, ..., t_{y^{(d)}})\)</span></p>
-<ul>
-<li>Exemple 1 : la moyenne de la variable <span class="math inline">\(\mu_{y^{(1)}} = \frac{1}{N} t_{y^{(1)}}\)</span></li>
-<li>Exemple 2 : le rapport des totaux des variables <span class="math inline">\(\{y_1\}\)</span> <span class="math inline">\(\{y_2\}\)</span> <span class="math inline">\(R_{\mu_{y^{(1)}}, \mu_{y^{(2)}}} = \frac{t_{y^{(1)}}}{t_{y^{(2)}}}\)</span></li>
-</ul></li>
-<li><p>Comment trouver un estimateur (approximativement) sans biais ?</p></li>
-<li><p>Principe de subtitution : on remplace les paramètres inconnus par des estimations.</p>
-<ul>
-<li>Exemple 1 : la moyenne de la variable <span class="math inline">\(\frac{1}{N} t_{y^{(1)}}\)</span></li>
-<li>Exemple 2 : la moyenne de la variable <span class="math inline">\(\frac{1}{N} t_{y^{(1)}}\)</span></li>
-</ul></li>
-<li><p>Quid de la variance ?</p></li>
+<li>Nous savons estimer la variance d’estimateurs d’Horvitz-Thompson <span class="math inline">\(\displaystyle \hat{t}_{y,\text{HT}} = \sum_{k \in S} \frac{y_k}{\pi_k}\)</span> du total.</li>
 </ul>
+</div>
+<div class="fragment">
+<ul>
+<li>En pratique, on s’intéresse à d’autres paramètres (univariés) : <span class="math inline">\(\theta = f(t_{y^{(1)}}, ..., t_{y^{(d)}})\)</span>
+<ul>
+<li>Exemple 1 : la moyenne de la variable <span class="math inline">\(\mu_{y^{(1)}} = \frac{1}{N} t_{y_{1}}\)</span></li>
+<li>Exemple 2 : le rapport des totaux des variables <span class="math inline">\(\{y_{1,k}\}\)</span> <span class="math inline">\(\{y_{2,k}\}\)</span> <span class="math inline">\(R_{{y^{(1)}},{y^{(2)}}} = \frac{t_{y_{1}}}{t_{y_{2}}}\)</span></li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Comment trouver un estimateur (approximativement) sans biais ?</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Principe de subtitution : on remplace les paramètres inconnus par des estimations.
+<ul>
+<li>Exemple 1 : la moyenne de la variable <span class="math inline">\(\frac{1}{N} \hat{t}_{y_1, \text{HT}}\)</span></li>
+<li>Exemple 2 : la moyenne de la variable <span class="math inline">\(\hat{R}_{{y^{(1)}},{y^{(2)}}} = \frac{\hat{t}_{y_1, \text{HT}}}{\hat{t}_{y_2, \text{HT}}}\)</span></li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Quid de la variance ?</li>
+</ul>
+</div>
 </section>
 <section id="principe-de-linéarisation" class="slide level2">
 <h2>Principe de linéarisation</h2>
+<div class="fragment">
 <ul>
-<li><p>Le principe de linéarisation va permettre d’estimer la variance d’estimateurs par subtitution.</p></li>
-<li><p>L’idée est d’approximer la variance de l’estimateur par subtitution <span class="math inline">\(\hat{\theta} = \mathbb{V}f(\hat{t}_{y^{(1),\text{HT}}, \text{HT}}, ..., \hat{t}_{y^{(d),\text{HT}}})\)</span> par celle de l’estimateur du total d’Horvitz-Thompson d’une variable <span class="math inline">\(\mathbb{V}(\hat{t}_{u,\text{HT}})\)</span>.</p></li>
-<li><p>Comment construire <span class="math inline">\(\{u_k\}\)</span> ?</p></li>
-<li><p>Plusieurs approches différentes :</p>
+<li>Le principe de linéarisation va permettre d’estimer la variance d’estimateurs par subtitution.</li>
+</ul>
+</div>
+<div class="fragment">
 <ul>
-<li>Si <span class="math inline">\(\hat{\theta} = \mathbb{V}f(\hat{t}_{y^{(1),\text{HT}}, \text{HT}}, ..., \hat{t}_{y^{(d),\text{HT}}})\)</span> où <span class="math inline">\(f\)</span> est différentiable.</li>
+<li>L’idée est d’approximer la variance de l’estimateur par subtitution <span class="math inline">\(\hat{\theta} = \mathbb{V}(f(\hat{t}_{y^{(1),\text{HT}}, \text{HT}}, ..., \hat{t}_{y^{(d),\text{HT}}}))\)</span> par celle de l’estimateur du total d’Horvitz-Thompson d’une variable <span class="math inline">\(\mathbb{V}(\hat{t}_{u,\text{HT}})\)</span>.</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Comment construire <span class="math inline">\(\{u_k\}\)</span> ?</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Plusieurs approches différentes :
+<ul>
+<li>Si <span class="math inline">\(\hat{\theta} = \mathbb{V}(f(\hat{t}_{y^{(1),\text{HT}}, \text{HT}}, ..., \hat{t}_{y^{(d),\text{HT}}}))\)</span> où <span class="math inline">\(f\)</span> est différentiable.</li>
 <li>Si <span class="math inline">\(\hat{\theta}\)</span> est solution d’une équation estimante.</li>
 <li>Si <span class="math inline">\(\hat{\theta}\)</span> est une fonctionnelle.</li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="approche-1-si-f-différentiable" class="slide level2">
 <h2>Approche 1 : si <span class="math inline">\(f\)</span> différentiable</h2>
@@ -2172,13 +2248,26 @@ Idée 4
 </section>
 <section id="linéarisation-par-fonction-objective" class="slide level2">
 <h2>Linéarisation par fonction objective</h2>
+<div class="fragment">
 <ul>
-<li><p>Certains paramètres d’intérêt et estimateurs sont solution d’une équation estimante.</p></li>
-<li><p>Dans certains cas, une expression close du paramètre ou de l’estimateur n’existe pas.</p>
+<li>Certains paramètres d’intérêt et estimateurs sont solutions d’une équation estimante.</li>
+</ul>
+</div>
+<div class="fragment">
 <ul>
-<li>Formellement, il n’est pas possible d’écrire simple</li>
+<li>Dans certains cas, une expression close du paramètre ou de l’estimateur n’existe pas.
+<ul>
+<li>Il n’est pas possible de donner une expression <strong>directe</strong> de l’estimateur.</li>
 </ul></li>
-<li><p>Il est cependant possible d’obtenir une estimation de la variance de l’estimateur par linéarisation de la fonction objective.</p></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Il est cependant possible d’obtenir une estimation de la variance de l’estimateur par linéarisation de la fonction objective.</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
 <li><p>Soit <span class="math inline">\(\theta \in \mathbb{R}^d\)</span>, un paramètre tel que <span class="math display">\[\begin{equation}
 \frac{1}{N} \sum_{k \in \mathcal{U}} \phi(\theta; x_k, y_k) = 0 \text{  où  } \phi : \mathbb{R}^d \to \mathbb{R}^{d} \text{ différentiable.}
 \label{defparameq}
@@ -2187,6 +2276,12 @@ Idée 4
 <li>Exemple 1 : la moyenne <span class="math inline">\(\displaystyle {\mu}_y = \frac{1}{N} \sum_{k \in \mathcal{U}} y_k\)</span> avec <span class="math inline">\(\phi(\theta; x_k, y_k) = y_k - \theta\)</span></li>
 <li>Exemple 2 : le coefficient de régression <span class="math inline">\(\beta\)</span> de la régression de <span class="math inline">\(y\)</span> sur <span class="math inline">\(x\)</span> avec <span class="math inline">\(\phi(\theta; x_k, y_k) = x_k (y_k - x_k^T \theta)\)</span></li>
 </ul></li>
+</ul>
+</div>
+</section>
+<section id="linéarisation-par-fonction-objective-1" class="slide level2">
+<h2>Linéarisation par fonction objective</h2>
+<ul>
 <li><p>Il est possible de construire un estimateur associé <span class="math inline">\(\hat{\theta}\)</span> tel que <span class="math display">\[\begin{equation}
 \frac{1}{N} \sum_{k \in S} \frac{\phi(\hat{\theta}; x_k, y_k)}{\pi_k} = 0 \text{  où  } \phi : \mathbb{R}^d \to \mathbb{R}^{d} \text{ différentiable.}
 \label{defestimeq}
@@ -2201,29 +2296,40 @@ Idée 4
 <h2>Intuition de la linéarisation par fonction estimante</h2>
 <ul>
 <li><p>Si <span class="math inline">\(\phi\)</span> est différentiable, <span class="math display">\[\phi(\hat{\theta}; x_k, y_k) \approx \phi(\theta; x_k, y_k) + (\text{Jac}(\phi)(\theta)) (\hat{\theta} - \theta)\]</span></p></li>
-<li><p>D’où <span class="math display">\[\sum_{k \in S} \frac{\phi(\hat{\theta}; x_k, y_k)}{\pi_k} \approx \sum_{k \in S} \frac{\phi(\theta; x_k, y_k)}{\pi_k} + (\sum_{k \in S} \frac{\text{Jac}(\phi)(\theta; x_k, y_k))}{\pi_k}) (\hat{\theta} - \theta)\]</span></p></li>
-<li><p>Or <span class="math inline">\(\sum_{k \in S} \frac{\phi(\hat{\theta}; x_k, y_k)}{\pi_k} = 0\)</span></p></li>
+<li><p>D’où <span class="math display">\[\underbrace{\sum_{k \in S} \frac{\phi(\hat{\theta}; x_k, y_k)}{\pi_k}}_{=0} \approx \sum_{k \in S} \frac{\phi(\theta; x_k, y_k)}{\pi_k} + (\sum_{k \in S} \frac{\text{Jac}(\phi)(\theta; x_k, y_k))}{\pi_k}) (\hat{\theta} - \theta)\]</span></p></li>
 <li><p>D’où <span class="math display">\[\begin{align}
 (\hat{\theta} - \theta) &amp;\approx \sum_{k \in S}  (-\sum_{j \in S} \frac{\text{Jac}(\phi)(\theta; x_j, y_j))}{\pi_j})^{-1} \frac{\phi(\theta; x_k, y_k)}{\pi_k} \\
 &amp;\approx \sum_{k \in S}  (-\sum_{j \in \mathcal{U}} {\text{Jac}(\phi)(\theta; x_j, y_j))})^{-1} \frac{\phi(\theta; x_k, y_k)}{\pi_k} \\
 &amp;\approx \sum_{k \in S} \frac{u^\text{est}_k(\theta)}{\pi_k}
 \end{align}\]</span></p></li>
 </ul>
+</section>
+<section id="section-3" class="slide level2">
+<h2></h2>
+<div class="fragment">
 <div id="thm-blineq" class="theorem">
 <p><span class="theorem-title"><strong>Théorème 4 (Estimateur de la variance par linéarisation de l’équation estimante)</strong></span> L’approximation suivante <span class="math inline">\(\displaystyle \mathbb{V}(\hat{\theta}) \approx \mathbb{V}(\sum_{k \in S} \frac{u^\text{est}_k(\theta)}{\pi_k})\)</span> permet de créer un estimateur <span class="math inline">\(\displaystyle \hat{\mathbb{V}}(\hat{\theta}) \approx \hat{\mathbb{V}}(\sum_{k \in S} \frac{\widehat{u^\text{est}_k(\theta)}}{\pi_k})\)</span></p>
 </div>
-</section>
-<section id="exemple-de-linéarisation-par-fonction-estimante" class="slide level2">
-<h2>Exemple de linéarisation par fonction estimante</h2>
+</div>
+<div class="fragment">
 <ul>
-<li><p>La variable <span class="math inline">\(\{ u^\text{est}_k(\theta) \}\)</span> est la variable linéarisée associée à l’estimateur <span class="math inline">\(\hat{\theta}\)</span> <span class="math inline">\(\to\)</span> <span class="math inline">\(\theta\)</span> est inconnu.</p></li>
-<li><p>La variable <span class="math inline">\(\{ u^\text{est}_k(\hat{\theta}) \}\)</span> est la variable linéarisée estimée associée à l’estimateur.</p></li>
-<li><p>Pour des développements plus rigoureux :</p>
+<li>La variable <span class="math inline">\(\{ u^\text{est}_k(\theta) \}\)</span> est la variable linéarisée associée à l’estimateur <span class="math inline">\(\hat{\theta}\)</span> <span class="math inline">\(\to\)</span> <span class="math inline">\(\theta\)</span> est inconnu.</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>La variable <span class="math inline">\(\{ u^\text{est}_k(\hat{\theta}) \}\)</span> est la variable linéarisée estimée associée à l’estimateur.</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Pour des développements plus rigoureux :
 <ul>
 <li>Preuve de la normalité asymptotique des Z-estimateurs (iid) :</li>
 <li>Preuve de la normalité asymptotique des Z-estimateurs (cas sondage) :</li>
 </ul></li>
 </ul>
+</div>
 </section>
 <section id="exemple-dapplication" class="slide level2">
 <h2>Exemple d’application</h2>
@@ -2262,17 +2368,35 @@ Idée 4
 </section>
 <section id="calage-sur-marges" class="slide level2">
 <h2>Calage sur marges</h2>
+<div class="fragment">
 <ul>
-<li><p>La calage sur marges consiste à chercher les poids les plus proches des poids initiaux en respectant des contraintes sur l’estimation des marges.</p></li>
-<li><p>Formellement, les poids calés sont solution du programme d’optimisation : <span class="math display">\[\min_{w \in \mathbb{R}^n} \sum_{k \in S} d_k G(\frac{w_k}{d_k}) \text{ sous contrainte que } \sum_{k \in S} w_k \textbf{x}_k = t_\textbf{x}\]</span> où <span class="math inline">\(G\)</span> est une pseudo-distance/divergence qui quantifie l’écart entre les poids initiaux et les poids calés.</p></li>
-<li><p>L’estimateur calé du total d’une variable <span class="math inline">\(\{y_k\}\)</span> s’écrit <span class="math inline">\(\displaystyle \hat{t}_{y,\text{cal}} = \sum_{k \in S} w_k(\color{red}S\color{black}) y_k\)</span> <span class="math inline">\(\to\)</span> il n’est pas possible d’utiliser les estimateurs de la variance d’un estimateur du total classique. <span class="emoji" data-emoji="cry">😢</span></p></li>
-<li><p><span class="citation" data-cites="devcal">Deville et Sarndal (<a href="#/bibliographie" role="doc-biblioref" onclick="">1992</a>)</span><sup>1</sup> montre qu’il est possible d’approximer la variance d’un estimateur calé en utilisant :</p>
+<li>La calage sur marges consiste à chercher les poids les plus proches des poids initiaux en respectant des contraintes sur l’estimation des marges.</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Formellement, les poids calés sont solution du programme d’optimisation : <span class="math display">\[\min_{w \in \mathbb{R}^n} \sum_{k \in S} d_k G(\frac{w_k}{d_k}) \text{ sous contrainte que } \sum_{k \in S} w_k \textbf{x}_k = t_\textbf{x}\]</span> où <span class="math inline">\(G\)</span> est une pseudo-distance/divergence qui quantifie l’écart entre les poids initiaux et les poids calés.</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>L’estimateur calé du total d’une variable <span class="math inline">\(\{y_k\}\)</span> s’écrit <span class="math inline">\(\displaystyle \hat{t}_{y,\text{cal}} = \sum_{k \in S} w_k(\color{red}S\color{black}) y_k\)</span> <span class="math inline">\(\to\)</span> il n’est pas possible d’utiliser les estimateurs de la variance d’un estimateur du total classique. <span class="emoji" data-emoji="cry">😢</span></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><span class="citation" data-cites="devcal">Deville et Sarndal (<a href="#/bibliographie" role="doc-biblioref" onclick="">1992</a>)</span><sup>1</sup> montre qu’il est possible d’approximer la variance d’un estimateur calé en utilisant :
 <ul>
 <li>un estimateur de la variance d’un estimateur du total classique. <span class="emoji" data-emoji="grin">😁</span></li>
 <li>les résidus de la régression de la variable d’intérêt <span class="math inline">\(\{y_k\}\)</span> sur <span class="math inline">\(\{\textbf{x}_k\}\)</span> pondérée par les poids initiaux.</li>
 </ul></li>
-<li><p>Pas de dépendances au choix de <span class="math inline">\(G\)</span><sup>2</sup> : toutes les méthodes sont asymptotiquement équivalentes au sens de la variance.</p></li>
 </ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Pas de dépendances au choix de <span class="math inline">\(G\)</span><sup>2</sup> : toutes les méthodes sont asymptotiquement équivalentes au sens de la variance.</li>
+</ul>
+</div>
 <aside><ol class="aside-footnotes"><li id="fn1"><p><span class="citation" data-cites="kimcal">Kim et Park (<a href="#/bibliographie" role="doc-biblioref" onclick="">2010</a>)</span> pour une lecture plus détaillée.</p></li><li id="fn2"><p>Pour les formes usuelles.</p></li></ol></aside></section>
 <section id="calage-sur-marges-1" class="slide level2">
 <h2>Calage sur marges</h2>
@@ -2549,7 +2673,7 @@ Rao, JNK. 1975. <span>«&nbsp;Unbiased variance estimation for multistage design
 </div>
 <p><a href="#/sec-tclsondage"><span class="button">Retour au cours</span></a></p>
 </section>
-<section id="section-2" class="slide level2">
+<section id="section-4" class="slide level2">
 <h2></h2>
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
