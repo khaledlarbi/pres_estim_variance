@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="fr"><head>
 <script src="pres_analytique_files/libs/clipboard/clipboard.min.js"></script>
 <script src="pres_analytique_files/libs/quarto-html/tabby.min.js"></script>
 <script src="pres_analytique_files/libs/quarto-html/popper.min.js"></script>
@@ -8,10 +8,9 @@
 <link href="pres_analytique_files/libs/quarto-html/light-border.css" rel="stylesheet">
 <link href="pres_analytique_files/libs/quarto-html/quarto-html.min.css" rel="stylesheet" data-mode="light">
 <link href="pres_analytique_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.4.553">
+  <meta name="generator" content="quarto-1.4.555">
 
   <meta name="author" content="Khaled Larbi">
-  <meta name="dcterms.date" content="2024-05-31">
   <title>Atelier du réseau sondage</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -30,7 +29,27 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
-  </style>
+    /* CSS for citations */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+      margin-bottom: 0em;
+    }
+    .hanging-indent div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }  </style>
   <link rel="stylesheet" href="pres_analytique_files/libs/revealjs/dist/theme/quarto.css">
   <link href="pres_analytique_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="pres_analytique_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
@@ -321,8 +340,1276 @@
       margin-right: 0; 
     }
   </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/monaco-editor@0.47.0/min/vs/editor/editor.main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+  <style type="text/css">
+  .monaco-editor pre {
+    background-color: unset !important;
+  }
+
+  .qwebr-editor-toolbar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+  }
+
+  .qwebr-editor-toolbar-left-buttons, .qwebr-editor-toolbar-right-buttons {
+    display: flex;
+  }
+
+  .qwebr-non-interactive-loading-container.qwebr-cell-needs-evaluation, .qwebr-non-interactive-loading-container.qwebr-cell-evaluated {
+    justify-content: center;
+    display: flex;
+    background-color: rgba(250, 250, 250, 0.65);
+    border: 1px solid rgba(233, 236, 239, 0.65);
+    border-radius: 0.5rem;
+    margin-top: 15px;
+    margin-bottom: 15px;
+  }
+
+  .qwebr-r-project-logo {
+    color: #2767B0; /* R Project's blue color */
+  }
+
+  .qwebr-icon-status-spinner {
+    color: #7894c4;
+  }
+
+  .qwebr-icon-run-code {
+    color: #0d9c29
+  }
+
+  body.quarto-light .qwebr-output-code-stdout {
+    color: #111;
+  }
+
+  body.quarto-dark .qwebr-output-code-stdout {
+    color: #EEE;
+  }
+
+  .qwebr-output-code-stderr {
+    color: #db4133;
+  }
+
+  body.quarto-light .qwebr-editor {
+    border: 1px solid #EEEEEE;
+  }
+
+  body.quarto-light .qwebr-editor-toolbar {
+    background-color: #EEEEEE;
+    padding: 0.2rem 0.5rem;
+  }
+
+  body.quarto-dark .qwebr-editor {
+    border: 1px solid #111;
+  }
+
+  body.quarto-dark .qwebr-editor-toolbar {
+    background-color: #111;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .qwebr-button {
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1;
+    text-decoration: none;
+    text-align: center;
+    padding: 0.375rem 0.75rem;
+    font-size: .9rem;
+    border-radius: 0.25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  }
+
+  body.quarto-light .qwebr-button {
+    background-color: #EEEEEE;
+    color: #000;
+    border-color: #dee2e6;
+    border: 1px solid rgba(0,0,0,0);
+  }
+
+  body.quarto-dark .qwebr-button {
+    background-color: #111;
+    color: #EEE;
+    border-color: #dee2e6;
+    border: 1px solid rgba(0,0,0,0);
+  }
+
+  body.quarto-light .qwebr-button:hover {
+    color: #000;
+    background-color: #d9dce0;
+    border-color: #c8ccd0;
+  }
+
+  body.quarto-dark .qwebr-button:hover {
+    color: #d9dce0;
+    background-color: #323232;
+    border-color: #d9dce0;
+  }
+
+  .qwebr-button:disabled,.qwebr-button.disabled,fieldset:disabled .qwebr-button {
+    pointer-events: none;
+    opacity: .65
+  }
+
+  .qwebr-button-reset {
+    color: #696969; /*#4682b4;*/
+  }
+
+  .qwebr-button-copy {
+    color: #696969;
+  }
+
+
+  /* Custom styling for RevealJS Presentations*/
+
+  /* Reset the style of the interactive area */
+  .reveal div.qwebr-interactive-area {
+    display: block;
+    box-shadow: none;
+    max-width: 100%;
+    max-height: 100%;
+    margin: 0;
+    padding: 0;
+  } 
+
+  /* Provide space to entries */
+  .reveal div.qwebr-output-code-area pre div {
+    margin: 1px 2px 1px 10px;
+  }
+
+  /* Collapse the inside code tags to avoid extra space between line outputs */
+  .reveal pre div code.qwebr-output-code-stdout, .reveal pre div code.qwebr-output-code-stderr {
+    padding: 0;
+    display: contents;
+  }
+
+  body.reveal.quarto-light pre div code.qwebr-output-code-stdout {
+    color: #111;
+  }
+
+  body.reveal.quarto-dark pre div code.qwebr-output-code-stdout {
+    color: #EEEEEE;
+  }
+
+  .reveal pre div code.qwebr-output-code-stderr {
+    color: #db4133;
+  }
+
+
+  /* Create a border around console and output (does not effect graphs) */
+  body.reveal.quarto-light div.qwebr-console-area {
+    border: 1px solid #EEEEEE;
+    box-shadow: 2px 2px 10px #EEEEEE;
+  }
+
+  body.reveal.quarto-dark div.qwebr-console-area {
+    border: 1px solid #111;
+    box-shadow: 2px 2px 10px #111;
+  }
+
+
+  /* Cap output height and allow text to scroll */
+  /* TODO: Is there a better way to fit contents/max it parallel to the monaco editor size? */
+  .reveal div.qwebr-output-code-area pre {
+    max-height: 400px;
+    overflow: scroll;
+  }
+
+  </style>
+  <script type="module">
+  // Document level settings ----
+
+  // Determine if we need to install R packages
+  globalThis.qwebrInstallRPackagesList = ['gustave'];
+
+  // Specify possible locations to search for the repository
+  globalThis.qwebrPackageRepoURLS = ['https://repo.r-wasm.org/'];
+
+  // Check to see if we have an empty array, if we do set to skip the installation.
+  globalThis.qwebrSetupRPackages = !(qwebrInstallRPackagesList.indexOf("") !== -1);
+  globalThis.qwebrAutoloadRPackages = true;
+
+  // Display a startup message?
+  globalThis.qwebrShowStartupMessage = true;
+  globalThis.qwebrShowHeaderMessage = false;
+
+  // Describe the webR settings that should be used
+  globalThis.qwebrCustomizedWebROptions = {
+    "baseURL": "https://webr.r-wasm.org/v0.3.3/",
+    "serviceWorkerUrl": "",
+    "homedir": "/home/web_user", 
+    "channelType": "ChannelType.Automatic"
+  };
+
+  // Store cell data
+  globalThis.qwebrCellDetails = [{"id":1,"code":"n <- 100\nN <- 10000\ny <- 1:n\npik <- rep(n/N, n)\ngustave::var_srs(y = y, pik =  pik, strata = NULL, w = NULL, precalc = NULL)\n#Le plan est de taille fixe, il est donc possible d'utiliser l'estimateur de Sen-Yates-Grundy\n\n#Définition de la matrice des probabilités doubles\npikl <- matrix(n*(n-1)/(N*(N-1)), ncol = n, nrow = n)\ndiag(pikl) <- pik\ngustave::varSYG(y = y, pikl = pikl)","options":{"output":"true","context":"interactive","comment":"","editor-quick-suggestions":"false","warning":"true","fig-height":5,"fig-cap":"","dpi":72,"message":"true","out-width":"700px","label":"unnamed-chunk-1","editor-max-height":"250","results":"markup","editor-font-scale":"0.5","out-height":"","classes":"","autorun":"false","read-only":"false","fig-width":7}},{"id":2,"code":"n <- 100\ny <- 1:n\npik <- rep(0.5, n)\ngustave::var_srs(y = y, pik =  pik, w = NULL)","options":{"output":"true","context":"interactive","comment":"","editor-quick-suggestions":"false","warning":"true","fig-height":5,"fig-cap":"","dpi":72,"message":"true","out-width":"700px","label":"unnamed-chunk-2","editor-max-height":"250","results":"markup","editor-font-scale":"0.5","out-height":"","classes":"","autorun":"false","read-only":"false","fig-width":7}},{"id":3,"code":"\nn <- 100\nd <- 5 #Nombre de variables auxiliaires\ny <- matrix(1:n, ncol = 1)\nx <- matrix(rnorm(n*d), ncol = d)\n\npik <- rep(0.5, n)\n\nresidus <- gustave::res_cal(y = y, \n x = x,\n w = 1/pik\n )\n\nstr(residus)\n\nvar_srs(y = matrix(residus, ncol = 1), \n  pik = pik)","options":{"output":"true","context":"interactive","comment":"","editor-quick-suggestions":"false","warning":"true","fig-height":5,"fig-cap":"","dpi":72,"fig-width":7,"message":"true","out-width":"700px","label":"unnamed-chunk-3","editor-max-height":"250","results":"markup","editor-font-scale":"0.5","out-height":"","classes":"","autorun":"false","read-only":"false","fig-cap ":"Récupération des résidus"}},{"id":4,"code":"var_lfs <- function(y, ind, dwel, area){\n  \n  variance <- list()\n  \n  # Variance associated with the sampling of the dwellings\n  y <- sum_by(y, ind$id_dwel)\n  variance[[\"dwel\"]] <- var_srs(\n    y = y, pik = dwel$pik_dwel, strata = dwel$id_area, \n    w = (1 / dwel$pik_area^2 - dwel$q_area)\n  )\n  \n  # Variance associated with the sampling of the areas\n  y <- sum_by(y = y, by = dwel$id_area, w = 1 / dwel$pik_dwel) \n  variance[[\"area\"]] <- varDT(y = y, precalc = area)\n  \n  Reduce(`+`, variance)\n  \n}\n\n# where y is the matrix of variables of interest and ind, dwel and area the technical data:\n\ntechnical_data_lfs <- list()\n\n# Technical data at the area level\n# The varDT function allows for the pre-calculation of \n# most of the methodological quantities needed.\ntechnical_data_lfs$area <- varDT(\n  y = NULL, \n  pik = lfs_samp_area$pik_area, \n  x = as.matrix(lfs_samp_area[c(\"pik_area\", \"income\")]),\n  id = lfs_samp_area$id_area\n)\n\n# Technical data at the dwelling level\n# In order to implement Rao (1975) formula for two-stage samples,\n# we associate each dwelling with the diagonal term corresponding \n# to its area in the first-stage variance estimator: \nlfs_samp_dwel$q_area <- with(technical_data_lfs$area, setNames(diago, id))[lfs_samp_dwel$id_area]\ntechnical_data_lfs$dwel <- lfs_samp_dwel[c(\"id_dwel\", \"pik_dwel\", \"id_area\", \"pik_area\", \"q_area\")]\n\n# Technical data at the individual level\ntechnical_data_lfs$ind <- lfs_samp_ind[c(\"id_ind\", \"id_dwel\", \"sampling_weight\")]\n\n# Test of the variance function var_lfs\ny <- matrix(as.numeric(lfs_samp_ind$unemp), ncol = 1, dimnames = list(lfs_samp_ind$id_ind))\nwith(technical_data_lfs, var_lfs(y = y, ind = ind, dwel = dwel, area = area))\n\n\n# Step 2 : Definition of the variance wrapper\n\n# Call of define_variance_wrapper\nprecision_lfs <- define_variance_wrapper(\n  variance_function = var_lfs,\n  technical_data = technical_data_lfs, \n  reference_id = technical_data_lfs$ind$id_ind,\n  reference_weight = technical_data_lfs$ind$sampling_weight,\n  default_id = \"id_ind\"\n)","options":{"output":"true","context":"setup","comment":"","editor-quick-suggestions":"false","warning":"true","fig-height":5,"fig-cap":"","dpi":72,"message":"true","out-width":"700px","label":"unnamed-chunk-4","editor-max-height":"250","results":"markup","editor-font-scale":"0.5","out-height":"","classes":"","autorun":"true","read-only":"false","fig-width":7}},{"id":5,"code":"\n#Exemple d'un variance wrapper : precision_lfs\n\n#str(precision_lfs) #Il s'agit bien d'une fonction\n#str(lfs_samp_ind) #Données d'enquête\nprecision_lfs(data = lfs_samp_ind, total(unemp), mean(unemp), alpha = 0.9)","options":{"output":"true","context":"interactive","comment":"","editor-quick-suggestions":"false","warning":"true","fig-height":5,"fig-cap":"Un variance wrapper","dpi":72,"message":"true","out-width":"700px","label":"unnamed-chunk-5","editor-max-height":"250","results":"markup","editor-font-scale":"0.5","out-height":"","classes":"","autorun":"false","read-only":"false","fig-width":7}},{"id":6,"code":"#Fonction qui calcule une estimation de la variance d'un estimateur du total de y. \n  str(var_lfs)\n#Liste contenant les données nécessaires à l'utilisation de la fonction var_lfs\n  str(technical_data_lfs)","options":{"output":"true","context":"interactive","comment":"","editor-quick-suggestions":"false","warning":"true","fig-height":5,"fig-cap":"","dpi":72,"message":"true","out-width":"700px","label":"unnamed-chunk-6","editor-max-height":"250","results":"markup","editor-font-scale":"0.5","out-height":"","classes":"","autorun":"false","read-only":"false","fig-width":7}},{"id":7,"code":"precision_lfs <- gustave::define_variance_wrapper(\n  variance_function = var_lfs, #Fonction d'estimations de la variance d'un total \n  technical_data = technical_data_lfs, #Données utilisées par la fonction `var_lfs`\n  reference_id = technical_data_lfs$ind$id_ind, #Identifiant des individus\n  reference_weight = technical_data_lfs$ind$sampling_weight, #Poids utilisés pour calculer les estimations\n  default_id = \"id_ind\" #Identifiant des individus dans la table contenant les variables d'intérêt\n)","options":{"output":"true","context":"interactive","comment":"","editor-quick-suggestions":"false","warning":"true","fig-height":5,"fig-cap":"","dpi":72,"message":"true","out-width":"700px","label":"unnamed-chunk-7","editor-max-height":"250","results":"markup","editor-font-scale":"0.5","out-height":"","classes":"","autorun":"false","read-only":"false","fig-width":7}},{"id":8,"code":"ratio2 <- define_statistic_wrapper(\n  statistic_function = function(num, denom, weight){\n    na <- is.na(num) | is.na(denom)\n    num[na] <- 0\n    denom[na] <- 0\n    est_num <- sum(num * weight)\n    est_denom <- sum(denom * weight)\n    #Définition de l'estimation du paramètre d'intérêt\n    point <- est_num / est_denom\n    #Définition de la variable linéarisée estimée\n    lin <- (num - point * denom ) / est_denom\n    list(point = point, lin = lin, n = length(num))\n  }, \n  arg_type = list(data = c(\"num\", \"denom\") , weight = \"weight\")\n)\n\n\n## Récapitulatif \n\n![](illustrations/resume/resume6.svg)\n\n\n#Utilisation\nlfs_samp_ind$rand_income <- rexp(nrow(lfs_samp_ind))\nprecision_lfs(data = lfs_samp_ind,\n ratio(income, rand_income),\n ratio2(income, rand_income), \n alpha = 0.9)","options":{"output":"true","context":"interactive","comment":"","editor-quick-suggestions":"false","warning":"true","fig-height":5,"fig-cap":"","dpi":72,"message":"true","out-width":"700px","label":"unnamed-chunk-8","editor-max-height":"250","results":"markup","editor-font-scale":"0.5","out-height":"","classes":"","autorun":"false","read-only":"false","fig-width":7}}];
+
+  </script>
+  <script type="module">
+  // Declare startupMessageQWebR globally
+  globalThis.qwebrStartupMessage = document.createElement("p");
+
+  // Verify if OffScreenCanvas is supported
+  globalThis.qwebrOffScreenCanvasSupport = function() {
+    return typeof OffscreenCanvas !== 'undefined'
+  }
+
+  // Function to set the button text
+  globalThis.qwebrSetInteractiveButtonState = function(buttonText, enableCodeButton = true) {
+    document.querySelectorAll(".qwebr-button-run").forEach((btn) => {
+      btn.innerHTML = buttonText;
+      btn.disabled = !enableCodeButton;
+    });
+  }
+
+  // Function to update the status message in non-interactive cells
+  globalThis.qwebrUpdateStatusMessage = function(message) {
+    document.querySelectorAll(".qwebr-status-text.qwebr-cell-needs-evaluation").forEach((elem) => {
+      elem.innerText = message;
+    });
+  }
+
+  // Function to update the status message
+  globalThis.qwebrUpdateStatusHeader = function(message) {
+    qwebrStartupMessage.innerHTML = `
+      <i class="fa-solid fa-spinner fa-spin qwebr-icon-status-spinner"></i>
+      <span>${message}</span>`;
+  }
+
+  function qwebrPlaceMessageContents(content, html_location = "title-block-header", revealjs_location = "title-slide") {
+
+    // Get references to header elements
+    const headerHTML = document.getElementById(html_location);
+    const headerRevealJS = document.getElementById(revealjs_location);
+
+    // Determine where to insert the quartoTitleMeta element
+    if (headerHTML || headerRevealJS) {
+      // Append to the existing "title-block-header" element or "title-slide" div
+      (headerHTML || headerRevealJS).appendChild(content);
+    } else {
+      // If neither headerHTML nor headerRevealJS is found, insert after "webr-monaco-editor-init" script
+      const monacoScript = document.getElementById("qwebr-monaco-editor-init");
+      const header = document.createElement("header");
+      header.setAttribute("id", "title-block-header");
+      header.appendChild(content);
+      monacoScript.after(header);
+    }
+  }
+
+
+  function qwebrOffScreenCanvasSupportWarningMessage() {
+    
+    // Verify canvas is supported.
+    if(qwebrOffScreenCanvasSupport()) return;
+
+    // Create the main container div
+    var calloutContainer = document.createElement('div');
+    calloutContainer.classList.add('callout', 'callout-style-default', 'callout-warning', 'callout-titled');
+
+    // Create the header div
+    var headerDiv = document.createElement('div');
+    headerDiv.classList.add('callout-header', 'd-flex', 'align-content-center');
+
+    // Create the icon container div
+    var iconContainer = document.createElement('div');
+    iconContainer.classList.add('callout-icon-container');
+
+    // Create the icon element
+    var iconElement = document.createElement('i');
+    iconElement.classList.add('callout-icon');
+
+    // Append the icon element to the icon container
+    iconContainer.appendChild(iconElement);
+
+    // Create the title container div
+    var titleContainer = document.createElement('div');
+    titleContainer.classList.add('callout-title-container', 'flex-fill');
+    titleContainer.innerText = 'Warning: Web Browser Does Not Support Graphing!';
+
+    // Append the icon container and title container to the header div
+    headerDiv.appendChild(iconContainer);
+    headerDiv.appendChild(titleContainer);
+
+    // Create the body container div
+    var bodyContainer = document.createElement('div');
+    bodyContainer.classList.add('callout-body-container', 'callout-body');
+
+    // Create the paragraph element for the body content
+    var paragraphElement = document.createElement('p');
+    paragraphElement.innerHTML = 'This web browser does not have support for displaying graphs through the <code>quarto-webr</code> extension since it lacks an <code>OffScreenCanvas</code>. Please upgrade your web browser to one that supports <code>OffScreenCanvas</code>.';
+
+    // Append the paragraph element to the body container
+    bodyContainer.appendChild(paragraphElement);
+
+    // Append the header div and body container to the main container div
+    calloutContainer.appendChild(headerDiv);
+    calloutContainer.appendChild(bodyContainer);
+
+    // Append the main container div to the document depending on format
+    qwebrPlaceMessageContents(calloutContainer, "title-block-header"); 
+
+  }
+
+
+  // Function that attaches the document status message and diagnostics
+  function displayStartupMessage(showStartupMessage, showHeaderMessage) {
+    if (!showStartupMessage) {
+      return;
+    }
+
+    // Create the outermost div element for metadata
+    const quartoTitleMeta = document.createElement("div");
+    quartoTitleMeta.classList.add("quarto-title-meta");
+
+    // Create the first inner div element
+    const firstInnerDiv = document.createElement("div");
+    firstInnerDiv.setAttribute("id", "qwebr-status-message-area");
+
+    // Create the second inner div element for "WebR Status" heading and contents
+    const secondInnerDiv = document.createElement("div");
+    secondInnerDiv.setAttribute("id", "qwebr-status-message-title");
+    secondInnerDiv.classList.add("quarto-title-meta-heading");
+    secondInnerDiv.innerText = "WebR Status";
+
+    // Create another inner div for contents
+    const secondInnerDivContents = document.createElement("div");
+    secondInnerDivContents.setAttribute("id", "qwebr-status-message-body");
+    secondInnerDivContents.classList.add("quarto-title-meta-contents");
+
+    // Describe the WebR state
+    qwebrStartupMessage.innerText = "🟡 Loading...";
+    qwebrStartupMessage.setAttribute("id", "qwebr-status-message-text");
+    // Add `aria-live` to auto-announce the startup status to screen readers
+    qwebrStartupMessage.setAttribute("aria-live", "assertive");
+
+    // Append the startup message to the contents
+    secondInnerDivContents.appendChild(qwebrStartupMessage);
+
+    // Add a status indicator for COOP and COEP Headers if needed
+    if (showHeaderMessage) {
+      const crossOriginMessage = document.createElement("p");
+      crossOriginMessage.innerText = `${crossOriginIsolated ? '🟢' : '🟡'} COOP & COEP Headers`;
+      crossOriginMessage.setAttribute("id", "qwebr-coop-coep-header");
+      secondInnerDivContents.appendChild(crossOriginMessage);
+    }
+
+    // Combine the inner divs and contents
+    firstInnerDiv.appendChild(secondInnerDiv);
+    firstInnerDiv.appendChild(secondInnerDivContents);
+    quartoTitleMeta.appendChild(firstInnerDiv);
+
+    // Place message on webpage
+    qwebrPlaceMessageContents(quartoTitleMeta); 
+  }
+
+  displayStartupMessage(qwebrShowStartupMessage, qwebrShowHeaderMessage);
+  qwebrOffScreenCanvasSupportWarningMessage();
+  </script>
+  <script type="module">
+  // Supported Evaluation Types for Context
+  globalThis.EvalTypes = Object.freeze({
+    Interactive: 'interactive',
+    Setup: 'setup',
+    Output: 'output',
+  });
+
+  // Function that obtains the font size for a given element 
+  globalThis.qwebrCurrentFontSizeOnElement = function(element, cssProperty = 'font-size') {
+
+    const currentFontSize = parseFloat(
+      window
+      .getComputedStyle(element)
+      .getPropertyValue(cssProperty)
+    );
+    
+    return currentFontSize;
+  }
+
+  // Function to determine font scaling
+  globalThis.qwebrScaledFontSize = function(div, qwebrOptions) {
+    // Determine if we should compute font-size using RevealJS's `--r-main-font-size` 
+    // or if we can directly use the document's `font-size`.
+    const cssProperty = document.body.classList.contains('reveal') ? 
+      "--r-main-font-size" : "font-size";
+    
+    // Get the current font size on the div element
+    const elementFontSize = qwebrCurrentFontSizeOnElement(div, cssProperty);
+
+    // Determine the scaled font size value
+    const scaledFontSize = ((qwebrOptions['editor-font-scale'] ?? 1) * elementFontSize) ?? 17.5;
+
+    return scaledFontSize;
+  }
+
+
+  // Function that dispatches the creation request
+  globalThis.qwebrCreateHTMLElement = function (
+    cellData
+  ) {
+
+    // Extract key components
+    const evalType = cellData.options.context;
+    const qwebrCounter = cellData.id;
+
+    // We make an assumption that insertion points are defined by the Lua filter as:
+    // qwebr-insertion-location-{qwebrCounter} 
+    const elementLocator = document.getElementById(`qwebr-insertion-location-${qwebrCounter}`);
+
+    // Figure out the routine to use to insert the element.
+    let qwebrElement;
+    switch ( evalType ) {
+      case EvalTypes.Interactive:
+        qwebrElement = qwebrCreateInteractiveElement(qwebrCounter, cellData.options);
+        break;
+      case EvalTypes.Output: 
+        qwebrElement = qwebrCreateNonInteractiveOutputElement(qwebrCounter, cellData.options);
+        break;
+      case EvalTypes.Setup: 
+        qwebrElement = qwebrCreateNonInteractiveSetupElement(qwebrCounter, cellData.options);
+        break;
+      default: 
+        qwebrElement = document.createElement('div');
+        qwebrElement.textContent = 'Error creating `quarto-webr` element';
+    }
+
+    // Insert the dynamically generated object at the document location.
+    elementLocator.appendChild(qwebrElement);
+  };
+
+  // Function that setups the interactive element creation
+  globalThis.qwebrCreateInteractiveElement = function (qwebrCounter, qwebrOptions) {
+
+    // Create main div element
+    var mainDiv = document.createElement('div');
+    mainDiv.id = 'qwebr-interactive-area-' + qwebrCounter;
+    mainDiv.className = `qwebr-interactive-area`;
+    if (qwebrOptions.classes) {
+      mainDiv.className += " " + qwebrOptions.classes
+    }
+
+    // Add a unique cell identifier that users can customize
+    if (qwebrOptions.label) {
+      mainDiv.setAttribute('data-id', qwebrOptions.label);
+    }
+
+    // Create toolbar div
+    var toolbarDiv = document.createElement('div');
+    toolbarDiv.className = 'qwebr-editor-toolbar';
+    toolbarDiv.id = 'qwebr-editor-toolbar-' + qwebrCounter;
+
+    // Create a div to hold the left buttons
+    var leftButtonsDiv = document.createElement('div');
+    leftButtonsDiv.className = 'qwebr-editor-toolbar-left-buttons';
+
+    // Create a div to hold the right buttons
+    var rightButtonsDiv = document.createElement('div');
+    rightButtonsDiv.className = 'qwebr-editor-toolbar-right-buttons';
+
+    // Create Run Code button
+    var runCodeButton = document.createElement('button');
+    runCodeButton.className = 'btn btn-default qwebr-button qwebr-button-run';
+    runCodeButton.disabled = true;
+    runCodeButton.type = 'button';
+    runCodeButton.id = 'qwebr-button-run-' + qwebrCounter;
+    runCodeButton.textContent = '🟡 Loading webR...';
+    runCodeButton.title = `Run code (Shift + Enter)`;
+
+    // Append buttons to the leftButtonsDiv
+    leftButtonsDiv.appendChild(runCodeButton);
+
+    // Create Reset button
+    var resetButton = document.createElement('button');
+    resetButton.className = 'btn btn-light btn-xs qwebr-button qwebr-button-reset';
+    resetButton.type = 'button';
+    resetButton.id = 'qwebr-button-reset-' + qwebrCounter;
+    resetButton.title = 'Start over';
+    resetButton.innerHTML = '<i class="fa-solid fa-arrows-rotate"></i>';
+
+    // Create Copy button
+    var copyButton = document.createElement('button');
+    copyButton.className = 'btn btn-light btn-xs qwebr-button qwebr-button-copy';
+    copyButton.type = 'button';
+    copyButton.id = 'qwebr-button-copy-' + qwebrCounter;
+    copyButton.title = 'Copy code';
+    copyButton.innerHTML = '<i class="fa-regular fa-copy"></i>';
+
+    // Append buttons to the rightButtonsDiv
+    rightButtonsDiv.appendChild(resetButton);
+    rightButtonsDiv.appendChild(copyButton);
+
+    // Create console area div
+    var consoleAreaDiv = document.createElement('div');
+    consoleAreaDiv.id = 'qwebr-console-area-' + qwebrCounter;
+    consoleAreaDiv.className = 'qwebr-console-area';
+
+    // Create editor div
+    var editorDiv = document.createElement('div');
+    editorDiv.id = 'qwebr-editor-' + qwebrCounter;
+    editorDiv.className = 'qwebr-editor';
+
+    // Create output code area div
+    var outputCodeAreaDiv = document.createElement('div');
+    outputCodeAreaDiv.id = 'qwebr-output-code-area-' + qwebrCounter;
+    outputCodeAreaDiv.className = 'qwebr-output-code-area';
+    outputCodeAreaDiv.setAttribute('aria-live', 'assertive');
+
+    // Create pre element inside output code area
+    var preElement = document.createElement('pre');
+    preElement.style.visibility = 'hidden';
+    outputCodeAreaDiv.appendChild(preElement);
+
+    // Create output graph area div
+    var outputGraphAreaDiv = document.createElement('div');
+    outputGraphAreaDiv.id = 'qwebr-output-graph-area-' + qwebrCounter;
+    outputGraphAreaDiv.className = 'qwebr-output-graph-area';
+
+    // Append buttons to the toolbar
+    toolbarDiv.appendChild(leftButtonsDiv);
+    toolbarDiv.appendChild(rightButtonsDiv);
+
+    // Append all elements to the main div
+    mainDiv.appendChild(toolbarDiv);
+    consoleAreaDiv.appendChild(editorDiv);
+    consoleAreaDiv.appendChild(outputCodeAreaDiv);
+    mainDiv.appendChild(consoleAreaDiv);
+    mainDiv.appendChild(outputGraphAreaDiv);
+
+    return mainDiv;
+  }
+
+  // Function that adds output structure for non-interactive output
+  globalThis.qwebrCreateNonInteractiveOutputElement = function(qwebrCounter, qwebrOptions) {
+    // Create main div element
+    var mainDiv = document.createElement('div');
+    mainDiv.id = 'qwebr-noninteractive-area-' + qwebrCounter;
+    mainDiv.className = `qwebr-noninteractive-area`;
+    if (qwebrOptions.classes) {
+      mainDiv.className += " " + qwebrOptions.classes
+    }
+    
+    // Add a unique cell identifier that users can customize
+    if (qwebrOptions.label) {
+      mainDiv.setAttribute('data-id', qwebrOptions.label);
+    }
+    
+    // Create a status container div
+    var statusContainer = createLoadingContainer(qwebrCounter);
+
+    // Create output code area div
+    var outputCodeAreaDiv = document.createElement('div');
+    outputCodeAreaDiv.id = 'qwebr-output-code-area-' + qwebrCounter;
+    outputCodeAreaDiv.className = 'qwebr-output-code-area';
+    outputCodeAreaDiv.setAttribute('aria-live', 'assertive');
+
+    // Create pre element inside output code area
+    var preElement = document.createElement('pre');
+    preElement.style.visibility = 'hidden';
+    outputCodeAreaDiv.appendChild(preElement);
+
+    // Create output graph area div
+    var outputGraphAreaDiv = document.createElement('div');
+    outputGraphAreaDiv.id = 'qwebr-output-graph-area-' + qwebrCounter;
+    outputGraphAreaDiv.className = 'qwebr-output-graph-area';
+
+    // Append all elements to the main div
+    mainDiv.appendChild(statusContainer);
+    mainDiv.appendChild(outputCodeAreaDiv);
+    mainDiv.appendChild(outputGraphAreaDiv);
+
+    return mainDiv;
+  };
+
+  // Function that adds a stub in the page to indicate a setup cell was used.
+  globalThis.qwebrCreateNonInteractiveSetupElement = function(qwebrCounter, qwebrOptions) {
+    // Create main div element
+    var mainDiv = document.createElement('div');
+    mainDiv.id = `qwebr-noninteractive-setup-area-${qwebrCounter}`;
+    mainDiv.className = `qwebr-noninteractive-setup-area`;
+    if (qwebrOptions.classes) {
+      mainDiv.className += " " + qwebrOptions.classes
+    }
+
+
+    // Add a unique cell identifier that users can customize
+    if (qwebrOptions.label) {
+      mainDiv.setAttribute('data-id', qwebrOptions.label);
+    }
+
+    // Create a status container div
+    var statusContainer = createLoadingContainer(qwebrCounter);
+
+    // Append status onto the main div
+    mainDiv.appendChild(statusContainer);
+
+    return mainDiv;
+  }
+
+
+  // Function to create loading container with specified ID
+  globalThis.createLoadingContainer = function(qwebrCounter) {
+
+    // Create a status container
+    const container = document.createElement('div');
+    container.id = `qwebr-non-interactive-loading-container-${qwebrCounter}`;
+    container.className = 'qwebr-non-interactive-loading-container qwebr-cell-needs-evaluation';
+
+    // Create an R project logo to indicate its a code space
+    const rProjectIcon = document.createElement('i');
+    rProjectIcon.className = 'fa-brands fa-r-project fa-3x qwebr-r-project-logo';
+
+    // Setup a loading icon from font awesome
+    const spinnerIcon = document.createElement('i');
+    spinnerIcon.className = 'fa-solid fa-spinner fa-spin fa-1x qwebr-icon-status-spinner';
+
+    // Add a section for status text
+    const statusText = document.createElement('p');
+    statusText.id = `qwebr-status-text-${qwebrCounter}`;
+    statusText.className = `qwebr-status-text qwebr-cell-needs-evaluation`;
+    statusText.innerText = 'Loading webR...';
+
+    // Incorporate an inner container
+    const innerContainer = document.createElement('div');
+
+    // Append elements to the inner container
+    innerContainer.appendChild(spinnerIcon);
+    innerContainer.appendChild(statusText);
+
+    // Append elements to the main container
+    container.appendChild(rProjectIcon);
+    container.appendChild(innerContainer);
+
+    return container;
+  }
+  </script>
+  <script type="module">
+  // Function to install a single package
+  async function qwebrInstallRPackage(packageName) {
+    await mainWebR.evalRVoid(`webr::install('${packageName}');`);
+  }
+
+  // Function to load a single package
+  async function qwebrLoadRPackage(packageName) {
+    await mainWebR.evalRVoid(`require('${packageName}', quietly = TRUE)`);
+  }
+
+  // Generic function to process R packages
+  async function qwebrProcessRPackagesWithStatus(packages, processType, displayStatusMessageUpdate = true) {
+    // Switch between contexts
+    const messagePrefix = processType === 'install' ? 'Installing' : 'Loading';
+
+    // Modify button state
+    qwebrSetInteractiveButtonState(`🟡 ${messagePrefix} package ...`, false);
+
+    // Iterate over packages
+    for (let i = 0; i < packages.length; i++) {
+      const activePackage = packages[i];
+      const formattedMessage = `${messagePrefix} package ${i + 1} out of ${packages.length}: ${activePackage}`;
+
+      // Display the update in header
+      if (displayStatusMessageUpdate) {
+        qwebrUpdateStatusHeader(formattedMessage);
+      }
+
+      // Display the update in non-active areas
+      qwebrUpdateStatusMessage(formattedMessage);
+
+      // Run package installation
+      if (processType === 'install') {
+        await qwebrInstallRPackage(activePackage);
+      } else {
+        await qwebrLoadRPackage(activePackage);
+      }
+    }
+
+    // Clean slate
+    if (processType === 'load') {
+      await mainWebR.flush();
+    }
+  }
+
+  // Start a timer
+  const initializeWebRTimerStart = performance.now();
+
+  // Encase with a dynamic import statement
+  globalThis.qwebrInstance = import(qwebrCustomizedWebROptions.baseURL + "webr.mjs").then(
+    async ({ WebR, ChannelType }) => {
+      // Populate WebR options with defaults or new values based on `webr` meta
+      globalThis.mainWebR = new WebR(qwebrCustomizedWebROptions);
+
+      // Initialization WebR
+      await mainWebR.init();
+
+      // Setup a shelter
+      globalThis.mainWebRCodeShelter = await new mainWebR.Shelter();
+
+      // Setup a pager to allow processing help documentation 
+      await mainWebR.evalRVoid('webr::pager_install()'); 
+
+      // Override the existing install.packages() to use webr::install()
+      await mainWebR.evalRVoid('webr::shim_install()'); 
+
+      // Specify the repositories to pull from
+      // Note: webR does not use the `repos` option, but instead uses `webr_pkg_repos`
+      // inside of `install()`. However, other R functions still pull from `repos`.
+      await mainWebR.evalRVoid(`
+        options(
+          webr_pkg_repos = c(${qwebrPackageRepoURLS.map(repoURL => `'${repoURL}'`).join(',')}),
+          repos = c(${qwebrPackageRepoURLS.map(repoURL => `'${repoURL}'`).join(',')})
+        )
+      `);
+
+      // Check to see if any packages need to be installed
+      if (qwebrSetupRPackages) {
+        // Obtain only a unique list of packages
+        const uniqueRPackageList = Array.from(new Set(qwebrInstallRPackagesList));
+
+        // Install R packages one at a time (either silently or with a status update)
+        await qwebrProcessRPackagesWithStatus(uniqueRPackageList, 'install', qwebrShowStartupMessage);
+
+        if (qwebrAutoloadRPackages) {
+          // Load R packages one at a time (either silently or with a status update)
+          await qwebrProcessRPackagesWithStatus(uniqueRPackageList, 'load', qwebrShowStartupMessage);
+        }
+      }
+    }
+  );
+
+  // Stop timer
+  const initializeWebRTimerEnd = performance.now();
+
+  </script>
+  <script type="module">
+  // Function to verify a given JavaScript Object is empty
+  globalThis.qwebrIsObjectEmpty = function (arr) {
+      return Object.keys(arr).length === 0;
+  }
+
+  // Global version of the Escape HTML function that converts HTML 
+  // characters to their HTML entities.
+  globalThis.qwebrEscapeHTMLCharacters = function(unsafe) {
+      return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    };
+
+  // Passthrough results
+  globalThis.qwebrIdentity = function(x) {
+      return x;
+  };
+
+  // Append a comment
+  globalThis.qwebrPrefixComment = function(x, comment) {
+      return `${comment}${x}`;
+  };
+
+  // Function to parse the pager results
+  globalThis.qwebrParseTypePager = async function (msg) { 
+
+      // Split out the event data
+      const { path, title, deleteFile } = msg.data; 
+
+      // Process the pager data by reading the information from disk
+      const paged_data = await mainWebR.FS.readFile(path).then((data) => {
+          // Obtain the file content
+          let content = new TextDecoder().decode(data);
+
+          // Remove excessive backspace characters until none remain
+          while(content.match(/.[\b]/)){
+          content = content.replace(/.[\b]/g, '');
+          }
+
+          // Returned cleaned data
+          return content;
+      });
+
+      // Unlink file if needed
+      if (deleteFile) { 
+          await mainWebR.FS.unlink(path); 
+      } 
+
+      // Return extracted data with spaces
+      return paged_data;
+  } 
+
+  // Function to run the code using webR and parse the output
+  globalThis.qwebrComputeEngine = async function(
+      codeToRun, 
+      elements, 
+      options) {
+
+      // Call into the R compute engine that persists within the document scope.
+      // To be prepared for all scenarios, the following happens: 
+      // 1. We setup a canvas device to write to by making a namespace call into the {webr} package
+      // 2. We use values inside of the options array to set the figure size.
+      // 3. We capture the output stream information (STDOUT and STERR)
+      // 4. We disable the current device's image creation.
+      // 5. Piece-wise parse the results into the different output areas
+
+      // Create a pager variable for help/file contents
+      let pager = [];
+
+      // Handle how output is processed
+      let showMarkup = options.results === "markup" && options.output !== "asis";
+      let processOutput;
+
+      if (showMarkup) {
+          processOutput = qwebrEscapeHTMLCharacters;
+      } else {
+          processOutput = qwebrIdentity;
+      }
+
+      // ---- 
+      // Convert from Inches to Pixels by using DPI (dots per inch)
+      // for bitmap devices (dpi * inches = pixels)
+      let fig_width = options["fig-width"] * options["dpi"]
+      let fig_height = options["fig-height"] * options["dpi"]
+
+      // Initialize webR
+      await mainWebR.init();
+
+      // Configure capture output
+      let captureOutputOptions = {
+          withAutoprint: true,
+          captureStreams: true,
+          captureConditions: false,
+          // env: webR.objs.emptyEnv, // maintain a global environment for webR v0.2.0
+      };
+      
+      // Determine if the browser supports OffScreen
+      if (qwebrOffScreenCanvasSupport()) {
+          // Mirror default options of webr::canvas()
+          // with changes to figure height and width.
+          captureOutputOptions.captureGraphics = {
+              width: fig_width,
+              height: fig_height,
+              bg: "white", // default: transparent
+              pointsize: 12,
+              capture: true
+          };
+      }  else {
+          // Disable generating graphics
+          captureOutputOptions.captureGraphics = false;
+      }
+
+      // Setup a webR canvas by making a namespace call into the {webr} package
+      // Evaluate the R code
+      // Remove the active canvas silently
+      const result = await mainWebRCodeShelter.captureR(
+          `${codeToRun}`,
+          captureOutputOptions
+      );
+
+      // -----
+
+      // Start attempting to parse the result data
+      processResultOutput:try {
+          
+          // Avoid running through output processing
+          if (options.results === "hide" || options.output === "false") { 
+              break processResultOutput; 
+          }
+
+          // Merge output streams of STDOUT and STDErr (messages and errors are combined.)
+          // Require both `warning` and `message` to be true to display `STDErr`. 
+          const out = result.output
+          .filter(
+              evt => evt.type === "stdout" || 
+              ( evt.type === "stderr" && (options.warning === "true" && options.message === "true")) 
+          )
+          .map((evt, index) => {
+              const className = `qwebr-output-code-${evt.type}`;
+              const outputResult = qwebrPrefixComment(processOutput(evt.data), options.comment);
+              return `<code id="${className}-editor-${elements.id}-result-${index + 1}" class="${className}">${outputResult}</code>`;
+          })
+          .join("\n");
+
+
+          // Clean the state
+          // We're now able to process pager events.
+          // As a result, we cannot maintain a true 1-to-1 output order 
+          // without individually feeding each line
+          const msgs = await mainWebR.flush();
+
+          // Use `map` to process the filtered "pager" events asynchronously
+          const pager = await Promise.all(
+              msgs.filter(msg => msg.type === 'pager').map(
+                  async (msg) => {
+                      return await qwebrParseTypePager(msg);
+                  }
+              )
+          );
+
+          // Nullify the output area of content
+          elements.outputCodeDiv.innerHTML = "";
+          elements.outputGraphDiv.innerHTML = "";
+
+          // Design an output object for messages
+          const pre = document.createElement("pre");
+          if (/\S/.test(out)) {
+              // Display results as HTML elements to retain output styling
+              const div = document.createElement("div");
+              div.innerHTML = out;
+
+              // Calculate a scaled font-size value
+              const scaledFontSize = qwebrScaledFontSize(
+                  elements.outputCodeDiv, options);
+
+              // Override output code cell size
+              pre.style.fontSize = `${scaledFontSize}px`;
+              pre.appendChild(div);
+          } else {
+              // If nothing is present, hide the element.
+              pre.style.visibility = "hidden";
+          }
+
+          elements.outputCodeDiv.appendChild(pre);
+
+          // Determine if we have graphs to display
+          if (result.images.length > 0) {
+              // Create figure element
+              const figureElement = document.createElement('figure');
+
+              // Place each rendered graphic onto a canvas element
+              result.images.forEach((img) => {
+                  // Construct canvas for object
+                  const canvas = document.createElement("canvas");
+
+                  // Set canvas size to image
+                  canvas.width = img.width;
+                  canvas.height = img.height;
+
+                  // Apply output truncations
+                  canvas.style.width = options["out-width"] ? options["out-width"] : `${fig_width}px`;
+                  if (options["out-height"]) {
+                      canvas.style.height = options["out-height"];
+                  }
+
+                  // Apply styling
+                  canvas.style.display = "block";
+                  canvas.style.margin = "auto";
+
+                  // Draw image onto Canvas
+                  const ctx = canvas.getContext("2d");
+                  ctx.drawImage(img, 0, 0, img.width, img.height);
+            
+                  // Append canvas to figure output area
+                  figureElement.appendChild(canvas);
+              });
+
+              if (options['fig-cap']) {
+                  // Create figcaption element
+                  const figcaptionElement = document.createElement('figcaption');
+                  figcaptionElement.innerText = options['fig-cap'];
+                  // Append figcaption to figure
+                  figureElement.appendChild(figcaptionElement);    
+              }
+
+              elements.outputGraphDiv.appendChild(figureElement);
+          }
+
+          // Display the pager data
+          if (pager) {
+          // Use the `pre` element to preserve whitespace.
+          pager.forEach((paged_data, index) => {
+              let pre_pager = document.createElement("pre");
+              pre_pager.innerText = paged_data;
+              pre_pager.classList.add("qwebr-output-code-pager");
+              pre_pager.setAttribute("id", `qwebr-output-code-pager-editor-${elements.id}-result-${index + 1}`);
+              elements.outputCodeDiv.appendChild(pre_pager);
+          });
+          }
+      } finally {
+          // Clean up the remaining code
+          mainWebRCodeShelter.purge();
+      }
+  }
+
+  // Function to execute the code (accepts code as an argument)
+  globalThis.qwebrExecuteCode = async function (
+      codeToRun,
+      id,
+      options = {}) {
+
+      // If options are not passed, we fall back on the bare minimum to handle the computation
+      if (qwebrIsObjectEmpty(options)) {
+          options = { 
+              "context": "interactive", 
+              "fig-width": 7, "fig-height": 5, 
+              "out-width": "700px", "out-height": "", 
+              "dpi": 72,
+              "results": "markup", 
+              "warning": "true", "message": "true",
+          };
+      }
+
+      // Next, we access the compute areas values
+      const elements = {
+          runButton: document.getElementById(`qwebr-button-run-${id}`),
+          outputCodeDiv: document.getElementById(`qwebr-output-code-area-${id}`),
+          outputGraphDiv: document.getElementById(`qwebr-output-graph-area-${id}`),
+          id: id,
+      }
+
+      // Disallowing execution of other code cells
+      document.querySelectorAll(".qwebr-button-run").forEach((btn) => {
+          btn.disabled = true;
+      });
+
+      if (options.context == EvalTypes.Interactive) {
+          // Emphasize the active code cell
+          elements.runButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin qwebr-icon-status-spinner"></i> <span>Run Code</span>';
+      }
+
+      // Evaluate the code and parse the output into the document
+      await qwebrComputeEngine(codeToRun, elements, options);
+
+      // Switch to allowing execution of code
+      document.querySelectorAll(".qwebr-button-run").forEach((btn) => {
+          btn.disabled = false;
+      });
+
+      if (options.context == EvalTypes.Interactive) {
+          // Revert to the initial code cell state
+          elements.runButton.innerHTML = '<i class="fa-solid fa-play qwebr-icon-run-code"></i> <span>Run Code</span>';
+      }
+  }
+
+  </script>
 </head>
 <body class="quarto-light">
+<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.47.0/min/vs/loader.js"></script>
+<script type="module" id="qwebr-monaco-editor-init">
+
+  // Configure the Monaco Editor's loader
+  require.config({
+    paths: {
+      'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.47.0/min/vs'
+    }
+  });
+</script>
+<script type="module">
+// Function to update Monaco Editors when body class changes
+function updateMonacoEditorsOnBodyClassChange() {
+    // Select the body element
+    const body = document.querySelector('body');
+
+    // Options for the observer (which mutations to observe)
+    const observerOptions = {
+        attributes: true,  // Observe changes to attributes
+        attributeFilter: ['class'] // Only observe changes to the 'class' attribute
+    };
+
+    // Callback function to execute when mutations are observed
+    const bodyClassChangeCallback = function(mutationsList, observer) {
+        for(let mutation of mutationsList) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                // Class attribute has changed
+                // Update all Monaco Editors on the page
+                updateMonacoEditorTheme();
+            }
+        }
+    };
+
+    // Create an observer instance linked to the callback function
+    const observer = new MutationObserver(bodyClassChangeCallback);
+
+    // Start observing the target node for configured mutations
+    observer.observe(body, observerOptions);
+}
+
+// Function to update all instances of Monaco Editors on the page
+function updateMonacoEditorTheme() {
+    // Determine what VS Theme to use
+    const vsThemeToUse = document.body.classList.contains("quarto-dark") ? 'vs-dark' : 'vs' ;
+
+    // Iterate through all initialized Monaco Editors
+    qwebrEditorInstances.forEach( function(editorInstance) { 
+        editorInstance.updateOptions({ theme: vsThemeToUse }); 
+    });
+}
+
+// Call the function to start observing changes to body class
+updateMonacoEditorsOnBodyClassChange();
+</script>
+<script type="module">
+// Global array to store Monaco Editor instances
+globalThis.qwebrEditorInstances = [];
+
+// Function that builds and registers a Monaco Editor instance    
+globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
+
+  const initialCode = cellData.code;
+  const qwebrCounter = cellData.id;
+  const qwebrOptions = cellData.options;
+
+  // Retrieve the previously created document elements
+  let runButton = document.getElementById(`qwebr-button-run-${qwebrCounter}`);
+  let resetButton = document.getElementById(`qwebr-button-reset-${qwebrCounter}`);
+  let copyButton = document.getElementById(`qwebr-button-copy-${qwebrCounter}`);
+  let editorDiv = document.getElementById(`qwebr-editor-${qwebrCounter}`);
+
+  // Load the Monaco Editor and create an instance
+  let editor;
+  require(['vs/editor/editor.main'], function () {
+    editor = monaco.editor.create(editorDiv, {
+      value: initialCode,
+      language: 'r',
+      theme: 'vs-light',
+      automaticLayout: true,           // Works wonderfully with RevealJS
+      scrollBeyondLastLine: false,
+      minimap: {
+        enabled: false
+      },
+      fontSize: qwebrScaledFontSize(editorDiv, qwebrOptions),         
+      renderLineHighlight: "none",      // Disable current line highlighting
+      hideCursorInOverviewRuler: true,  // Remove cursor indictor in right hand side scroll bar
+      readOnly: qwebrOptions['read-only'] ?? false,
+      quickSuggestions: qwebrOptions['editor-quick-suggestions'] ?? false
+    });
+
+    // Store the official counter ID to be used in keyboard shortcuts
+    editor.__qwebrCounter = qwebrCounter;
+
+    // Store the official div container ID
+    editor.__qwebrEditorId = `qwebr-editor-${qwebrCounter}`;
+
+    // Store the initial code value and options
+    editor.__qwebrinitialCode = initialCode;
+    editor.__qwebrOptions = qwebrOptions;
+
+    // Set at the model level the preferred end of line (EOL) character to LF.
+    // This prevent `\r\n` from being given to the webR engine if the user is on Windows.
+    // See details in: https://github.com/coatless/quarto-webr/issues/94
+    // Associated error text: 
+    // Error: <text>:1:7 unexpected input
+
+    // Retrieve the underlying model
+    const model = editor.getModel();
+    // Set EOL for the model
+    model.setEOL(monaco.editor.EndOfLineSequence.LF);
+
+    // Dynamically modify the height of the editor window if new lines are added.
+    let ignoreEvent = false;
+    const updateHeight = () => {
+      // Increment editor height by 2 to prevent vertical scroll bar from appearing
+      const contentHeight = editor.getContentHeight() + 2;
+
+      // Retrieve editor-max-height option
+      const maxEditorHeight = qwebrOptions['editor-max-height'];
+
+      // If editor-max-height is missing, allow infinite growth. Otherwise, threshold.
+      const editorHeight = !maxEditorHeight ?  contentHeight : Math.min(contentHeight, maxEditorHeight);
+
+      // We're avoiding a width change
+      //editorDiv.style.width = `${width}px`;
+      editorDiv.style.height = `${editorHeight}px`;
+      try {
+        ignoreEvent = true;
+
+        // The key to resizing is this call
+        editor.layout();
+      } finally {
+        ignoreEvent = false;
+      }
+    };
+
+    // Helper function to check if selected text is empty
+    function isEmptyCodeText(selectedCodeText) {
+      return (selectedCodeText === null || selectedCodeText === undefined || selectedCodeText === "");
+    }
+
+    // Registry of keyboard shortcuts that should be re-added to each editor window
+    // when focus changes.
+    const addWebRKeyboardShortCutCommands = () => {
+      // Add a keydown event listener for Shift+Enter to run all code in cell
+      editor.addCommand(monaco.KeyMod.Shift | monaco.KeyCode.Enter, () => {
+
+        // Retrieve all text inside the editor
+        qwebrExecuteCode(editor.getValue(), editor.__qwebrCounter, editor.__qwebrOptions);
+      });
+
+      // Add a keydown event listener for CMD/Ctrl+Enter to run selected code
+      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
+
+        // Get the selected text from the editor
+        const selectedText = editor.getModel().getValueInRange(editor.getSelection());
+        // Check if no code is selected
+        if (isEmptyCodeText(selectedText)) {
+          // Obtain the current cursor position
+          let currentPosition = editor.getPosition();
+          // Retrieve the current line content
+          let currentLine = editor.getModel().getLineContent(currentPosition.lineNumber);
+
+          // Propose a new position to move the cursor to
+          let newPosition = new monaco.Position(currentPosition.lineNumber + 1, 1);
+
+          // Check if the new position is beyond the last line of the editor
+          if (newPosition.lineNumber > editor.getModel().getLineCount()) {
+            // Add a new line at the end of the editor
+            editor.executeEdits("addNewLine", [{
+            range: new monaco.Range(newPosition.lineNumber, 1, newPosition.lineNumber, 1),
+            text: "\n", 
+            forceMoveMarkers: true,
+            }]);
+          }
+          
+          // Run the entire line of code.
+          qwebrExecuteCode(currentLine, editor.__qwebrCounter, editor.__qwebrOptions);
+
+          // Move cursor to new position
+          editor.setPosition(newPosition);
+        } else {
+          // Code to run when Ctrl+Enter is pressed with selected code
+          qwebrExecuteCode(selectedText, editor.__qwebrCounter, editor.__qwebrOptions);
+        }
+      });
+    }
+
+    // Register an on focus event handler for when a code cell is selected to update
+    // what keyboard shortcut commands should work.
+    // This is a workaround to fix a regression that happened with multiple
+    // editor windows since Monaco 0.32.0 
+    // https://github.com/microsoft/monaco-editor/issues/2947
+    editor.onDidFocusEditorText(addWebRKeyboardShortCutCommands);
+
+    // Register an on change event for when new code is added to the editor window
+    editor.onDidContentSizeChange(updateHeight);
+
+    // Manually re-update height to account for the content we inserted into the call
+    updateHeight();
+
+    // Store the editor instance in the global dictionary
+    qwebrEditorInstances[editor.__qwebrCounter] = editor;
+
+  });
+
+  // Add a click event listener to the run button
+  runButton.onclick = function () {
+    qwebrExecuteCode(editor.getValue(), editor.__qwebrCounter, editor.__qwebrOptions);
+  };
+
+  // Add a click event listener to the reset button
+  copyButton.onclick = function () {
+    // Retrieve current code data
+    const data = editor.getValue();
+    
+    // Write code data onto the clipboard.
+    navigator.clipboard.writeText(data || "");
+  };
+  
+  // Add a click event listener to the copy button
+  resetButton.onclick = function () {
+    editor.setValue(editor.__qwebrinitialCode);
+  };
+  
+}
+</script>
   <div class="reveal">
     <div class="slides">
 
@@ -344,7 +1631,7 @@ Khaled Larbi
     </div>
 </div>
 
-  <p class="date">May 31, 2024</p>
+  <p class="date">11 juin 2024</p>
 </section>
 <section id="pourquoi-estimer-la-variance-dun-estimateur" class="title-slide slide level1 center">
 <h1>Pourquoi estimer la variance d’un estimateur ?</h1>
@@ -381,29 +1668,26 @@ Khaled Larbi
 <section id="estimateur-dhorvitz-thompson" class="slide level2">
 <h2>Estimateur d’Horvitz-Thompson</h2>
 <ul>
-<li>Comment estimer le total <span class="math inline">\(t_y = \sum_{k \in \mathcal{U}} y_k\)</span> en utilisant l’information disponible uniquement sur l’échantillon <span class="math inline">\(S\)</span> ?</li>
-</ul>
-<div id="def-estHT" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition 1 (Estimateur d’Horvitz-Thompson)</strong></span> L’estimateur <span class="math inline">\(\hat{t}_{y,\text{HT}} = \sum_{k \in S} \frac{y_k}{\pi_k}\)</span> est appelé estimateur d’Hovitz-Thompson du total.</p>
-</div>
+<li>Comment estimer le total <span class="math inline">\(\displaystyle t_y = \sum_{k \in \mathcal{U}} y_k\)</span> en utilisant l’information disponible uniquement sur l’échantillon <span class="math inline">\(S\)</span> ?
 <ul>
-<li>Est-ce un <em>bon</em> estimateur ?
-<ul>
-<li>Critère de biais et de variance.<br>
-</li>
+<li>L’estimateur <span class="math inline">\(\hat{t}_{y,\text{HT}} = \sum_{k \in S} \frac{y_k}{\pi_k}\)</span> est appelé estimateur d’Hovitz-Thompson du total.</li>
 </ul></li>
-<li></li>
+<li>Est-ce un <em>bon</em> estimateur ?</li>
+<li>Critère de biais et de variance.</li>
 </ul>
 <div class="columns">
 <div class="column" style="width:50%;">
-<div class="callout callout-caution no-icon callout-titled callout-style-default">
+<div class="callout callout-caution callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
-<p><strong>Caution</strong></p>
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Mise en garde</strong></p>
 </div>
 <div class="callout-content">
 <div id="def-biais" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition 2 (Biais d’un estimation)</strong></span> Le biais d’un estimateur <span class="math inline">\(\hat \theta\)</span> d’une fonction d’intérêt <span class="math inline">\(\theta\)</span> est donné par <span class="math inline">\(\mathbb{B}(\hat \theta; \theta) = \mathbb{E}(\hat \theta) - \theta\)</span>.</p>
+<p><span class="theorem-title"><strong>Définition 1 (Biais d’un estimateur)</strong></span> Le biais d’un estimateur <span class="math inline">\(\hat{\theta}\)</span> d’une fonction d’intérêt <span class="math inline">\(\theta\)</span> est donné par <span class="math inline">\(\mathbb{B}(\hat{\theta}; \theta) = \mathbb{E}(\hat{\theta}) - \theta\)</span>.</p>
 </div>
 </div>
 </div>
@@ -412,11 +1696,11 @@ Khaled Larbi
 <div class="callout callout-caution no-icon callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
-<p><strong>Caution</strong></p>
+<p><strong>Mise en garde</strong></p>
 </div>
 <div class="callout-content">
 <div id="def-var" class="theorem definition">
-<p><span class="theorem-title"><strong>Definition 3 (Variance)</strong></span> La variance d’un estimateur <span class="math inline">\(\hat \theta\)</span> d’une fonction d’intérêt <span class="math inline">\(\theta\)</span> est donné par <span class="math inline">\(\mathbb{V}(\hat \theta) = \mathbb{E}(\left(\hat \theta  - \mathbb{E}(\hat \theta) \right)^2)\)</span>.</p>
+<p><span class="theorem-title"><strong>Définition 2 (Variance)</strong></span> La variance d’un estimateur <span class="math inline">\(\hat \theta\)</span> d’une fonction d’intérêt <span class="math inline">\(\theta\)</span> est donné par <span class="math inline">\(\mathbb{V}(\hat \theta) = \mathbb{E}(\left(\hat \theta  - \mathbb{E}(\hat \theta) \right)^2)\)</span>.</p>
 <p>La variance permet de quantifier la variabilité d’un estimateur.</p>
 </div>
 </div>
@@ -427,17 +1711,18 @@ Khaled Larbi
 </section>
 <section id="arbitrage-biaisvariance" class="slide level2">
 <h2>Arbitrage biais/variance</h2>
-</section>
+
+<img data-src="illustrations/biais_variance.svg" class="quarto-figure quarto-figure-center r-stretch"></section>
 <section id="estimateur-dhorvitz-thompson-biais-et-variance" class="slide level2">
 <h2>Estimateur d’Horvitz-Thompson : biais et variance</h2>
 <ul>
 <li><p>Si pour tout <span class="math inline">\(k \in \mathcal{U},~~ \pi_k &gt; 0\)</span> alors <span class="math inline">\(\hat{t}_{y,\text{HT}}\)</span> est un estimateur sans biais de <span class="math inline">\(t_y\)</span>.</p></li>
-<li><p>Si il existe un individu <span class="math inline">\(j\)</span> tel que <span class="math inline">\(\pi_j = 0\)</span>, alors il y a un défaut de couverture <span class="math inline">\(\to\)</span> biais.</p></li>
+<li><p>S’il existe un individu <span class="math inline">\(j\)</span> tel que <span class="math inline">\(\pi_j = 0\)</span>, alors il y a un défaut de couverture <span class="math inline">\(\to\)</span> biais.</p></li>
 <li><p>Quid de la variance de <span class="math inline">\(\hat{t}_{y,\text{HT}}\)</span> ?</p>
 <ul>
 <li><span class="math display">\[\mathbb{V}(\hat t_{y,\text{HT}}) = \sum_{k \in \color{red}{\mathcal{U}}} \sum_{l \in \color{red}{\mathcal{U}}} \frac{y_k}{\pi_k} \frac{y_l}{\pi_l} \Delta_{kl}\]</span> où <span class="math inline">\(\Delta_{kl} = \pi_{kl} - \pi_k \pi_l\)</span></li>
-<li>Problème : la variance est fonction des valeurs de <span class="math inline">\(\{y_k\}\)</span> sur <span class="math inline">\(\color{red}{\mathcal{U}}\)</span> mais cette information n’est disponible que sur <span class="math inline">\(\mathcal{S}\)</span></li>
-<li>Solution : estimer la variance.</li>
+<li><u>Problème</u> : la variance est fonction des valeurs de <span class="math inline">\(\{y_k\}\)</span> sur <span class="math inline">\(\color{red}{\mathcal{U}}\)</span> mais cette information n’est disponible que sur <span class="math inline">\(\mathcal{S}\)</span></li>
+<li><u>Solution</u> : estimer la variance.</li>
 </ul></li>
 </ul>
 <div class="columns">
@@ -449,9 +1734,9 @@ Khaled Larbi
 </div>
 <div class="callout-content">
 <p><span class="math display">\[\hat{\mathbb{V}}_\text{HT}(\hat t_{y,\text{HT}}) = \sum_{k \in \mathcal{U}} \sum_{k \in \mathcal{U}} \frac{y_k}{\pi_k} \frac{y_l}{\pi_l} \Delta_{kl} \color{red}{\frac{I_{kl}}{\pi_{kl}}} \color{black} = \sum_{k \in S} \sum_{l \in S} \frac{y_k}{\pi_k} \frac{y_l}{\pi_l} {\frac{\Delta_{kl}}{\pi_{kl}}} \]</span></p>
-<p>Propriétés :</p>
+<p><u>Propriétés</u> :</p>
 <ul>
-<li>Si pour tout <span class="math inline">\((k,l) \in \mathcal{U}^2\)</span>, <span class="math inline">\(\pi_{kl} &gt; 0\)</span>, <span class="math inline">\(\hat{\mathbb{V}}_\text{HT}(\hat t_{y,\text{HT}})\)</span> est sans biais pour <span class="math inline">\(\mathbb{V}_\text{HT}(\hat t_{y,\text{HT}})\)</span></li>
+<li>Si pour tout <span class="math inline">\((k,l) \in \mathcal{U}^2\)</span>, <span class="math inline">\(\pi_{kl} &gt; 0\)</span>, <span class="math inline">\(\hat{\mathbb{V}}_\text{HT}(\hat t_{y,\text{HT}})\)</span> est sans biais pour <span class="math inline">\(\mathbb{V}(\hat t_{y,\text{HT}})\)</span></li>
 </ul>
 </div>
 </div>
@@ -464,9 +1749,9 @@ Khaled Larbi
 </div>
 <div class="callout-content">
 <p><span class="math display">\[\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}}) =  - \frac{1}{2} \sum_{k \in \mathcal{S}} \sum_{l \in \mathcal{S} | k \neq l} \left(\frac{y_k}{\pi_k} - \frac{y_l}{\pi_l} \right)^2 \frac{\Delta_{kl}}{\pi_{kl}}\]</span></p>
-<p>Propriétés :</p>
+<p><u>Propriétés</u> :</p>
 <ul>
-<li>Si pour tout <span class="math inline">\((k,l) \in \mathcal{U}^2\)</span>, <span class="math inline">\(\pi_{kl} &gt; 0\)</span> et le plan <span class="math inline">\(p\)</span> est de taille fixe alors <span class="math inline">\(\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}})\)</span> est sans biais pour <span class="math inline">\(\mathbb{V}_\text{HT}(\hat t_{y,\text{HT}})\)</span>.</li>
+<li>Si pour tout <span class="math inline">\((k,l) \in \mathcal{U}^2\)</span>, <span class="math inline">\(\pi_{kl} &gt; 0\)</span> et le plan <span class="math inline">\(p\)</span> est de taille fixe alors <span class="math inline">\(\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}})\)</span> est sans biais pour <span class="math inline">\(\mathbb{V}(\hat t_{y,\text{HT}})\)</span>.</li>
 <li>Si pour tout <span class="math inline">\((k,l) \in \mathcal{U}^2\)</span>, <span class="math inline">\(\pi_{kl} - \pi_k \pi_l \leq 0\)</span> alors <span class="math inline">\(\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}}) \geq 0\)</span>.</li>
 </ul>
 </div>
@@ -474,47 +1759,805 @@ Khaled Larbi
 </div>
 </div>
 </div>
-</section></section>
-<section id="application-à-quelques-plans-de-sondage." class="title-slide slide level1 center">
-<h1>Application à quelques plans de sondage.</h1>
+</section>
+<section id="sec-tclsondage" class="slide level2">
+<h2>Théorème central limite en sondage</h2>
+<div class="fragment">
+<ul>
+<li><p>Rappel sur le théorème central limite dans le cas iid : <a href="#/sec-icidd"><span class="button">Rappel</span></a></p></li>
+<li><p>Est-ce que le théorème central limite est applicable en sondage sur l’estimateur d’Horvitz-Thompson ?</p></li>
+<li><p>Par exemple : <span class="math display">\[\frac{1}{\mathbb{V}^{\frac{1}{2}}(\hat t_{y,\text{HT}})}(\hat t_{y,\text{HT}} - t_y) \hookrightarrow \mathcal{N}(0,1) \]</span></p></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Qu’est-ce que <span class="math inline">\(n \to \infty\)</span> ?
+<ul>
+<li>Cadré proposé par exemple dans <span class="citation" data-cites="Isaki1982SurveyDU">Isaki et Fuller (<a href="#/bibliographie" role="doc-biblioref" onclick="">1982</a>)</span> : <span class="math inline">\(N \to \infty\)</span> ?</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Un théorème central limite pour tous les plans de sondage : <span class="emoji" data-emoji="x">❌</span>
+<ul>
+<li><span class="citation" data-cites="hajek1960limiting">Hájek (<a href="#/bibliographie" role="doc-biblioref" onclick="">1960</a>)</span> : pour le SRS.</li>
+<li><span class="citation" data-cites="Chauvet2015CouplingMF">Chauvet (<a href="#/bibliographie" role="doc-biblioref" onclick="">2015</a>)</span> : pour les sondages à plusieurs degrés avec un SRS au premier degré.</li>
+<li><span class="citation" data-cites="Berger1998RateOC">Berger (<a href="#/bibliographie" role="doc-biblioref" onclick="">1998</a>)</span> : pour les plans à forte entropie. …</li>
+</ul></li>
+<li>Champ de recherche ouvert : théorie unifiée ? D’autres TCL ?</li>
+</ul>
+</div>
+</section>
+<section id="théorème-central-limite-en-sondage" class="slide level2">
+<h2>Théorème central limite en sondage</h2>
+<div class="fragment">
+<ul>
+<li>En général, on supposera toujours que le théorème central limite tient : <span class="math display">\[\frac{1}{\mathbb{V}^{\frac{1}{2}}(\hat t_{y,\text{HT}})}(\hat t_{y,\text{HT}} - t_y) \hookrightarrow \mathcal{N}(0,1) \]</span></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Un intervalle de confiance asymptotique au niveau <span class="math inline">\(1-\alpha\)</span> est donné par : <span class="math display">\[ [ \hat t_{y,\text{HT}} - q_{1 - \frac{\alpha}{2}} \color{red}{\mathbb{V}}^{\frac{1}{2}}(\hat t_{y,\text{HT}}), \hat t_{y,\text{HT}} + q_{1 - \frac{\alpha}{2}} \color{red}{\mathbb{V}}^{\frac{1}{2}}(\hat t_{y,\text{HT}})  ] \]</span> avec <span class="math inline">\(q_{1 - \frac{\alpha}{2}}\)</span>, le quantile d’ordre <span class="math inline">\(1- \frac{\alpha}{2}\)</span> de la loi normale centrée réduite</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Problème : <span class="math inline">\(\mathbb{V}(\hat t_{y,\text{HT}})\)</span> pas connu mais … on peut utiliser un estimateur consistant de <span class="math inline">\(\hat{\mathbb{V}}(\hat t_{y,\text{HT}})\)</span>.</li>
+</ul>
+</div>
+<div class="fragment">
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Lemme de Slustky</strong></p>
+</div>
+<div class="callout-content">
+<p>Si <span class="math inline">\((X_n,Y_n)_{n \in \mathbb{N}}\)</span> tel que <span class="math inline">\(X_n \to^{\mathbb{P}} c\)</span> (une constante) et <span class="math inline">\(Y_n  \hookrightarrow Y\)</span> alors <span class="math inline">\((X_n, Y_n) \hookrightarrow (X,Y)\)</span>.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p><span class="math inline">\(\to\)</span> Remplacement de <span class="math inline">\(\mathbb{V}(\hat t_{y,\text{HT}})\)</span> par un estimateur <span class="math inline">\(\hat{\mathbb{V}}_\text{HT}(\hat t_{y,\text{HT}})\)</span> ou <span class="math inline">\(\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}})\)</span> (si taille fixe).</p>
+</div>
+</section>
+<section id="application-au-plan-aléatoire-simple-sans-remise" class="slide level2">
+<h2>Application au plan aléatoire simple sans remise</h2>
 <div class="callout callout-caution no-icon callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
 <p><strong>Plan aléatoire simple sans remise</strong></p>
 </div>
 <div class="callout-content">
-
+<p><span class="math inline">\(p_{\text{SASSR}(n;N)}\)</span> est un plan aléatoire simple sans remise de taille <span class="math inline">\(n\)</span> parmi <span class="math inline">\(N\)</span> si :</p>
+<ul>
+<li>tous les échantillons de taille <span class="math inline">\(n\)</span> ont même probabilité d’être tiré,</li>
+<li>si tous les échantillons de taille différente de <span class="math inline">\(n\)</span> ont une probabilité nulle d’être tiré.</li>
+</ul>
+<p>Si $S <span class="math inline">\(p_{\text{SASSR}(n;N)}\)</span> alors pour tout <span class="math inline">\((k,l) \in \mathcal{U}^2, ~~ \pi_k = \frac{n}{N}\)</span> et si <span class="math inline">\(k \neq l~~\)</span>, <span class="math inline">\(\pi_{kl} = \frac{n(n-1)}{N(N-1)}\)</span></p>
+<p><u>Application</u> : <span class="math inline">\(\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}}) = \hat{\mathbb{V}}_\text{HT}(\hat t_{y,\text{HT}}) = \frac{N^2}{n} (1 - \frac{n}{N}) s^2_y\)</span> où <span class="math inline">\(s^2_y\)</span> est la dispersion de la variable <span class="math inline">\(\{y_k\}\)</span> sur l’échantillon <span class="math inline">\(S\)</span>.</p>
 </div>
 </div>
 </div>
+<div id="qwebr-insertion-location-1"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="application-au-plan-poissonien" class="slide level2">
+<h2>Application au plan poissonien</h2>
 <div class="callout callout-caution no-icon callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
 <p><strong>Plan poissonien</strong></p>
 </div>
 <div class="callout-content">
+<p><span class="math inline">\(p_{\text{Poisson}(\textbf{p})}\)</span> où <span class="math inline">\(\textbf{p} = (p_1, ..., p_N) \in [0;1]^N\)</span> est un plan de Poisson si :</p>
+<ul>
+<li>tous les individus sont tirés indépendamment les uns des autres,</li>
+<li>la probabilité d’un individu <span class="math inline">\(k\)</span> soit dans l’échantillon est <span class="math inline">\(p_k\)</span>.</li>
+</ul>
+<p>Si $S <span class="math inline">\(p_{\text{Poisson}(\textbf{p})}\)</span> alors pour tout <span class="math inline">\((k,l) \in \mathcal{U}^2, ~~ \pi_k = \textbf{p}_k\)</span> et si <span class="math inline">\(k \neq l~~\)</span>, <span class="math inline">\(\pi_{kl} = \textbf{p}_k \textbf{p}_l\)</span></p>
+<p><u>Application</u> : <span class="math inline">\(\displaystyle \hat{\mathbb{V}}_\text{HT}(\hat t_{y,\text{HT}}) = \sum_{k \in S} y_k^2 \frac{1-\textbf{p}_k}{\textbf{p}_k}\)</span></p>
+</div>
+</div>
+</div>
+<div id="qwebr-insertion-location-2"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="approximations-classiques" class="slide level2">
+<h2>Approximations classiques</h2>
+<ul>
+<li><p>Parfois, il est délicat de calculer les probabilités d’inclusion d’ordre 2.</p></li>
+<li><p>Pour certains plans, des approximations sont utilisées.</p></li>
+<li><p>Pour les plans équilibrés à forte entropie : formule de Deville-Tiilé (<span class="citation" data-cites="varDT">Deville et Tillé (<a href="#/bibliographie" role="doc-biblioref" onclick="">2000</a>)</span>). <span class="math display">\[\hat{\mathbb{V}}_\text{DT}(\hat{t}_{y,\text{HT}}) = \sum_{k \in S} (1 - \pi_k) \left(\frac{y_k}{\pi_k} - \frac{x_k}{\pi_k} \hat{\beta} \right)^2\]</span> où <span class="math inline">\(\hat{\beta}\)</span> est le coefficient estimé de la régression de <span class="math inline">\(\{\frac{y_k}{\pi_k}\}\)</span> par <span class="math inline">\(\{\frac{x_k}{\pi_k}\}\)</span> pondérée par <span class="math inline">\(1-\pi_k\)</span>.</p>
+<ul>
+<li>Remarque : le plan aléatoire simple sans remise <span class="math inline">\(p_{\text{SASSR}(n;N)}\)</span> est un plan équilibré sur la variable <span class="math inline">\(\{pi_k\}\)</span> <span class="math inline">\(\to\)</span> il est donc possible d’utiliser l’approximation de Deville-Tillé et <span class="math inline">\(\hat{\mathbb{V}}_\text{DT}(\hat{t}_{y,\text{HT}}) = \hat{\mathbb{V}}_\text{SYG}(\hat{t}_{y,\text{HT}}) = \hat{\mathbb{V}}_\text{HT}(\hat{t}_{y,\text{HT}})\)</span></li>
+</ul></li>
+<li><p>Pour le tirage systématique : approximation par la variance sous un plan aléatoire simple.</p></li>
+</ul>
+</section>
+<section id="section" class="slide level2">
+<h2></h2>
+<p>Plan de l’enquête Histoire de Vie et Patrimoine</p>
+<div class="fragment">
+<ul>
+<li><ins>
+Idée 1
+</ins>
+: utiliser les résultats présentés. <span class="emoji" data-emoji="x">❌</span></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><ins>
+Problème 1
+</ins>
+: le calcul des probabilités d’inclusion d’ordre deux est (très) délicat.</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><ins>
+Idée 2
+</ins>
+: estimer les probabilités d’inclusion d’ordre deux par simulation. <span class="emoji" data-emoji="x">❌</span></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><ins>
+Problème 2
+</ins>
+: l’estimation des probabilités d’inclusion d’ordre deux est très gourmande en ressource informatique et peut conduire à des estimations instables.</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><ins>
+Idée 3
+</ins>
+: décomposer le calcul de l’estimateur de la variance degré par degré. <span class="emoji" data-emoji="white_check_mark">✅</span></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li><ins>
+Idée 4
+</ins>
+: utiliser des méthodes de réplication. <span class="emoji" data-emoji="white_check_mark">✅</span></li>
+</ul>
+</div>
+</section>
+<section id="section-1" class="slide level2">
+<h2></h2>
 
+<img data-src="illustrations/resume/resume0.svg" class="r-stretch quarto-figure-center"><p class="caption">Récapitulatif</p></section>
+<section id="estimation-de-variance-pour-des-plans-à-plusieurs-degrés-rao75" class="slide level2">
+<h2>Estimation de variance pour des plans à plusieurs degrés (<span class="citation" data-cites="rao75">Rao (<a href="#/bibliographie" role="doc-biblioref" onclick="">1975</a>)</span>)</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p>Soit <span class="math inline">\(p\)</span> un plan de sondage à deux degrés où <span class="math inline">\(p_1\)</span> désigne le plan de sondage des unités primaires et <span class="math inline">\(p_{2|1}\)</span> le plan de sondage des unités secondaires conditionnellement aux unités primaires. On notera respectivement <span class="math inline">\(s_\text{UP}\)</span> et <span class="math inline">\(s_\text{US}\)</span>, les échantillons d’unités primaires et secondaires obtenus.</p>
+<p>On note :</p>
+<ul>
+<li><span class="math inline">\(\pi_u^{(1)}\)</span>, les probabilités d’inclusion d’ordre 1 d’une unité primaire <span class="math inline">\(u \in U_\text{UP}\)</span>.</li>
+<li><span class="math inline">\(\pi_l^{(2|1)}\)</span>, les probabilités d’inclusion d’ordre 1 d’une unité secondaire <span class="math inline">\(l \in U_\text{UP}\)</span> conditionnellement à l’échantillon des UP.</li>
+<li><span class="math inline">\(\pi_l^{(1,2)}\)</span>, les probabilités d’inclusion d’ordre 1 d’une unité secondaire <span class="math inline">\(l \in U_\text{UP}\)</span>.</li>
+</ul>
+<p>Soit <span class="math inline">\(\hat y\)</span>, l’estimateur d’Horvitz-Thompson d’une variable d’intérêt <span class="math inline">\(y\)</span> : <span class="math display">\[\hat y = \sum_{k \in S_{\text{US}}} \frac{y_k}{\pi_k^{(1,2)}} = \sum_{u \in S_\text{UP}} \frac{\hat{y}_{(u)}}{\pi_u^{(1)}} \text{  avec  } \hat{y}_{(u)} = \sum_{k \in u \cap S_\text{US}} \frac{y_k}{\pi_k^{(2|1)}}\]</span></p>
+</div><div class="column" style="width:50%;">
+<p>Supposons que :</p>
+<ul>
+<li>le tirage des unités secondaires au sein des unités primaires sont indépendants d’une unité primaire à l’autre.</li>
+<li>l’existence d’un estimateur <span class="math inline">\(\hat{\mathbb{V}^{1}}(\hat y)\)</span> sans biais de la variance lié au premier degré d’échantillonnage <span class="math inline">\(\mathbb{V}^{1}(\hat y)\)</span> pouvant s’écrire sous la forme <span class="math inline">\(\displaystyle \hat{\mathbb{V}} (\hat y) = Q(y_{(1)}, ..., y_{(n_\text{UP})}) = \sum_{i} \sum_{j \neq i} q_{ij} y_{(i)} y_{(j)} + \sum_{i} q_{i} y_{(i)}^2\)</span> .</li>
+<li>pour tout <span class="math inline">\(u \in \mathcal{U}_\text{UP}\)</span>, l’existence d’un estimateur sans biais <span class="math inline">\(\hat y_{(u)}\)</span> (sous le deuxième degré) de <span class="math inline">\(\displaystyle y_{(u)} = \sum_{k \in u} y_k\)</span></li>
+<li>pour tout <span class="math inline">\(u \in \mathcal{U}_\text{UP}\)</span>, l’existence d’un estimateur sans biais <span class="math inline">\(\hat{\mathbb{V}}^{2|1}(\hat{y}_{(u)})\)</span> (sous le deuxième degré) de la variance de l’estimateur <span class="math inline">\(\hat y_(u)\)</span>.</li>
+</ul>
+<p>Sous ces hypothèses, la variance totale de l’estimateur d’Horvitz-Thompson sous le plan <span class="math inline">\(p\)</span> peut être estimée sans biais par <span class="math display">\[\hat{\mathbb{V}}^{(1,2)}(\hat y_{(u)}) = \hat{\mathbb{V}}^{(1,2)}(\{ y_{l} : l \in S_\text{US} \}) =  Q(\hat{y}_{(1)}, ..., \hat{y}_{(n_\text{UP})}) + \sum_{u \in S_\text{UP}} \left( \frac{1}{(\pi_u^{(1)})^2} - q_u \right) \hat{\mathbb{V}}^{2|1}(\hat{y}_{(u)}) \]</span></p>
 </div>
 </div>
+<p>::::</p>
+</section>
+<section id="récapitulatif" class="slide level2">
+<h2>Récapitulatif</h2>
+
+<img data-src="illustrations/resume/resume1.svg" class="r-stretch quarto-figure-center"><p class="caption">Récapitulatif</p></section></section>
+<section>
+<section id="estimation-de-variance-par-linéarisation" class="title-slide slide level1 center">
+<h1>Estimation de variance par linéarisation</h1>
+
+</section>
+<section id="estimation-par-subtitution" class="slide level2">
+<h2>Estimation par subtitution</h2>
+<ul>
+<li><p>Nous savons calculer la variance d’estimateurs d’Horvitz-Thompson <span class="math inline">\(\hat{t}_{y,\text{HT}} = \sum_{k \in S} \frac{y_k}{pi_k}\)</span> du total.</p></li>
+<li><p>En pratique, on s’intéresse à d’autres paramètres (univariés) : <span class="math inline">\(\theta = f(t_{y^{(1)}}, ..., t_{y^{(d)}})\)</span></p>
+<ul>
+<li>Exemple 1 : la moyenne de la variable <span class="math inline">\(\mu_{y^{(1)}} = \frac{1}{N} t_{y^{(1)}}\)</span></li>
+<li>Exemple 2 : le rapport des totaux des variables <span class="math inline">\(\{y_1\}\)</span> <span class="math inline">\(\{y_2\}\)</span> <span class="math inline">\(R_{\mu_{y^{(1)}}, \mu_{y^{(2)}}} = \frac{t_{y^{(1)}}}{t_{y^{(2)}}}\)</span></li>
+</ul></li>
+<li><p>Comment trouver un estimateur (approximativement) sans biais ?</p></li>
+<li><p>Principe de subtitution : on remplace les paramètres inconnus par des estimations.</p>
+<ul>
+<li>Exemple 1 : la moyenne de la variable <span class="math inline">\(\frac{1}{N} t_{y^{(1)}}\)</span></li>
+<li>Exemple 2 : la moyenne de la variable <span class="math inline">\(\frac{1}{N} t_{y^{(1)}}\)</span></li>
+</ul></li>
+<li><p>Quid de la variance ?</p></li>
+</ul>
+</section>
+<section id="principe-de-linéarisation" class="slide level2">
+<h2>Principe de linéarisation</h2>
+<ul>
+<li><p>Le principe de linéarisation va permettre d’estimer la variance d’estimateurs par subtitution.</p></li>
+<li><p>L’idée est d’approximer la variance de l’estimateur par subtitution <span class="math inline">\(\hat{\theta} = \mathbb{V}f(\hat{t}_{y^{(1),\text{HT}}, \text{HT}}, ..., \hat{t}_{y^{(d),\text{HT}}})\)</span> par celle de l’estimateur du total d’Horvitz-Thompson d’une variable <span class="math inline">\(\mathbb{V}(\hat{t}_{u,\text{HT}})\)</span>.</p></li>
+<li><p>Comment construire <span class="math inline">\(\{u_k\}\)</span> ?</p></li>
+<li><p>Plusieurs approches différentes :</p>
+<ul>
+<li>Si <span class="math inline">\(\hat{\theta} = \mathbb{V}f(\hat{t}_{y^{(1),\text{HT}}, \text{HT}}, ..., \hat{t}_{y^{(d),\text{HT}}})\)</span> où <span class="math inline">\(f\)</span> est différentiable.</li>
+<li>Si <span class="math inline">\(\hat{\theta}\)</span> est solution d’une équation estimante.</li>
+<li>Si <span class="math inline">\(\hat{\theta}\)</span> est une fonctionnelle.</li>
+</ul></li>
+</ul>
+</section>
+<section id="approche-1-si-f-différentiable" class="slide level2">
+<h2>Approche 1 : si <span class="math inline">\(f\)</span> différentiable</h2>
+<ul>
+<li>Supposons de plus que <span class="math inline">\(f\)</span> est régulière : <span class="math inline">\(f\)</span> différentiable.</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>En utilisant un développement de Taylor (cas où <span class="math inline">\(f : \mathbb{R} \to \mathbb{R}\)</span>): <span class="math display">\[f(\hat{t}_{y,\text{HT}}) \approx f(t_y) + (\hat{t}_{y,\text{HT}} - t_y) f'(t_y)\]</span></li>
+</ul>
 </div>
-<div class="callout callout-caution no-icon callout-titled callout-style-default">
+<div class="fragment">
+<ul>
+<li>Par passage à l’espérance : <span class="math display">\[\mathbb{E}(f(\hat{t}_{y,\text{HT}})) \approx \mathbb{E}(f(t_y)) + \mathbb{E}((\hat{t}_{y,\text{HT}} - t_y) f'(t_y)) \approx \mathbb{E}(f(t_y))\]</span> <span class="math inline">\(\to\)</span> <span style="color: red;">Si l’estimateur d’Horvitz-Thompson <span class="math inline">\(\hat{t}_{y,\text{HT}}\)</span> est sans biais pour <span class="math inline">\(t_y\)</span> alors <span class="math inline">\(f(t_{y,\text{HT}})\)</span> l’est approximativement pour <span class="math inline">\(f(t_{y})\)</span>. </span></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Par passage à la variance : <span class="math display">\[\mathbb{V}(f(\hat{t}_{y,\text{HT}})) \approx \mathbb{V}((\hat{t}_{y,\text{HT}} - t_y) f'(t_y)) \approx  \color{red}{\mathbb{V}((\hat{t}_{ f'(t_y) \times y,\text{HT}}))}\]</span></li>
+</ul>
+</div>
+<div class="fragment">
+<div id="thm-biasub" class="theorem">
+<p><span class="theorem-title"><strong>Théorème 1 (Biais de l’estimateur par subtitution)</strong></span> Si l’estimateur d’Horvitz-Thompson <span class="math inline">\(\hat{t}_{y,\text{HT}}\)</span> est sans biais pour <span class="math inline">\(t_y\)</span> alors <span class="math inline">\(\mathbb{E}(f(\hat{t}_{y,\text{HT}})) - f(t_y) \approx 0\)</span>.</p>
+</div>
+</div>
+</section>
+<section id="approche-1-si-f-différentiable-1" class="slide level2">
+<h2>Approche 1 : si <span class="math inline">\(f\)</span> différentiable</h2>
+<div class="fragment">
+<ul>
+<li>La variance d’un estimateur de la forme <span class="math inline">\(f(\hat t_{y,\text{HT}})\)</span> est approximativement égale à la variance de l’estimateur du total de la variable <span class="math inline">\(u\)</span> définie pour tout individu <span class="math inline">\(k, ~~ u_k = f'(t_y) \times y_k\)</span> : <span class="math display">\[ \mathbb{V}(f(\hat t_{y,\text{HT}})) \approx \mathbb{V}(\hat t_{u,HT}) \]</span></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Intuitivement : la variance de <span class="math inline">\(f(\hat t_{y,\text{HT}})\)</span> est approximativement la même que celle d’un estimateur d’Horvitz-Thompson pour une variable d’intérêt bien choisie <span class="math inline">\(\to\)</span> rôle central de l’estimation du total.</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>La variable <span class="math inline">\(\{u_k\}_{k \in \mathcal{U}}\)</span> est appelée <em>variable linéarisée</em> associée à <span class="math inline">\(f\)</span>.</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Problème : cette variable est définie par pour tout individu <span class="math inline">\(k \in \mathcal{U} ~~ u_k = f'(\color{red}{t_y}\color{black}) \times y_k \to\)</span> il est donc nécessaire de connaître <span class="math inline">\(\displaystyle t_y = \sum_{k \in \mathcal{U}} y_k\)</span> qui est inconnu.</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Solution : estimer par subtitution la variable linéarisée <span class="math inline">\(\{u_k\}\)</span>.
+<ul>
+<li>Pour l’individu <span class="math inline">\(k \in \mathcal{U}\)</span>, <span class="math inline">\(u_k = f'(t_y) \times y_k\)</span> sera estimé par <span class="math inline">\(\hat{u}_k = f'(\hat{t}_{y,\text{HT}}) \times y_k\)</span>.</li>
+</ul></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>La variable <span class="math inline">\(\hat{u}_k\)</span> est la variable linéarisée estimée.</li>
+</ul>
+</div>
+<div class="fragment">
+<div id="thm-lin" class="theorem">
+<p><span class="theorem-title"><strong>Théorème 2 (Estimation de la variance par linéarisation - cas unidimensionnel)</strong></span> L’estimateur de la variance par linéarisation d’une fonction d’intérêt de la forme <span class="math inline">\(f(t_{y})\)</span> est donné par <span class="math inline">\(\displaystyle \hat{\mathbb{V}}_\text{lin}(f(\hat{t}_{y,\text{HT}})) = \mathbb{V}(\hat t_{\hat{u},HT})\)</span></p>
+</div>
+</div>
+</section>
+<section id="exemple-de-linéarisation---cas-unidimensionnel" class="slide level2">
+<h2>Exemple de linéarisation - cas unidimensionnel</h2>
+<div class="fragment">
+<ul>
+<li>On suppose que l’échantillon <span class="math inline">\(S\)</span> dont nous disposons est tiré selon un plan de sondage tel que pour tout individu <span class="math inline">\(k \in \mathcal{U}, ~ \pi_k &gt; 0\)</span> <span class="math inline">\(\to\)</span> l’estimateur du total d’Horvitz-Thompson <span class="math inline">\(\hat{t}_{y,\text{HT}}\)</span> est un estimateur sans biais de <span class="math inline">\(t_y\)</span>.<br>
+</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Dans cet exemple, la variable d’intérêt prend des valeurs strictement positives.</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Nous souhaitons estimer <span class="math inline">\(\log{t_y}\)</span> : un estimateur par subtitution est donné par <span class="math inline">\(\log{\hat{t}_{y,\text{HT}}}\)</span>.</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Cet estimateur est approximativement sans biais pour <span class="math inline">\(\log{t_y}\)</span> car <span class="math inline">\(\hat{t}_{y,\text{HT}}\)</span> est sans biais pour <span class="math inline">\(t_y\)</span>.</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>L’estimateur de la variance par linéarisation est donné par <span class="math inline">\(\mathbb{V}(\hat t_{\hat{u},HT})\)</span> où pour tout <span class="math inline">\(k \in \mathcal{U}\)</span>, <span class="math inline">\(\hat{u}_k = \frac{y_k}{\hat{t}_{y,\text{HT}}}\)</span>.</li>
+</ul>
+<p>Il reste à utiliser les résultats propres au plan de sondage afin de déterminer un estimateur de la variance.</p>
+</div>
+</section>
+<section id="simulation" class="slide level2">
+<h2>Simulation</h2>
+<p>A FAIRE</p>
+</section>
+<section id="linéarisation-dune-fonction-de-plusieurs-totaux" class="slide level2">
+<h2>Linéarisation d’une fonction de plusieurs totaux</h2>
+<div class="fragment">
+<ul>
+<li>Il est possible d’utiliser cette approche pour des fonctions de totaux de plusieurs variables d’intérêt <span class="math inline">\(f(t_{y^1}, ..., t_{y^d})\)</span> où <span class="math inline">\(f : \mathbb{R}^d \to \mathbb{R}\)</span> est une fonction différentiable.</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Principe de subtitution : un estimateur de <span class="math inline">\(f(t_{y^1}, ..., t_{y^d})\)</span> est donné par <span class="math inline">\(f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d,\text{HT}}})\)</span>.</li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Même idée : en utilisant la formule de Taylor <span class="math display">\[  f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d,\text{HT}}}) \approx f(t_{y^1}, ..., t_{y^d}) +  \nabla f(t_{y^1}, ..., t_{y^d})( \hat{t}_{y^1, \text{HT}} - t_{y^1} , ..., \hat{t}_{y^d,\text{HT}} - t_{y^d})^T  \]</span></li>
+</ul>
+</div>
+<div class="fragment">
+<ul>
+<li>Il est possible d’obtenir l’approximation de la variance suivante : <span class="math display">\[\mathbb{V}(f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d,\text{HT}}})) \approx \mathbb{V}(\nabla f(t_{y^1}, ..., t_{y^d})  ( \hat{t}_{y^1, \text{HT}}  , ..., \hat{t}_{y^d,\text{HT}})^T) = \hat{t}_{u,\text{HT}}\]</span></li>
+</ul>
+<p>où la variable <span class="math inline">\(\{u_k\}_{k \in \mathcal{U}}\)</span> est définie pour tout <span class="math inline">\(k \in \mathcal{U}\)</span> par <span class="math inline">\(u_k = \nabla f(t_{y^1}, ..., t_{y^d}) (y^1_k, ..., y^d_k)^T\)</span></p>
+</div>
+<div class="fragment">
+<ul>
+<li><span class="math inline">\(u_k\)</span> est la variable linéarisée associée à <span class="math inline">\(f\)</span> <span class="math inline">\(\to\)</span> même problème que dans les cas univarié : pas accès aux totaux.</li>
+</ul>
+</div>
+</section>
+<section id="linéarisation-dune-fonction-de-plusieurs-totaux-2" class="slide level2">
+<h2>Linéarisation d’une fonction de plusieurs totaux (2)</h2>
+<div class="fragment">
+<ul>
+<li><span class="math inline">\(u_k\)</span> est la variable linéarisée associée à <span class="math inline">\(f\)</span> <span class="math inline">\(\to\)</span> même problème que dans les cas univarié : pas accès aux totaux.</li>
+</ul>
+<p><span class="math inline">\(\to\)</span> utilisation de la variable linéarisée estimée : <span class="math inline">\(\hat u_k = \nabla f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{y^d,\text{HT}}) (y^1_k, ..., y^d_k)^T\)</span>.</p>
+</div>
+<div class="fragment">
+<ul>
+<li>Estimation par subtitution : <span class="math inline">\(\hat{V}_\text{lin}(f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d,\text{HT}}})) =  \mathbb{V}( \nabla f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d},\text{HT}}) ( \hat{t}_{y^1, \text{HT}} , ..., \hat{t}_{y^d,\text{HT}} )^T) = \mathbb{V}(\hat{t}_{\hat{u},\text{HT}})\)</span></li>
+</ul>
+</div>
+<div class="fragment">
+<div id="thm-linmul" class="theorem">
+<p><span class="theorem-title"><strong>Théorème 3 (Estimation de la variance par linéarisation)</strong></span> L’estimateur de la variance par linéarisation d’une fonction d’intérêt de la forme <span class="math inline">\(f(t_{y^1}, ..., t_{y^d})\)</span> est donné par <span class="math inline">\(\displaystyle \hat{\mathbb{V}}_\text{lin}(f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d,\text{HT}}})) = \mathbb{V}( \nabla f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d},\text{HT}}) ( \hat{t}_{y^1, \text{HT}} , ..., \hat{t}_{y^d,\text{HT}})^T)\)</span></p>
+</div>
+</div>
+</section>
+<section id="exemple-de-linéarisation" class="slide level2">
+<h2>Exemple de linéarisation</h2>
+<ul>
+<li><p>Supposons que nous disposons de deux variables d’intérêt <span class="math inline">\(y^{(1)}\)</span> (par exemple, la part de transferts sociaux) et <span class="math inline">\(y^{(2)}\)</span> (par exemple, le revenu total) et que nous souhaitons connaître un estimateur du ratio des totaux <span class="math inline">\(R_{y^{(1)}, y^{(2)}} = \frac{t_{y^{(1)}}}{t_{y^{(2)}}}\)</span>.</p></li>
+<li><p>L’estimateur par subtitution de <span class="math inline">\(R_{y^{(1)}, y^{(2)}}\)</span> noté <span class="math inline">\(\hat{R}_{\y^{(1)}, y^{(2)}, \text{sub}}\)</span> est donné par <span class="math inline">\(\hat{R}_{y^{(1)}, y^{(2)}, \text{sub}} = \frac{\hat{t}_{y^{(1)},\text{HT}}}{\hat{t}_{y^{(2)},\text{HT}}}\)</span> .</p></li>
+<li><p>Cet estimateur est approximativement sans biais (le biais est d’autant plus faible que les estimateurs des totaux ont une faible variance et que la fonction d’intérêt <em>ne fluctue pas trop</em> - on suppose que pour tout <span class="math inline">\(k \in \mathcal{U}, \pi_k &gt; 0\)</span>).</p></li>
+<li><p>Quid de la variance ?</p>
+<ul>
+<li>Malheureusement, <span class="math inline">\(\mathbb{V}(\hat{R}_{\text{sub}}) = \mathbb{V}(\frac{\hat{t}_{y^{(1)},\text{HT}}}{\hat{t}_{y^{(2)},\text{HT}}}) \neq  \frac{\mathbb{V}(\hat{t}_{y^{(1)},\text{HT}})}{\mathbb{V}({\hat{t}_{y^{(2)},\text{HT}})}}\)</span></li>
+<li>Utilisation du principe de substitution.</li>
+</ul></li>
+</ul>
+</section>
+<section id="exemple-de-linéarisation-2" class="slide level2">
+<h2>Exemple de linéarisation (2)</h2>
+<ul>
+<li><p><span class="math inline">\(f : (x,y) \in \mathbb{R} \times \mathbb{R}^* \to \frac{x}{y}\)</span></p></li>
+<li><p>Pour tout <span class="math inline">\((x,y) \in \mathbb{R} \times \mathbb{R}^*\)</span>, <span class="math inline">\(\nabla f(x,y) = (\frac{1}{y}, \frac{-x}{y})\)</span></p></li>
+<li><p>La variable linéarisée pour un individu <span class="math inline">\(k\)</span> vaut donc <span class="math inline">\(u_k = \frac{y^{(1)}_k}{t_{y^{(2)}}} - \frac{t_{y^{(1)}}}{t_{y^{(2)}}^2} y^{(2)}_k = \frac{1}{t_{y^{(2)}}} (y^{(1)}_k - R_{y^{(1)}, y^{(2)}} y^{(2)}_k)\)</span></p></li>
+<li><p>La variable linéarisée estimée pour un individu <span class="math inline">\(k\)</span> vaut <span class="math inline">\(\hat{u}_k =  \frac{1}{\hat{t}_{y^{(2)},\text{HT}}} (y^{(1)}_k - \hat{R}_{y^{(1)}, y^{(2)},\text{sub}} y^{(2)}_k)\)</span></p></li>
+</ul>
+<p>L’estimateur de la variance par <span class="math inline">\(\mathbb{V}(\hat{R}_{y^1, y^2, \text{sub}})\)</span> est approximativement <span class="math inline">\(\mathbb{V(\hat{t}_{\hat{u}, \text{HT}})}\)</span> où <span class="math inline">\(\hat{u}_k =  \frac{1}{\hat{t}_{y^{(2)},\text{HT}}} (y^{(1)}_k - \hat{R}_{y^{(1)}, y^{(2)},\text{sub}} y^{(2)}_k)\)</span>.</p>
+</section>
+<section id="linéarisation-par-fonction-objective" class="slide level2">
+<h2>Linéarisation par fonction objective</h2>
+<ul>
+<li><p>Certains paramètres d’intérêt et estimateurs sont solution d’une équation estimante.</p></li>
+<li><p>Dans certains cas, une expression close du paramètre ou de l’estimateur n’existe pas.</p>
+<ul>
+<li>Formellement, il n’est pas possible d’écrire simple</li>
+</ul></li>
+<li><p>Il est cependant possible d’obtenir une estimation de la variance de l’estimateur par linéarisation de la fonction objective.</p></li>
+<li><p>Soit <span class="math inline">\(\theta \in \mathbb{R}^d\)</span>, un paramètre tel que <span class="math display">\[\begin{equation}
+\frac{1}{N} \sum_{k \in \mathcal{U}} \phi(\theta; x_k, y_k) = 0 \text{  où  } \phi : \mathbb{R}^d \to \mathbb{R}^{d} \text{ différentiable.}
+\label{defparameq}
+\end{equation}\]</span></p>
+<ul>
+<li>Exemple 1 : la moyenne <span class="math inline">\(\displaystyle {\mu}_y = \frac{1}{N} \sum_{k \in \mathcal{U}} y_k\)</span> avec <span class="math inline">\(\phi(\theta; x_k, y_k) = y_k - \theta\)</span></li>
+<li>Exemple 2 : le coefficient de régression <span class="math inline">\(\beta\)</span> de la régression de <span class="math inline">\(y\)</span> sur <span class="math inline">\(x\)</span> avec <span class="math inline">\(\phi(\theta; x_k, y_k) = x_k (y_k - x_k^T \theta)\)</span></li>
+</ul></li>
+<li><p>Il est possible de construire un estimateur associé <span class="math inline">\(\hat{\theta}\)</span> tel que <span class="math display">\[\begin{equation}
+\frac{1}{N} \sum_{k \in S} \frac{\phi(\hat{\theta}; x_k, y_k)}{\pi_k} = 0 \text{  où  } \phi : \mathbb{R}^d \to \mathbb{R}^{d} \text{ différentiable.}
+\label{defestimeq}
+\end{equation}\]</span></p>
+<ul>
+<li>Exemple 1 : l’estimateur <span class="math inline">\(\displaystyle \hat{\mu}_{y, \text{Hayek}} = \frac{1}{\sum_{k \in S}\frac{1}{\pi_k}} \sum_{k \in S} \frac{y_k}{\pi_k}\)</span> avec <span class="math inline">\(\phi(\theta; x_k, y_k) = y_k - \theta\)</span></li>
+<li>Exemple 2 : le coefficient de régression estimée <span class="math inline">\(\displaystyle \hat{\beta} = \left(\sum_{k \in S} \frac{x_k x_k^T}{\pi_k} \right)^{-1} \sum_{k \in S} \frac{x_k y_k}{\pi_k}\)</span> de la régression de <span class="math inline">\(y\)</span> sur <span class="math inline">\(x\)</span> avec <span class="math inline">\(\phi(\theta; x_k, y_k) = x_k (y_k - x_k^T \theta)\)</span></li>
+</ul></li>
+</ul>
+</section>
+<section id="intuition-de-la-linéarisation-par-fonction-estimante" class="slide level2">
+<h2>Intuition de la linéarisation par fonction estimante</h2>
+<ul>
+<li><p>Si <span class="math inline">\(\phi\)</span> est différentiable, <span class="math display">\[\phi(\hat{\theta}; x_k, y_k) \approx \phi(\theta; x_k, y_k) + (\text{Jac}(\phi)(\theta)) (\hat{\theta} - \theta)\]</span></p></li>
+<li><p>D’où <span class="math display">\[\sum_{k \in S} \frac{\phi(\hat{\theta}; x_k, y_k)}{\pi_k} \approx \sum_{k \in S} \frac{\phi(\theta; x_k, y_k)}{\pi_k} + (\sum_{k \in S} \frac{\text{Jac}(\phi)(\theta; x_k, y_k))}{\pi_k}) (\hat{\theta} - \theta)\]</span></p></li>
+<li><p>Or <span class="math inline">\(\sum_{k \in S} \frac{\phi(\hat{\theta}; x_k, y_k)}{\pi_k} = 0\)</span></p></li>
+<li><p>D’où <span class="math display">\[\begin{align}
+(\hat{\theta} - \theta) &amp;\approx \sum_{k \in S}  (-\sum_{j \in S} \frac{\text{Jac}(\phi)(\theta; x_j, y_j))}{\pi_j})^{-1} \frac{\phi(\theta; x_k, y_k)}{\pi_k} \\
+&amp;\approx \sum_{k \in S}  (-\sum_{j \in \mathcal{U}} {\text{Jac}(\phi)(\theta; x_j, y_j))})^{-1} \frac{\phi(\theta; x_k, y_k)}{\pi_k} \\
+&amp;\approx \sum_{k \in S} \frac{u^\text{est}_k(\theta)}{\pi_k}
+\end{align}\]</span></p></li>
+</ul>
+<div id="thm-blineq" class="theorem">
+<p><span class="theorem-title"><strong>Théorème 4 (Estimateur de la variance par linéarisation de l’équation estimante)</strong></span> L’approximation suivante <span class="math inline">\(\displaystyle \mathbb{V}(\hat{\theta}) \approx \mathbb{V}(\sum_{k \in S} \frac{u^\text{est}_k(\theta)}{\pi_k})\)</span> permet de créer un estimateur <span class="math inline">\(\displaystyle \hat{\mathbb{V}}(\hat{\theta}) \approx \hat{\mathbb{V}}(\sum_{k \in S} \frac{\widehat{u^\text{est}_k(\theta)}}{\pi_k})\)</span></p>
+</div>
+</section>
+<section id="exemple-de-linéarisation-par-fonction-estimante" class="slide level2">
+<h2>Exemple de linéarisation par fonction estimante</h2>
+<ul>
+<li><p>La variable <span class="math inline">\(\{ u^\text{est}_k(\theta) \}\)</span> est la variable linéarisée associée à l’estimateur <span class="math inline">\(\hat{\theta}\)</span> <span class="math inline">\(\to\)</span> <span class="math inline">\(\theta\)</span> est inconnu.</p></li>
+<li><p>La variable <span class="math inline">\(\{ u^\text{est}_k(\hat{\theta}) \}\)</span> est la variable linéarisée estimée associée à l’estimateur.</p></li>
+<li><p>Pour des développements plus rigoureux :</p>
+<ul>
+<li>Preuve de la normalité asymptotique des Z-estimateurs (iid) :</li>
+<li>Preuve de la normalité asymptotique des Z-estimateurs (cas sondage) :</li>
+</ul></li>
+</ul>
+</section>
+<section id="exemple-dapplication" class="slide level2">
+<h2>Exemple d’application</h2>
+<ul>
+<li><p>Exemple 2 : le coefficient de régression estimée <span class="math inline">\(\displaystyle \hat{\beta} = \left(\sum_{k \in S} \frac{x_k x_k^T}{\pi_k} \right)^{-1} \sum_{k \in S} \frac{x_k y_k}{\pi_k}\)</span> de la régression de <span class="math inline">\(y\)</span> sur <span class="math inline">\(x\)</span> avec <span class="math inline">\(\phi(\theta; x_k, y_k) = x_k (y_k - x_k^T \theta)\)</span></p></li>
+<li><p><span class="math inline">\(\text{Jac}(\phi)(\theta; x_j, y_j) = x_k x_k^T\)</span></p></li>
+<li><p><span class="math inline">\(u_k^\text{est}(\theta) = \left(- \sum_{k \in \mathcal{U}} x_j x_j^T \right)^{-1} {x_k}({y_k - x_k^T \theta})\)</span></p></li>
+<li><p>Application de l’estimateur <span class="math inline">\(\displaystyle \hat{\mathbb{V}}\)</span> de la variance d’un total à <span class="math inline">\(\widehat{u_k^\text{est}(\hat{\beta})} = \left(- \sum_{k \in S} \frac{x_j x_j^T}{\pi_k} \right)^{-1} {x_k}({y_k - x_k^T \hat{\beta}})\)</span></p></li>
+</ul>
+<div class="callout callout-important callout-titled callout-style-default">
 <div class="callout-body">
 <div class="callout-title">
-<p><strong>Plan de l’enquête Histoire de Vie et Patrimoine</strong></p>
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Important</strong></p>
 </div>
 <div class="callout-content">
 <ul>
-<li>Calcul des probabilités d’inclusion ?</li>
+<li>Il s’agit d’une version allégée de la linéarisation sur équation estimante : beaucoup d’hypothèses ont été cachées.</li>
+<li>Ces hypothèses sont parfois techniques et difficilement vérifiables en pratique.</li>
+<li>Ne pas hésitez à vérifier l’implémentation des estimations par linéarisation sur des exemples simples en utilisant des simulations.</li>
 </ul>
 </div>
 </div>
 </div>
+</section>
+<section id="récapitulatif-1" class="slide level2">
+<h2>Récapitulatif</h2>
+
+<img data-src="illustrations/resume/resume2.svg" class="r-stretch quarto-figure-center"><p class="caption">Récapitulatif</p></section></section>
+<section>
+<section id="prise-en-compte-des-redressements-dans-lestimation-de-variance" class="title-slide slide level1 center">
+<h1>Prise en compte des redressements dans l’estimation de variance</h1>
+
+</section>
+<section id="calage-sur-marges" class="slide level2">
+<h2>Calage sur marges</h2>
+<ul>
+<li><p>La calage sur marges consiste à chercher les poids les plus proches des poids initiaux en respectant des contraintes sur l’estimation des marges.</p></li>
+<li><p>Formellement, les poids calés sont solution du programme d’optimisation : <span class="math display">\[\min_{w \in \mathbb{R}^n} \sum_{k \in S} d_k G(\frac{w_k}{d_k}) \text{ sous contrainte que } \sum_{k \in S} w_k \textbf{x}_k = t_\textbf{x}\]</span> où <span class="math inline">\(G\)</span> est une pseudo-distance/divergence qui quantifie l’écart entre les poids initiaux et les poids calés.</p></li>
+<li><p>L’estimateur calé du total d’une variable <span class="math inline">\(\{y_k\}\)</span> s’écrit <span class="math inline">\(\displaystyle \hat{t}_{y,\text{cal}} = \sum_{k \in S} w_k(\color{red}S\color{black}) y_k\)</span> <span class="math inline">\(\to\)</span> il n’est pas possible d’utiliser les estimateurs de la variance d’un estimateur du total classique. <span class="emoji" data-emoji="cry">😢</span></p></li>
+<li><p><span class="citation" data-cites="devcal">Deville et Sarndal (<a href="#/bibliographie" role="doc-biblioref" onclick="">1992</a>)</span><sup>1</sup> montre qu’il est possible d’approximer la variance d’un estimateur calé en utilisant :</p>
+<ul>
+<li>un estimateur de la variance d’un estimateur du total classique. <span class="emoji" data-emoji="grin">😁</span></li>
+<li>les résidus de la régression de la variable d’intérêt <span class="math inline">\(\{y_k\}\)</span> sur <span class="math inline">\(\{\textbf{x}_k\}\)</span> pondérée par les poids initiaux.</li>
+</ul></li>
+<li><p>Pas de dépendances au choix de <span class="math inline">\(G\)</span><sup>2</sup> : toutes les méthodes sont asymptotiquement équivalentes au sens de la variance.</p></li>
+</ul>
+<aside><ol class="aside-footnotes"><li id="fn1"><p><span class="citation" data-cites="kimcal">Kim et Park (<a href="#/bibliographie" role="doc-biblioref" onclick="">2010</a>)</span> pour une lecture plus détaillée.</p></li><li id="fn2"><p>Pour les formes usuelles.</p></li></ol></aside></section>
+<section id="calage-sur-marges-1" class="slide level2">
+<h2>Calage sur marges</h2>
+<div id="thm-linmul" class="theorem">
+<p><span class="theorem-title"><strong>Théorème 5 (Estimation de la variance d’un estimateur du total calé)</strong></span> L’estimateur de la variance d’un estimateur du total calé est <span class="math inline">\(\hat{\mathbb{V}}^\text{cal}(\hat{t}_{y,\text{cal}}) = \hat{\mathbb{V}}(\hat{t}_{\varepsilon,\text{HT}})\)</span> où <span class="math inline">\(\hat{\mathbb{V}}\)</span> est un estimateur de la variance d’un estimateur du total d’Horvitz-Tompson.</p>
+</div>
+<ul>
+<li><code>gustave</code> dispose d’une fonction permettant de récupérer les résidus de la régression :
+<ul>
+<li>Exemple d’un estimateur calé tiré selon un <span class="math inline">\(\text{SASSR}(100;200)\)</span></li>
+</ul></li>
+</ul>
+<div id="qwebr-insertion-location-3"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="récapitulatif-2" class="slide level2">
+<h2>Récapitulatif</h2>
+
+<img data-src="illustrations/resume/resume3.svg" class="r-stretch quarto-figure-center"><p class="caption">Récapitulatif</p></section>
+<section id="partage-des-poids" class="slide level2">
+<h2>Partage des poids</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="illustrations/partagedespoids.svg"></p>
+<figcaption>Partage des poids</figcaption>
+</figure>
+</div>
+</div><div class="column" style="width:50%;">
+<ul>
+<li><p>Le partage des poids permet de calculer les poids lorsque :</p>
+<ul>
+<li>le plan de sondage est indirect,</li>
+<li>plusieurs bases de sondage sont mobilisées,</li>
+<li>un panel est utilisé.</li>
+</ul></li>
+<li><p>Cette méthode permet de prendre en compte qu’un individu de la <em>population-fille</em> aurait pu être tiré de plusieurs manières / à plusieurs instants différents.</p></li>
+<li><p><span class="math inline">\(L_{ij} = 1\)</span> si l’individu <span class="math inline">\(i\)</span> est la mère de l’individu <span class="math inline">\(j\)</span> et <span class="math inline">\(\displaystyle L_{\bullet j} = \sum_{k \in \color{red} \mathcal{U} \color{black}} L_{kj}\)</span>.</p></li>
+<li><p>Application : le poids d’un ménage <span class="math inline">\(j \in S_\text{fille}\)</span> est <span class="math inline">\(\displaystyle w^\text{fille}_{j} = \sum_{k \in \mathcal{U_\text{mère}}} w^\text{mère}_{k} \frac{L_{kj}}{L_{\bullet j}}I^\text{mère}_k\)</span></p></li>
+<li><p>Application à l’estimation de la variance : <span class="math display">\[\mathbb{V}(\sum_{j \in S_\text{fille}} w^\text{fille}_{j} y_j) = \mathbb{V}(\sum_{k \in S_\text{mère}} w^\text{mère}_{k} z_k)\]</span> où <span class="math inline">\(\displaystyle z_k = \sum_{j \in S_\text{fille}} \frac{L_{kj}}{L_{\bullet j}} y_i\)</span></p></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="récapitulatif-3" class="slide level2">
+<h2>Récapitulatif</h2>
+
+<img data-src="illustrations/resume/resume4.svg" class="r-stretch quarto-figure-center"><p class="caption">Récapitulatif</p><p>Faire des liens avec les théoremes</p>
+</section></section>
+<section>
+<section id="logique-de-gustave" class="title-slide slide level1 center">
+<h1>Logique de <code>gustave</code></h1>
+
+</section>
+<section id="il-était-une-fois-gustave" class="slide level2">
+<h2>Il était une fois, <code>gustave</code> …</h2>
+<ul>
+<li><p><code>gustave</code> est un package développé en R à l’Insee en 2018.</p></li>
+<li><p>Il permet de :</p>
+<ul>
+<li>aider au calcul de variance,</li>
+<li>proposer un cadre consistant,</li>
+<li>réutiliser des opérations déjà implementées,</li>
+<li>diffuser les résultats sans que l’utilisateur ait besoin de connaissance en sondage.</li>
+</ul></li>
+<li><p>Ce que <code>gustave</code> n’est pas :</p>
+<ul>
+<li>un package qui estime <strong>automatiquement</strong> la variance fonctionnant pour tous les plans.</li>
+<li></li>
+</ul></li>
+</ul>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Important</strong></p>
+</div>
+<div class="callout-content">
+<p>Un <code>package</code> proposant une estimation de la variance basée uniquement sur des poids (sans autre prise en compte du plan de sondage) se base <em>a priori</em> sur <strong>des hypothèses simplificatrices</strong>.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="variance-wrapper" class="slide level2">
+<h2><code>variance wrapper</code></h2>
+<ul>
+<li><p>Les estimations de variance sont livrées sous la forme de fonction : les <code>variance wrappers</code>.</p></li>
+<li><p>Ces fonctions permettent à l’utilisateur, à partir de ces données, d’obtenir une estimation de la variance mais aussi des intervalles de confiance.</p></li>
+<li><p>Pas besoin de chercher les données nécessaires (dans les méandres de nos coffres) : toutes les données sont <strong>cachées</strong><sup>1</sup> dans la fonction.</p></li>
+</ul>
+<div class="callout callout-important callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<p><strong>Important</strong></p>
+</div>
+<div class="callout-content">
+<p>Pour certaines enquêtes, il est nécessaire de mobiliser des informations potentiellement confidentielles durant l’estimation de la variance (par exemple, des variables de calage sensibles) : la diffusion de la fonction <code>variance wrapper</code> entraîne la diffusion de ces données.</p>
+</div>
+</div>
+</div>
+<div id="qwebr-insertion-location-4"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<div id="qwebr-insertion-location-5"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<aside><ol class="aside-footnotes"><li id="fn3"><p>Elles sont dans l’environnement associé à la fonction.</p></li></ol></aside></section>
+<section id="construction-dun-variance-wrapper" class="slide level2">
+<h2>Construction d’un variance wrapper</h2>
+<ul>
+<li>Comment ces estimations sont calculées ?</li>
+<li>Comment construire ce <code>variance wrapper</code> ? </li>
+<li>Travail méthodologique en amont :
+<ul>
+<li>Proposition d’un estimateur de la variance d’un estimateur du total (calé, Hovitz-Thompson, …) :
+<ul>
+<li>On pourra utiliser les résultats sur l’estimation de variance de l’estimateur calé, par tirage indirect …</li>
+</ul></li>
+<li>Implémentation sous la forme d’une fonction simple en R / les données utilisées dans ce calcul seront stockées dans une liste.</li>
+</ul>
+<div id="qwebr-insertion-location-6"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript></li>
+</ul>
+</section>
+<section id="construction-dun-variance-wrapper-1" class="slide level2">
+<h2>Construction d’un variance wrapper</h2>
+<ul>
+<li>Création d’un variance wrapper à partir de cette fonction qui :
+<ul>
+<li>aidera à gérer les linéarisations,</li>
+<li>incorporera les données.</li>
+</ul></li>
+</ul>
+<div id="qwebr-insertion-location-7"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<ul>
+<li>Pour la diffusion, il suffit de livrer le <strong>variance_wrapper</strong> :
+<ul>
+<li>Par exemple, en enregistrant la fonction dans un fichier <code>.rData</code>.</li>
+</ul></li>
+</ul>
+</section>
+<section id="récapitulatif-4" class="slide level2">
+<h2>Récapitulatif</h2>
+
+<img data-src="illustrations/resume/resume5.svg" class="r-stretch"></section>
+<section id="linéarisation-et-statistic-wrapper" class="slide level2">
+<h2>Linéarisation et <code>statistic wrapper</code></h2>
+<ul>
+<li>Comment <code>gustave</code> sait commment linéariser les fonctions d’intérêt ?</li>
+<li>Utilisation des <em>statistic wrapper</em> - fonction permettant de :
+<ul>
+<li>alculer un estimateur d’une fonction d’intérêt à partir des variables d’intérêt et d’autres données.</li>
+<li>calculer la linéarisée estimée.</li>
+</ul></li>
+<li><code>gustave</code> contient de base <strong>plusieurs statistic wrapper</strong> :
+<ul>
+<li><code>gustave:::mean</code>, <code>gustave:::total</code>, <code>gustave:::ratio</code>, <code>gustave:::diff_of_ratio</code> …</li>
+<li>Mais comment faire si on souhaite estimer d’autres paramètres ? :’(
+<ul>
+<li>Il est possible d’en définir <em>simplement</em> avec la fonction <code>define_statistic_wrapper</code>.</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="exemple-de-définition-dun-statistic-wrapper" class="slide level2">
+<h2>Exemple de définition d’un statistic wrapper</h2>
+<ul>
+<li><p>(Re)-définition d’un statistic wrapper pour la linéarisée du ratio : <code>ratio2</code></p></li>
+<li><p><code>define_statistic_wrapper</code> nécessite de renseigner :</p>
+<ul>
+<li>une fonction calculant la fonction d’intérêt et les linéarisées estimées. Cette fonction renvoie une liste avec <strong>a minima</strong> deux éléments nommés :
+<ul>
+<li><code>point</code> : Estimation ponctuelle de la fonction d’intérêt.</li>
+<li><code>lin</code> : Vecteur contenant la linéarisée estimée.</li>
+</ul></li>
+<li>une liste contenant pour chaque argument de la fonction en argument de <code>statistic_function</code> un type parmi <code>"num"</code>, <code>"denom"</code> ou <code>"weights"</code></li>
+</ul></li>
+</ul>
+<div id="qwebr-insertion-location-8"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="bibliographie" class="slide level2 smaller scrollable">
+<h2>Bibliographie</h2>
+<div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Berger1998RateOC" class="csl-entry" role="listitem">
+Berger, Yves G. 1998. <span>«&nbsp;Rate of convergence for asymptotic variance of the Horvitz–Thompson estimator&nbsp;»</span>. <em>Journal of Statistical Planning and Inference</em> 74: 149‑68.
+</div>
+<div id="ref-Chauvet2015CouplingMF" class="csl-entry" role="listitem">
+Chauvet, Guillaume. 2015. <span>«&nbsp;Coupling methods for multistage sampling&nbsp;»</span>. <em>Annals of Statistics</em> 43: 2484‑2506.
+</div>
+<div id="ref-devcal" class="csl-entry" role="listitem">
+Deville, Jean-Claude, et Carl-Erik Sarndal. 1992. <span>«&nbsp;Calibration Estimators in Survey Sampling&nbsp;»</span>. <em>Journal of the American Statistical Association</em> 87 (418): 376‑82. <a href="http://www.jstor.org/stable/2290268">http://www.jstor.org/stable/2290268</a>.
+</div>
+<div id="ref-varDT" class="csl-entry" role="listitem">
+Deville, Jean-Claude, et Yves Tillé. 2000. <span>«&nbsp;Echantillonnage équilibre par la méthode du cube, variance et estimation&nbsp;»</span>. <em>Acte des JMS</em>.
+</div>
+<div id="ref-hajek1960limiting" class="csl-entry" role="listitem">
+Hájek, Jaroslav. 1960. <span>«&nbsp;Limiting distributions in simple random sampling from a finite population&nbsp;»</span>. <em>Publications of the Mathematical Institute of the Hungarian Academy of Sciences</em> 5: 361‑74.
+</div>
+<div id="ref-Isaki1982SurveyDU" class="csl-entry" role="listitem">
+Isaki, Cary Tsuguo, et Wayne A. Fuller. 1982. <span>«&nbsp;Survey Design under the Regression Superpopulation Model&nbsp;»</span>. <em>Journal of the American Statistical Association</em> 77: 89‑96.
+</div>
+<div id="ref-kimcal" class="csl-entry" role="listitem">
+Kim, Jae Kwang, et Mingue Park. 2010. <span>«&nbsp;Calibration Estimation in Survey Sampling&nbsp;»</span>. <em>International Statistical Review / Revue Internationale de Statistique</em> 78 (1): 21‑39. <a href="http://www.jstor.org/stable/27919793">http://www.jstor.org/stable/27919793</a>.
+</div>
+<div id="ref-rao75" class="csl-entry" role="listitem">
+Rao, JNK. 1975. <span>«&nbsp;Unbiased variance estimation for multistage designs&nbsp;»</span>. <em>Sankhya</em>.
+</div>
+</div>
+</section>
+<section id="sec-icidd" class="slide level2">
+<h2>Annexe 1 : Rappel sur les intervalles de confiance</h2>
+<div class="fragment">
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Intervalle de confiance</strong></p>
+</div>
+<div class="callout-content">
+<p>Un intervalle de confiance (resp. par excès) de niveau <span class="math inline">\(1 - \alpha\)</span> pour le paramètre <span class="math inline">\(\theta\)</span> est un intervalle défini par deux variables aléatoires <span class="math inline">\(\underline{\hat \theta}\)</span> et <span class="math inline">\(\bar{\hat \theta}\)</span> telles que <span class="math display">\[\mathbb{P}(\theta \in [\underline{\hat \theta}, \bar{\hat \theta}]) = 1 - \alpha \text{ (resp } \geq 1 - \alpha)\]</span></p>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment">
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Intervalle de confiance asymptotique</strong></p>
+</div>
+<div class="callout-content">
+<p>Un intervalle de confiance asymptotique (resp. par excès) de niveau <span class="math inline">\(1 - \alpha\)</span> pour le paramètre <span class="math inline">\(\theta\)</span> est un intervalle défini par deux suites de variables aléatoires <span class="math inline">\((\underline{\hat \theta_n})_{n \in \mathbb{N}}\)</span> et <span class="math inline">\((\bar{\hat \theta_n})_{n \in \mathbb{N}}\)</span> telles que <span class="math display">\[\lim_{n \to \infty} \mathbb{P}(\theta \in [\underline{\hat \theta_n}, \bar{\hat \theta_n}]) = 1 - \alpha \text{ (resp } \geq 1 - \alpha)\]</span></p>
+</div>
+</div>
+</div>
+</div>
+<div class="fragment">
+<p>Généralement :</p>
+<ul>
+<li>les intervalles de confiance non asymptotiques sont utilisables si on connaît la distribution de l’échantillon.</li>
+<li>les intervalles de confiance asymptotique repose sur la normalité asymptotique de l’estimateur :
+<ul>
+<li>dans le cadre traditionnel (population infinie, iid) : le théorème central limite.</li>
+</ul></li>
+</ul>
+</div>
+</section>
+<section id="théorème-central-limite" class="slide level2">
+<h2>Théorème central limite</h2>
+<div class="callout callout-note no-icon callout-titled callout-style-default">
+<div class="callout-body">
+<div class="callout-title">
+<p><strong>Théorème central limite - cadre <em>hors sondage</em></strong></p>
+</div>
+<div class="callout-content">
+<p>Soit <span class="math inline">\(\{X_1, ..., X_n\}\)</span>, <span class="math inline">\(n\)</span> variables aléatoires iid telles que <span class="math inline">\(\mathbb{E}(X_1) = \mu\)</span> et <span class="math inline">\(\mathbb{V}(X_1) &lt; \infty\)</span>. Le théorème central limite assure que : <span class="math display">\[\frac{1}{\mathbb{V}( \frac{1}{n} \sum_{k = 1}^n X_k)^{\frac{1}{2}}} \left( \frac{1}{n} \sum_{k = 1}^n X_k - \mu \right) = \frac{\sqrt{n}}{\mathbb{V}(X_1)^{\frac{1}{2}}} \left( \frac{1}{n} \sum_{k = 1}^n X_k - \mu \right) \hookrightarrow \mathcal{N}(0, 1)\]</span> où <span class="math inline">\(\hookrightarrow\)</span> désigne la convergence en loi.</p>
+</div>
+</div>
+</div>
+<div class="columns">
+<div class="column" style="width:50%;">
+<iframe data-external="1" src="https://www.youtube.com/embed/SCNr_Lom5z8" width="300%" height="100%" title="Illustration du TCL" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+</div><div class="column" style="width:50%;">
+<ul>
+<li>Utilisation possible pour déterminer un intervalle de confiance asymptotique pour l’espérance</li>
+<li><span class="math display">\[[\bar{X_n} - \frac{\mathbb{V}(X_1)^{\frac{1}{2}}}{\sqrt{n}} q_{1 - \frac{\alpha}{2}} , \bar{X_n} + \frac{\mathbb{V}(X_1)^{\frac{1}{2}}}{\sqrt{n}} q_{1 - \frac{\alpha}{2}} ]\]</span> où <span class="math inline">\(q_{1 - \frac{\alpha}{2}}\)</span> est le quantile d’ordre <span class="math inline">\(1-\frac{\alpha}{2}\)</span> de la loi normale centrée réduite, est un intervalle de confiance asymptotique au niveau <span class="math inline">\(1-\alpha\)</span> pour <span class="math inline">\(\bar{X}_n\)</span>.</li>
+</ul>
+</div>
+</div>
+<p><a href="#/sec-tclsondage"><span class="button">Retour au cours</span></a></p>
+</section>
+<section id="section-2" class="slide level2">
+<h2></h2>
 <div class="quarto-auto-generated-content">
 <div class="footer footer-default">
 
 </div>
 </div>
-</section>
+</section></section>
+
     </div>
   </div>
 
@@ -776,12 +2819,12 @@ Khaled Larbi
         // flash "checked"
         button.classList.add('code-copy-button-checked');
         var currentTitle = button.getAttribute("title");
-        button.setAttribute("title", "Copied!");
+        button.setAttribute("title", "Copié");
         let tooltip;
         if (window.bootstrap) {
           button.setAttribute("data-bs-toggle", "tooltip");
           button.setAttribute("data-bs-placement", "left");
-          button.setAttribute("data-bs-title", "Copied!");
+          button.setAttribute("data-bs-title", "Copié");
           tooltip = new bootstrap.Tooltip(button, 
             { trigger: "manual", 
               customClass: "code-copy-button-tooltip",
@@ -900,6 +2943,118 @@ Khaled Larbi
         }
       }
     });
+    </script>
+    <script type="module">
+    // Handle cell initialization initialization
+    qwebrCellDetails.map(
+      (entry) => {
+        // Handle the creation of the element
+        qwebrCreateHTMLElement(entry);
+        // In the event of interactive, initialize the monaco editor
+        if (entry.options.context == EvalTypes.Interactive) {
+          qwebrCreateMonacoEditorInstance(entry);
+        }
+      }
+    );
+
+    // Identify non-interactive cells (in order)
+    const filteredEntries = qwebrCellDetails.filter(entry => {
+      const contextOption = entry.options && entry.options.context;
+      return ['output', 'setup'].includes(contextOption) || (contextOption == "interactive" && entry.options && entry.options.autorun === 'true');
+    });
+
+    // Condition non-interactive cells to only be run after webR finishes its initialization.
+    qwebrInstance.then(
+      async () => {
+        const nHiddenCells = filteredEntries.length;
+        var currentHiddenCell = 0;
+
+
+        // Modify button state
+        qwebrSetInteractiveButtonState(`🟡 Running hidden code cells ...`, false);
+
+        // Begin processing non-interactive sections
+        // Due to the iteration policy, we must use a for() loop.
+        // Otherwise, we would need to switch to using reduce with an empty
+        // starting promise
+        for (const entry of filteredEntries) {
+
+          // Determine cell being examined
+          currentHiddenCell = currentHiddenCell + 1;
+          const formattedMessage = `Evaluating hidden cell ${currentHiddenCell} out of ${nHiddenCells}`;
+
+          // Update the document status header
+          if (qwebrShowStartupMessage) {
+            qwebrUpdateStatusHeader(formattedMessage);
+          }
+
+          // Display the update in non-active areas
+          qwebrUpdateStatusMessage(formattedMessage);
+
+          // Extract details on the active cell
+          const evalType = entry.options.context;
+          const cellCode = entry.code;
+          const qwebrCounter = entry.id;
+
+          if (['output', 'setup'].includes(evalType)) {
+            // Disable further global status updates
+            const activeContainer = document.getElementById(`qwebr-non-interactive-loading-container-${qwebrCounter}`);
+            activeContainer.classList.remove('qwebr-cell-needs-evaluation');
+            activeContainer.classList.add('qwebr-cell-evaluated');
+
+            // Update status on the code cell
+            const activeStatus = document.getElementById(`qwebr-status-text-${qwebrCounter}`);
+            activeStatus.innerText = " Evaluating hidden code cell...";
+            activeStatus.classList.remove('qwebr-cell-needs-evaluation');
+            activeStatus.classList.add('qwebr-cell-evaluated');
+          }
+
+          switch (evalType) {
+            case 'interactive':
+              // TODO: Make this more standardized.
+              // At the moment, we're overriding the interactive status update by pretending its
+              // output-like. 
+              const tempOptions = entry.options;
+              tempOptions["context"] = "output"
+              // Run the code in a non-interactive state that is geared to displaying output
+              await qwebrExecuteCode(`${cellCode}`, qwebrCounter, tempOptions);
+              break;
+            case 'output':
+              // Run the code in a non-interactive state that is geared to displaying output
+              await qwebrExecuteCode(`${cellCode}`, qwebrCounter, entry.options);
+              break;
+            case 'setup':
+              const activeDiv = document.getElementById(`qwebr-noninteractive-setup-area-${qwebrCounter}`);
+              // Run the code in a non-interactive state with all output thrown away
+              await mainWebR.evalRVoid(`${cellCode}`);
+              break;
+            default: 
+              break; 
+          }
+
+          if (['output', 'setup'].includes(evalType)) {
+            // Disable further global status updates
+            const activeContainer = document.getElementById(`qwebr-non-interactive-loading-container-${qwebrCounter}`);
+            // Disable visibility
+            activeContainer.style.visibility = 'hidden';
+            activeContainer.style.display = 'none';
+          }
+        }
+      }
+    ).then(
+      () => {
+        // Release document status as ready
+
+        if (qwebrShowStartupMessage) {
+          qwebrStartupMessage.innerText = "🟢 Ready!"
+        }
+      
+        qwebrSetInteractiveButtonState(
+          `<i class="fa-solid fa-play qwebr-icon-run-code"></i> <span>Run Code</span>`, 
+          true
+        );  
+      }
+    );
     </script>
     
 
