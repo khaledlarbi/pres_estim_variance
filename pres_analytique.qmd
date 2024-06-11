@@ -321,7 +321,8 @@ Plan de l'enquête Histoire de Vie et Patrimoine
 :::
 
 ## 
-![Récapitulatif](illustrations/resume/resume0.svg)
+
+![](illustrations/resume/resume0.svg)
 
 
 
