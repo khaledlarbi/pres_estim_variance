@@ -890,7 +890,7 @@ precision_lfs <- gustave::define_variance_wrapper(
 
 ## Récapitulatif 
 
-![Récapitulatif](illustrations/resume/resume5.svg)
+![](illustrations/resume/resume5.svg)
 
 
 ## Linéarisation et `statistic wrapper`
@@ -931,6 +931,11 @@ ratio2 <- define_statistic_wrapper(
   }, 
   arg_type = list(data = c("num", "denom") , weight = "weight")
 )
+
+
+## Récapitulatif 
+
+![](illustrations/resume/resume6.svg)
 
 
 #Utilisation
