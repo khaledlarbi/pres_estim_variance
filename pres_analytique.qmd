@@ -133,10 +133,67 @@ $$\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}}) =  - \frac{1}{2} \sum_{k \in
 
 
 
+## Théorème central limite en sondage {#sec-tclsondage}
+::: {.fragment}
+- Rappel sur le théorème central limite dans le cas iid : [[Rappel]{.button}](#sec-icidd)
+- Est-ce que le théorème central limite est applicable en sondage sur l'estimateur d'Horvitz-Thompson ? 
+
+- Par exemple : 
+$$\frac{1}{\mathbb{V}^{\frac{1}{2}}(\hat t_{y,\text{HT}})}(\hat t_{y,\text{HT}} - t_y) \hookrightarrow \mathcal{N}(0,1) $$
+:::
+
+
+::: {.fragment}
+- Qu'est-ce que $n \to \infty$ ?
+    - Cadré proposé par exemple dans @Isaki1982SurveyDU : $N \to \infty$ ?
+:::
+
+::: {.fragment}
+- Un théorème central limite pour tous les plans de sondage : :x:
+    - @hajek1960limiting : pour le SRS.
+    - @Chauvet2015CouplingMF : pour les sondages à plusieurs degrés avec un SRS au premier degré.
+    - @Berger1998RateOC : pour les plans à forte entropie.
+    ...
+
+- Champ de recherche ouvert : théorie unifiée ? D'autres TCL ?
+:::
+
+
+## Théorème central limite en sondage
+
+::: {.fragment}
+- En général, on supposera toujours que le théorème central limite tient : 
+$$\frac{1}{\mathbb{V}^{\frac{1}{2}}(\hat t_{y,\text{HT}})}(\hat t_{y,\text{HT}} - t_y) \hookrightarrow \mathcal{N}(0,1) $$
+
+:::
+
+::: {.fragment}
+- Un intervalle de confiance asymptotique au niveau $1-\alpha$ est donné par :
+$$ [ \hat t_{y,\text{HT}} - q_{1 - \frac{\alpha}{2}} \color{red}{\mathbb{V}}^{\frac{1}{2}}(\hat t_{y,\text{HT}}), \hat t_{y,\text{HT}} + q_{1 - \frac{\alpha}{2}} \color{red}{\mathbb{V}}^{\frac{1}{2}}(\hat t_{y,\text{HT}})  ] $$
+avec $q_{1 - \frac{\alpha}{2}}$, le quantile d'ordre $1- \frac{\alpha}{2}$ de la loi normale centrée réduite
+:::
+
+::: {.fragment}
+- Problème : $\mathbb{V}(\hat t_{y,\text{HT}})$ pas connu mais ... on peut utiliser un estimateur consistant de $\hat{\mathbb{V}}(\hat t_{y,\text{HT}})$.
+:::
+
+::: {.fragment}
+::: {.callout-note icon="false"}
+## Lemme de Slustky
+
+Si $(X_n,Y_n)_{n \in \mathbb{N}}$ tel que $X_n \to^{\mathbb{P}} c$  (une constante) et $Y_n  \hookrightarrow Y$ alors $(X_n, Y_n) \hookrightarrow (X,Y)$.
+:::
+:::
+
+::: {.fragment}
+$\to$ Remplacement de $\mathbb{V}(\hat t_{y,\text{HT}})$ par un estimateur $\hat{\mathbb{V}}_\text{HT}(\hat t_{y,\text{HT}})$ ou $\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}})$ (si taille fixe). 
+:::
 
 
 
-## Application à quelques plans de sondage.
+
+
+## Application au plan aléatoire simple sans remise
 
 ::: {.callout-caution icon="false"}
 ## Plan aléatoire simple sans remise 
@@ -167,7 +224,7 @@ diag(pikl) <- pik
 gustave::varSYG(y = y, pikl = pikl)
 ```
 
-##
+## Application au plan poissonien
 
 ::: {.callout-caution icon="false"}
 ## Plan poissonien
@@ -236,7 +293,7 @@ Plan de l'enquête Histoire de Vie et Patrimoine
 :::
 
 ## 
-![Récapitulatif](illustrations/resume/resume1.drawio.svg)
+![Récapitulatif](illustrations/resume/resume0.drawio.svg)
 
 
 
@@ -307,7 +364,7 @@ $$\hat{\mathbb{V}}^{(1,2)}(\hat y_{(u)}) = \hat{\mathbb{V}}^{(1,2)}(\{ y_{l} : l
 
 ## Récapitulatif
 
-![Récapitulatif](illustrations/resume/resume0.drawio.svg)
+![Récapitulatif](illustrations/resume/resume1.drawio.svg)
 
 # Estimation de variance par linéarisation 
 
@@ -701,6 +758,14 @@ Faire des liens avec les théoremes
   - un package qui estime **automatiquement** la variance fonctionnant pour tous les plans. 
   - 
 
+:::{.callout-important}
+## Important 
+
+Un `package` proposant une estimation de la variance basée uniquement sur des poids (sans autre prise en compte du plan de sondage) se base *a priori* sur **des hypothèses simplificatrices**.
+:::
+
+
+
 ## `variance wrapper`
 
 - Les estimations de variance sont livrées sous la forme de fonction : les `variance wrappers`.
@@ -795,10 +860,13 @@ precision_lfs(data = lfs_samp_ind, total(unemp), mean(unemp), alpha = 0.9)
 - Comment construire ce `variance wrapper` ? 
 \vspace{2cm}
 - Travail méthodologique en amont : 
-  - Proposition d'un estimateur de la variance d'un estimateur du total (calé, Hovitz-Thompson, ...)
-  - Implémentatiton sous la forme d'une fonction simple en R / les données utilisées dans ce calcul seront stockées dans une liste.
+  - Proposition d'un estimateur de la variance d'un estimateur du total (calé, Hovitz-Thompson, ...) :
+    - On pourra utiliser les résultats sur l'estimation de variance de l'estimateur calé, par tirage indirect ...
+  - Implémentation sous la forme d'une fonction simple en R / les données utilisées dans ce calcul seront stockées dans une liste.
   ```{webr-r}
+  #Fonction qui calcule une estimation de la variance d'un estimateur du total de y. 
     str(var_lfs)
+  #Liste contenant les données nécessaires à l'utilisation de la fonction var_lfs
     str(technical_data_lfs)
   ```
 
@@ -817,7 +885,118 @@ precision_lfs <- gustave::define_variance_wrapper(
 )
 ```
 
-# Bibliographie
+- Pour la diffusion, il suffit de livrer le **variance\_wrapper** :
+  - Par exemple, en enregistrant la fonction dans un fichier `.rData`.
+
+## Récapitulatif 
+
+![Récapitulatif](illustrations/resume/resume5.svg)
+
+
+## Linéarisation et `statistic wrapper`
+
+- Comment `gustave` sait commment linéariser les fonctions d'intérêt ? 
+- Utilisation des *statistic wrapper* - fonction permettant de :
+  - alculer un estimateur d'une fonction d'intérêt à partir des variables d'intérêt et d'autres données.
+  - calculer la linéarisée estimée. 
+
+- `gustave` contient de base **plusieurs statistic wrapper** :
+  - `gustave:::mean`, `gustave:::total`, `gustave:::ratio`, `gustave:::diff_of_ratio` ...
+  - Mais comment faire si on souhaite estimer d'autres paramètres ? :'(
+    - Il est possible d'en définir *simplement* avec la fonction `define_statistic_wrapper`.
+
+## Exemple de définition d'un statistic wrapper 
+
+- (Re)-définition d'un statistic wrapper pour la linéarisée du ratio : `ratio2`
+
+- `define_statistic_wrapper` nécessite de renseigner :
+  - une fonction calculant la fonction d'intérêt et les linéarisées estimées. Cette fonction renvoie une liste avec **a minima** deux éléments nommés :
+    - `point` : Estimation ponctuelle de la fonction d'intérêt.
+    - `lin` : Vecteur contenant la linéarisée estimée. 
+  - une liste contenant pour chaque argument de la fonction en argument de `statistic_function` un type parmi `"num"`, `"denom"` ou `"weights"`
+
+```{webr-r}
+ratio2 <- define_statistic_wrapper(
+  statistic_function = function(num, denom, weight){
+    na <- is.na(num) | is.na(denom)
+    num[na] <- 0
+    denom[na] <- 0
+    est_num <- sum(num * weight)
+    est_denom <- sum(denom * weight)
+    #Définition de l'estimation du paramètre d'intérêt
+    point <- est_num / est_denom
+    #Définition de la variable linéarisée estimée
+    lin <- (num - point * denom ) / est_denom
+    list(point = point, lin = lin, n = length(num))
+  }, 
+  arg_type = list(data = c("num", "denom") , weight = "weight")
+)
+
+
+#Utilisation
+lfs_samp_ind$rand_income <- rexp(nrow(lfs_samp_ind))
+precision_lfs(data = lfs_samp_ind,
+ ratio(income, rand_income),
+ ratio2(income, rand_income), 
+ alpha = 0.9)
+```
+
+
+## Bibliographie
+::: {#refs}
+:::
+
+
+## Annexe 1 : Rappel sur les intervalles de confiance {#sec-icidd}
+
+::: {.fragment}
+::: {.callout-note icon="false"}
+## Intervalle de confiance
+Un intervalle de confiance (resp. par excès) de niveau $1 - \alpha$ pour le paramètre $\theta$ est un intervalle défini par deux variables aléatoires $\underline{\hat \theta}$ et $\bar{\hat \theta}$ telles que $$\mathbb{P}(\theta \in [\underline{\hat \theta}, \bar{\hat \theta}]) = 1 - \alpha \text{ (resp } \geq 1 - \alpha)$$
+:::
+:::
+
+::: {.fragment}
+::: {.callout-note icon="false"}
+## Intervalle de confiance asymptotique
+Un intervalle de confiance asymptotique (resp. par excès) de niveau $1 - \alpha$ pour le paramètre $\theta$ est un intervalle défini par deux suites de variables aléatoires $(\underline{\hat \theta_n})_{n \in \mathbb{N}}$ et $(\bar{\hat \theta_n})_{n \in \mathbb{N}}$ telles que $$\lim_{n \to \infty} \mathbb{P}(\theta \in [\underline{\hat \theta_n}, \bar{\hat \theta_n}]) = 1 - \alpha \text{ (resp } \geq 1 - \alpha)$$
+:::
+:::
+
+::: {.fragment}
+Généralement : 
+
+- les intervalles de confiance non asymptotiques sont utilisables si on connaît la distribution de l'échantillon.
+- les intervalles de confiance asymptotique repose sur la normalité asymptotique de l'estimateur :
+    - dans le cadre traditionnel (population infinie, iid) : le théorème central limite.
+:::
+
+
+## Théorème central limite
+
+::: {.callout-note icon="false"}
+## Théorème central limite - cadre *hors sondage*
+
+Soit $\{X_1, ..., X_n\}$, $n$ variables aléatoires iid telles que $\mathbb{E}(X_1) = \mu$ et $\mathbb{V}(X_1) < \infty$.
+Le théorème central limite assure que :  $$\frac{1}{\mathbb{V}( \frac{1}{n} \sum_{k = 1}^n X_k)^{\frac{1}{2}}} \left( \frac{1}{n} \sum_{k = 1}^n X_k - \mu \right) = \frac{\sqrt{n}}{\mathbb{V}(X_1)^{\frac{1}{2}}} \left( \frac{1}{n} \sum_{k = 1}^n X_k - \mu \right) \hookrightarrow \mathcal{N}(0, 1)$$ où $\hookrightarrow$ désigne la convergence en loi.
+:::
+
+:::: {.columns}
+
+::: {.column width="50%"}
+{{< video https://www.youtube.com/watch?v=SCNr_Lom5z8&t=14s&ab_channel=Fran%C3%A7oisSchwarzentruber width="300%" height="100%" title='Illustration du TCL' >}}
+:::
+
+::: {.column width="50%"}
+- Utilisation possible pour déterminer un intervalle de confiance asymptotique pour l'espérance
+- $$[\bar{X_n} - \frac{\mathbb{V}(X_1)^{\frac{1}{2}}}{\sqrt{n}} q_{1 - \frac{\alpha}{2}} , \bar{X_n} + \frac{\mathbb{V}(X_1)^{\frac{1}{2}}}{\sqrt{n}} q_{1 - \frac{\alpha}{2}} ]$$ où $q_{1 - \frac{\alpha}{2}}$ est le quantile d'ordre $1-\frac{\alpha}{2}$ de la loi normale centrée réduite, est un intervalle de confiance asymptotique au niveau $1-\alpha$ pour $\bar{X}_n$.
+:::
+
+::::
+[[Retour au cours]{.button}](#sec-tclsondage)
+
+##
+
 [^1]: @kimcal pour une lecture plus détaillée.
 [^2]: Pour les formes usuelles.
 [^3]: Elles sont dans l'environnement associé à la fonction.
