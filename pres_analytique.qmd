@@ -293,7 +293,7 @@ Plan de l'enquête Histoire de Vie et Patrimoine
 :::
 
 ## 
-![Récapitulatif](illustrations/resume/resume0.drawio.svg)
+![Récapitulatif](illustrations/resume/resume0.svg)
 
 
 
@@ -309,7 +309,7 @@ Plan de l'enquête Histoire de Vie et Patrimoine
 
 
 
-## Estimation de variance pour des plans à plusieurs degrés (@Rao75, Caron et al 1998)
+## Estimation de variance pour des plans à plusieurs degrés (@rao75)
 
 :::: {.columns}
 
@@ -364,7 +364,7 @@ $$\hat{\mathbb{V}}^{(1,2)}(\hat y_{(u)}) = \hat{\mathbb{V}}^{(1,2)}(\{ y_{l} : l
 
 ## Récapitulatif
 
-![Récapitulatif](illustrations/resume/resume1.drawio.svg)
+![Récapitulatif](illustrations/resume/resume1.svg)
 
 # Estimation de variance par linéarisation 
 
@@ -468,7 +468,7 @@ L'estimateur de la variance par linéarisation d'une fonction d'intérêt de la 
 
 
 ::: {.fragment}
-- On suppose que l'échantillon $s$ dont nous disposons est tiré selon un plan de sondage tel que pour tout individu $k \in \mathcal{U}, ~ \pi_k > 0$
+- On suppose que l'échantillon $S$ dont nous disposons est tiré selon un plan de sondage tel que pour tout individu $k \in \mathcal{U}, ~ \pi_k > 0$
 $\to$ l'estimateur du total d'Horvitz-Thompson $\hat{t}_{y,\text{HT}}$ est un estimateur sans biais de $t_y$.  
 :::
 
@@ -648,7 +648,7 @@ L'approximation suivante $\displaystyle \mathbb{V}(\hat{\theta}) \approx \mathbb
 
 ## Récapitulatif
 
-![Récapitulatif](illustrations/resume/resume2.drawio.svg)
+![Récapitulatif](illustrations/resume/resume2.svg)
 
 # Prise en compte des redressements dans l'estimation de variance
 
@@ -699,7 +699,7 @@ var_srs(y = matrix(residus, ncol = 1),
 ```
 ## Récapitulatif
 
-![Récapitulatif](illustrations/resume/resume3.drawio.svg)
+![Récapitulatif](illustrations/resume/resume3.svg)
 
 
 ## Partage des poids
@@ -735,7 +735,7 @@ var_srs(y = matrix(residus, ncol = 1),
 
 ## Récapitulatif
 
-![Récapitulatif](illustrations/resume/resume4.drawio.svg)
+![Récapitulatif](illustrations/resume/resume4.svg)
 
 
 
