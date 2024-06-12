@@ -1,0 +1,376 @@
+---
+title: "Estimation de variance analytique avec `gustave`"
+author: "K. Larbi"
+format: 
+  html:
+    crossrefs-hover: true
+filters:
+  - webr
+---
+
+# Estimation de variance analytique avec `gustave`
+
+
+```{webr-r}
+library("gustave")
+```
+
+
+
+`gustave` est un package permettant d’estimer la variance d’estimateurs dans un contexte d’échantillonnage en population finie. Ce package s’inscrit dans une logique d’harmonisation des programmes à l'Insee introduite avec la macro Calker en SAS. Ce package simplifie les estimations de variance analytique en mutualisant des opérations mobilisées dans plusieurs enquêtes et en imposant une distinction entre les enjeux méthodologiques et de diffusion. `gustave` garde un niveau d’abstraction suffisant afin de pouvoir ajouter simplement des spécificités propres à certaines enquêtes.
+
+L’estimation de la variance avec `gustave` peut se décomposer en trois étapes : calcul d’un estimateur de la variance d’un estimateur d’un total, implémentation de l’estimateur et utilisation des variables linéarisées. 
+
+Afin d'illustrer le cheminement permettant d'obtenir les estimations de variance avec `gustave`, nous proposons d'estimer la précision dans le cadre d'un exemple. Nous considérons un tirage à deux degrés selon des sondages aléatoires simples sans remise : 
+
+- un tirage d'un échantillon de $n_\text{UP} = $ 1 000 unités primaires $S_\text{UP}$ parmi $N_\text{UP} = $ 10 000 selon un plan aléatoire simple stratifié avec allocation proportionnelle, 
+- un tirage de $n_u = 4$ unités secondaires parmi les $N_u = 10$ unités secondaires dont chaque unité primaire $u$ dispose. L'échantillon des unités secondaires obtenu est noté $S_\text{US}$.
+Un calage sur marges est ensuité réalisé au niveau des unités secondaires sur cinq variables quantitivatives $\{ \textbf{x}^\text{cal}_k \}_{k \in S_ \text{US}}$ où pour tout $k$, $\textbf{x}^\text{cal}_k = (\textbf{x}^\text{cal}_{k,1}, \hdots, \textbf{x}^\text{cal}_{k,5})$ : la pondération calée est notée $\{w^\text{cal}_k\}_{k \in S_\text{US}}$.
+
+
+Les données sont téléchargeables à l'adresse [suivante](https://minio.lab.sspcloud.fr/klarbi/Colloque_sondage/donnees.Rdata).
+
+
+```{webr-r}
+#Téléchargement des données
+download.file(url = "https://minio.lab.sspcloud.fr/klarbi/Colloque_sondage/donnees.Rdata",
+             destfile = "donnees.Rdata")
+#Chargement des données
+load("donnees.Rdata")
+```
+
+Le fichier .Rdata contient trois tables **info\_ech**, **var_ech_cal**, **var\_interet** dont le contenu est décrit par les dictionnaires suivants : 
+
+|  Nom de la variable  |                                         Définition                                         |
+|:--------------------:|:------------------------------------------------------------------------------------------:|
+|        id\_psu       |                              Identifiant de l'unité primaire.                              |
+|      strate\_psu     |                                 Strate de l'unité primaire.                                |
+|        id\_ssu       |                             Identifiant de l'unité secondaire.                             |
+|        pi\_psu       |                 Probabilité d'inclusion d'ordre 1 <br>de l'unité primaire.                 |
+|  pi\_ssu\_cond\_psu  | Probabilité d'inclusion d'ordre 1 <br>de l'unité secondaire cond.<br>aux unités primaires. |
+| poids\_avant\_calage |                                     Poids avant calage.                                    |
+| poids\_apres\_calage |                                     Poids après calage.                                    |
+
+| Nom de la variable |             Définition             |
+|:------------------:|:----------------------------------:|
+|       id\_psu      |  Identifiant de l'unité primaire.  |
+|       id\_ssu      | Identifiant de l'unité secondaire. |
+|      var\_caln     |       Variable de calage $n$       |
+
+| Nom de la variable |             Définition             |
+|:------------------:|:----------------------------------:|
+|     identifiant    | Identifiant de l'unité secondaire. |
+|          y         |       Variable d'intérêt $y$       |
+|          z         |       Variable d'intérêt $z$       |
+
+## Etape 1 : Estimateur de la variance d'un estimateur calé du total
+
+### Estimateur de la variance d'un estimateur du total d'Horvitz-Thompson
+
+Afin d’estimer la variance d’une statistique régulière, il est nécessaire de proposer un estimateur dans le cas simple de l’estimateur du total. Ce travail, réalisé par le méthodologue,
+consiste à utiliser des résultats théoriques et l’information sur la collecte (plan de sondage,
+redressements, ...) afin d’approcher au mieux un estimateur sans biais de la variance. Dans
+certains cas simples (cas d’un sondage aléatoire simple sans remise), il n’est pas nécessaire
+d’implémenter l’estimateur : des fonctions prêtes à l’emploi sont disponibles (fonction qvar
+par exemple).
+
+Un estimateur de la variance d'un estimateur du total d'Horvitz-Thompson $\hat{t}_{y,\text{HT}}$ sous le plan de l'exemple est :
+MODIFIER ESTIM ? 
+$$
+    \widehat{\mathbb{V}}(\hat{t}_{y,\text{HT}}) = \frac{N_\text{UP}^2}{n_\text{UP}} \left(1-\underbrace{\frac{n_\text{UP}}{N_\text{UP}}}_{= f_\text{up}} \right) s^2_{\{\hat{t}_{y,\text{HT}, u}\}_{u \in S_\text{UP}}} + \frac{N_\text{UP}}{n_\text{UP}} \left( \sum_{u \in S_\text{UP}}  \frac{N^2_u}{n_u} (1 - \underbrace{\frac{n_u}{N_u}}_{=f_u}) s^2_{\{{y_k}\}_{k \in S_\text{US}   \cap u}}\right)$${#eq-varht}
+
+
+où pour tout $u\in S_\text{UP}$, $\displaystyle  \hat{t}_{y,\text{HT},u} = \frac{N_u}{n_u}\sum_{k \in S_\text{US} \cap u} {y_k}$ et $s^2_{\{\hat{t}_{y,\text{HT}, u}\}_{u \in S_\text{UP}}}$ (resp.  $s^2_{\{y_k}\}_{k \in S_\text{US}   \cap u}$) désigne la dispersion de la variable $\{{\hat{t}_{y,\text{HT}, u}}\}_{u \in S_\text{UP}}$  (resp. ${\{y_k\}}_{k \in S_\text{US} \cap u}$) sur l'échantillon $S_\text{UP}$ (resp.  $S_\text{US} \cap u$).
+
+### Prise en compte du calage
+
+Un estimateur de variance d'un estimateur calé peut être calculé en utilisant les résultats asymptotiques proposés par \cite{DS} : un estimateur de la variance de l'estimateur $\displaystyle \sum_{k \in S_\text{US}} w^\text{cal}_k y_k$ dont la pondération est calée sur la variable $\{  \textbf{x}^\text{cal}_k\}_{k \in S_\text{US}}$ est approximativement celle de l'estimateur d'Horvitz-Thompson des résidus $\{\varepsilon_k\}_{k \in S_\text{US}}$ de la régression pondérée (par les poids avant calage) de $\{y_k\}_{k \in S_\text{US}}$ sur $\{\textbf{x}_k\}_{k \in S_\text{US}}$ estimée sur $S_\text{US}$.
+
+
+Il en vient que :
+
+$$
+\widehat{\mathbb{V}}(\hat{t}_{y,\text{cal}}) \approx \widehat{\mathbb{V}}(\hat{t}_{\varepsilon,\text{HT}}) 
+$${#eq-varcal}
+
+### Estimateur de la variance d'un estimateur calé du total
+
+En réunissant l'@eq-varht et l'@eq-varcal, il en vient que :
+$$ $$
+
+## Etape 2 : Implémentation
+
+### Implémentation de l'estimateur de variance d'un estimateur calé. 
+
+La fonction `calcul_var` correspond à l'implémentation de l'estimateur construit précédemment. 
+
+Cet estimateur dépend de :
+
+- la variable d'intérêt `y`,
+- des résidus de la régression de la variable `y` sur `x`,
+- la fraction de sondage au premier degré `f_up`,
+- la fraction de sondage au second degré `f_us`,
+- la strate de chaque individu `strate`
+
+Ces éléments seront donc des arguments de la fonction `calcul_var`.
+
+### Utilisation de la fonction `gustave::res_cal` et notion de `precalc`
+
+L'estimateur de variance proposé nécessite le calcul des résidus de la régression de la variable d'intérêt $\{y_k\}$ sur les variables d'intérêt $\{\textbf{x}_k\}$. 
+Ce calcul nécessite donc de connaître ... la variable d'intérêt $\{y_k\}$. Pour autant, certaines composantes peuvent être précalculées en amont.
+
+Dans le cas des résidus de la régression de la variable d'intérêt $\{y_k\}$ sur les variables d'intérêt $\{\textbf{x}_k\}$, il est possible de calculer l'inverse de la matrice $\displaystyle \sum_{k \in S} \frac{\textbf{x}_k \textbf{x}_k^T}{\pi_k}$ qui interviendra dans tous les calculs de résidus (et indépendamment de la variable $\{x_k\}$. 
+
+`gustave` permet de stocker ces informations dans un format consistant et de réutiliser ces informations facilement. Il s'agit des `precalc`
+
+
+Comme vu durant la présentation, la fonction `res_cal` permet de récupérer les résidus :
+
+
+```{webr-r}
+var_cal_interet <- merge(var_ech_cal, var_interet, by.x = "id_ssu", by.y = "identifiant")
+```
+
+
+```{webr-r}
+y <- matrix(var_cal_interet$y, ncol = 1)
+rownames(y) <- var_cal_interet$id_ssu
+```
+
+
+```{webr-r}
+rescal_avec_y <- res_cal(y = y,
+        x = as.matrix(var_cal_interet[, paste0("var_cal", 1:5)]),
+        w = var_cal_interet$poids_avant_calage,
+       id = var_cal_interet$id_ssu)
+```
+
+Si la variable d'intérêt n'est pas disponible, il est possible de précalculer certains éléments entrants dans le calcul des résidus. Dans ce cas, il faudra renseigner `NULL` à l'argument `y`. 
+
+
+```{webr-r}
+rescal_sans_y <- res_cal(y = NULL,
+        x = as.matrix(var_cal_interet[, paste0("var_cal", 1:5)]),
+        w = var_cal_interet$poids_avant_calage, 
+       id = var_cal_interet$id_ssu)
+```
+
+Le résultat lorsque `y` est renseigné est de la même forme que `y`.
+
+
+```{webr-r}
+str(rescal_avec_y)
+```
+
+Par contre, lorsque `y = NULL`, la fonction renvoie un `precalc` (formellement, il s'agit d'une liste).
+Cette liste contient les poids de sondage, la matrice des variables auxiliaires et l'inverse de la matrice de Gram `inv`. 
+
+
+```{webr-r}
+str(rescal_sans_y)
+```
+
+```{webr-r}
+rescal_precalc_y <- res_cal(y = y, 
+        precalc = rescal_sans_y)
+#Comparaison des résidus calculés avec le precalc et directement en renseignant y
+all((rescal_precalc_y - rescal_avec_y)[,1] == 0)        
+```
+     
+
+::: {.callout-important}
+## `precalc` et argument `id` : permutation
+Il est recommandé de :
+
+- faire en sorte que `y` soit toujours une matrice (à une colonne dans notre cas univarié),
+- avoir des lignes nommées pour la matrice `y` et de renseigner l'argument `id` afin que `gustave` puisse vérifier au moment de l'application de la fonction `res_cal` si les valeurs renseignées dans le `precalc` et dans l'argument `y` sont dans le même ordre.
+    - Si ce n'est pas le cas, `gustave` renvoie une erreur. 
+
+```{webr-r}
+#| error: true
+
+permutation <- sample(nrow(y))
+permutation_inv <- order(permutation)
+
+
+rescal_precalc_y_permu <- res_cal(y = y[permutation, , drop = FALSE], 
+        precalc = rescal_sans_y)
+```
+:::
+
+
+::: {.callout-important}
+## `precalc` et absence d'argument `id`
+
+Si les lignes de la variable `y` ne sont pas nommées ou si l'argument `id` n'a pas été complété au moment de la définition du `precalc` alors aucune vérification ne pourra être réalisée. 
+
+
+```{webr-r}
+rescal_sans_y_sans_id <- res_cal(y = NULL,
+        x = as.matrix(var_cal_interet[, paste0("var_cal", 1:5)]),
+        w = var_cal_interet$poids_avant_calage)
+
+rescal_precalc_y_permu_sans_ic <- res_cal(y = y[permutation, , drop = FALSE], 
+        precalc = rescal_sans_y_sans_id)
+
+#Comparaison des résidus calculés avec le precalc sans id et en permutant les y
+#et les résidus calculés avec id et sans permutation 
+
+#Il n'y a pas eu de message d'erreur et pourtant ...
+all(rescal_precalc_y_permu_sans_ic - rescal_avec_y[, ,drop = FALSE] == 0)
+```
+:::
+
+
+### Implémentation de l'estimateur
+
+L'implémentation de l'estimateur peut-être décomposée en plusieurs étapes :
+
+- calcul des résidus à l'aide de la fonction `gustave::res_cal`,
+- calcul des estimations des totaux dans chaque unité primaire à l'aide de la fonction `gustave::sum_by` et de la fraction de sondage `f_us`
+- calcul de la variance de premier degré en utilisant la
+- calcul de la variance du second degré.
+
+
+```{webr-r}
+calcul_var <- function(y, f_up, f_us, strate, up, calage){
+  #Calcul des résidus
+  eps <- res_cal(y = y, precalc = calage)
+  #Calcul de l'estimation de la variance de l'estimateur du total des résidus
+  ### Calcul des totaux estimés au sein de chaque up
+  tot_par_up <- sum_by(y = eps, by = up, w = rep(1/f_us, nrow(eps)))
+  ### Nombre d'unités primaires dans l'échantillon
+  n_up <- length(unique(up))
+  ### Nombre d'unités primaires dans la population
+  N_up <- n_up/f_up
+  ### Strate pour chaque up 
+  strate_up <- unique(cbind(strate,up))
+  strate_up <- setNames(strate_up[,1], strate_up[,2]) #il s'agit d'un vecteur dont les noms sont
+  #des noms d'UP et les éléments, les strates correspondantes.
+  ### Première partie 
+  v_a <- var_srs(y = tot_par_up, 
+                 pik = rep(f_up, nrow(tot_par_up)), 
+                 strata = strate_up[rownames(tot_par_up)])
+  ### Deuxième partie 
+  v_b <- var_srs(y = eps, 
+                 pik = rep(f_us, nrow(eps)),
+                 strata = up #le tirage des SSU est indépendant d'une PSU à l'autre --> ~ tirage stratifié
+                 )
+  v <- v_a + v_b
+  return(v)
+}
+```
+
+MEMO : 
+- Construire la fonction `calcul_var` en faisant comme si `y` était une matrice (éventuellement à une colonne) : cela permettra de pouvoir estimer la variance de plusieurs fonctions d'intérêt plus rapidement.
+
+
+### Création d'un `wrapper variance`
+
+L'implémentation de l'estimateur passe par la définition d'un **variance wrapper**.  Le **variance wrapper** contient toutes les informations nécessaires pour l'estimation. Il prend en argument une table contenant les variables d'intérêt ainsi qu'une expression décrivant un estimateur, un niveau pour les intervalles de confiance et renvoie une estimation de la variance associée à l'estimateur.
+
+Le variance wrapper est construit à l'aide de la fonction `define_variance_wrapper` en décrivant : 
+
+- la fonction de calcul de la variance (argument `variance_function`) : il s'agit d'une fonction prenant en argument une matrice $y$ décrivant la variable d'intérêt $\{y_k\}_{k \in S}$ ainsi que d'autres informations permettant de proposer une estimation de la variance d'un estimateur du total,
+- l'identifiant des individus (argument `reference_id`) : il s'agit d'un vecteur de même taille que le nombre de lignes de l'argument $\textbf{y}$ de la fonction renseignée dans l'argument `variance_function` indiquant l'ordre des identifiants des individus décrits,
+- les poids utilisés pour l'estimation (argument `reference_weight`) : il s'agit d'un vecteur numérique contenant la pondération des individus. L'ordre des poids dans ce vecteur doit correspondre à celui des identifiants dans `reference_id`. Ces poids vont permettre à gustave de calculer l'estimation du paramètre d'intérêt,
+- la liste des données utilisées par la fonction décrite dans l'argument `variance_function` (argument `technical_data`) : il s'agit d'une liste nommée contenant toutes les données nécessaires au calcul de la variance.  Les noms des éléments de la liste doivent correspondre aux arguments de la fonction décrite dans `variance_function` excepté l'argument $y$. 
+
+
+```{webr-r}
+#Les variables auxiliaires doivent être renseignées sous la forme d'une matrice
+var_aux <- var_ech_cal[, colnames(var_ech_cal)[startsWith(colnames(var_ech_cal), "var_cal")]]
+var_aux <- as.matrix(var_aux)
+
+#Création 
+cal <- res_cal(y = NULL, #y = NULL, res_cal va renvoyer une liste avec des éléments permettant de calculer les résidus
+               x = var_aux, #Matrice des variables de calage par individu de l'échantillon
+               w = var_ech_cal$poids_avant_calage, #Vecteur contenant les poids avant tirage
+               id = var_ech_cal$id_ssu #Identifiant
+              )
+```
+
+
+```{webr-r}
+technical <- list()
+
+technical$f_up <- 0.1
+technical$f_us <- 0.4
+technical$strate <- info_ech$strate_psu
+technical$up <- info_ech$id_psu
+technical$calage <- cal
+```
+
+
+```{webr-r}
+precision_estim <- define_variance_wrapper(
+  variance_function = calcul_var,
+  reference_id = info_ech$id_ssu,
+  reference_weight = info_ech$poids_apres_calage,
+  default_id = "identifiant", #Nom par défaut de la colonne contenant l'identifiant des individus dans le fichier contenant les variables d'intérêt
+  technical_data = technical #Liste des données nécessaire à l'application de la fonction calculant la variance
+)
+```
+
+## Etape 3 : Utilisation et diffusion
+
+Une fois le `variance wrapper` défini, l'utilisateur peut calculer des estimations de la variance d'estimateurs du total selon la méthode qu'il a choisi d'implémenter (argument `variance_function` lors de la définition du `variance wrapper`). 
+
+Par exemple, pour estimer la variance de $\displaystyle \hat{t}_{y,\text{cal}} = \sum_{k \in S} w_k^\text{cal} y_k$, il suffit d'utiliser la fonction `precision_estim` créée par `define_variance_wrapper`. Cette fonction contient un argument `data` correspondant à la table décrivant les informations sur la variable d'intérêt. L'utilisateur renseigne ensuite les estimateurs pour lesquels il souhaite une estimation de la variance à l'aide d'une expression. Dans l'exemple suivant, nous utilisons `total(y)` pour indiquer que nous souhaitons une estimation du total de la variable `y` de la table `var_interet` pondéré par les poids de calage\footnote{Il s'agit des poids renseignés dans l'argument reference\_weight lors de la définition du variance wrapper}.
+
+
+
+### Vérification de la table contenant les variables d'intérêt
+
+La table contenant les variables d'intérêt (ici `var_interet`) doit contenir un identifiant dont le nom correspond à celui de l'argument `default_id` de la fonction `define_variance_wrapper`.
+
+
+```{webr-r}
+str(var_interet)
+```
+
+Les identifiants de la table `var_interet` ne semblent pas être dans le même ordre que ceux de la table `info_ech`.
+
+Nous allons réaliser une première tentative en remettant les identifiants dans le même ordre.
+
+
+```{webr-r}
+var_interet_ord <- var_interet[match(info_ech$id_ssu, var_interet$identifiant), ]
+```
+
+Tout se passe bien : aucun message d'avertissement ou d'erreur.
+
+
+```{webr-r}
+precision_estim(data = var_interet_ord,
+               total(y))
+```
+
+
+::: {.callout-caution}
+## Table des variables d'intérêt non triée
+
+
+Si la variable identifiant de la table var_interet n’est pas triée dans
+le même ordre que le vecteur renseigné dans l’argument reference_id
+de define_variance_wrapper, le message d’avertissement suivant
+apparaîtra dans la console :
+
+<span style="color:red;">
+The inputted id variable (id argument) appears not to match the reference
+id variable provided when the variance wrapper was defined: it is reordered
+and everything should be fine. Issues may nonetheless arise if part of the
+call is to be evaluated outside of the inputted data.frame (data argument).
+gustave remettra en ordre la table.
+</span>
+
+Pour autant, il est indiqué que dans
+certains cas, des comportements inattendus peuvent apparaître : il est
+donc recommandé de vérifier l’ordre de la table en intrant du variance
+wrapper.
+
+```{webr-r}
+precision_estim(data = var_interet,
+               total(y))
+```
+:::

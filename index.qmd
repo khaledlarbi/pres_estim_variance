@@ -1,0 +1,15 @@
+---
+title: "Cours de théorie des sondages"
+format: html
+---
+
+
+#### Calendrier 
+
+Des coquilles peuvent être cachées dans les documents : n'hésitez pas à le notifier par mail ou faire un pull-request. 
+
+|      Date       |     Heure      |                  Sujet                   |    Lien Google Meet (si nécessaire)    | Définitifs ? | Compléments / Corrections |
+|:--------------:|:--------------:|:-------------------------------------:|:--------------:|:-----------:|:-----------:|
+|20 juin 2024| 13:00 - 15:00  | [Présentation du calcul de variance analytique](presentations/pres_analytique.qmd) | | :x: | |
+|20 juin 2024| 13:00 - 15:00  | [Application avec `gustave`](presentations/var_gustave.qmd) | | :x: | |
+|2 juillet 2024| 13:00 - 15:00 | [Présentation du calcul de variance par bootstrap]() | | :x: | |
