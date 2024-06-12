@@ -279,8 +279,8 @@ gustave::var_srs(y = y, pik =  pik, w = NULL)
 
 ::: {.fragment}
 - Pour les plans équilibrés à forte entropie : formule de Deville-Tiilé (@varDT).
-$$\hat{\mathbb{V}}_\text{DT}(\hat{t}_{y,\text{HT}}) = \sum_{k \in S} (1 - \pi_k) \left(\frac{y_k}{\pi_k} - \frac{x_k}{\pi_k} \hat{\beta} \right)^2$$ où $\hat{\beta}$ est le coefficient estimé de la régression de $\{\frac{y_k}{\pi_k}\}$ par $\{\frac{x_k}{\pi_k}\}$ pondérée par $1-\pi_k$. 
-  - Remarque : le plan aléatoire simple sans remise $p_{\text{SASSR}(n;N)}$ est un plan équilibré sur la variable $\{pi_k\}$ $\to$ il est donc possible d'utiliser l'approximation de Deville-Tillé et $\hat{\mathbb{V}}_\text{DT}(\hat{t}_{y,\text{HT}}) = \hat{\mathbb{V}}_\text{SYG}(\hat{t}_{y,\text{HT}}) = \hat{\mathbb{V}}_\text{HT}(\hat{t}_{y,\text{HT}})$
+$$\hat{\mathbb{V}}_\text{DT}(\hat{t}_{y,\text{HT}}) = \frac{n}{n-d}\sum_{k \in S} (1 - \pi_k) \left(\frac{y_k}{\pi_k} - \frac{x_k}{\pi_k} \hat{\beta} \right)^2$$ où $\hat{\beta}$ est le coefficient estimé de la régression de $\{\frac{y_k}{\pi_k}\}$ par $\{\frac{x_k}{\pi_k}\} \in \mathbb{R}^d$ pondérée par $1-\pi_k$. 
+  - Remarque : le plan aléatoire simple sans remise $p_{\text{SASSR}(n;N)}$ est un plan équilibré sur la variable $\{\pi_k\}$ $\to$ il est donc possible d'utiliser l'approximation de Deville-Tillé et $\hat{\mathbb{V}}_\text{DT}(\hat{t}_{y,\text{HT}}) = \hat{\mathbb{V}}_\text{SYG}(\hat{t}_{y,\text{HT}}) = \hat{\mathbb{V}}_\text{HT}(\hat{t}_{y,\text{HT}})$
 :::
 
 ::: {.fragment}
