@@ -1,4 +1,5 @@
 /.quarto/
 .*_files/
 /_site/
-_output/
+/_output/
+/_docs/
