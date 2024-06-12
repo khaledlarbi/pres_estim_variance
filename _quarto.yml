@@ -1,6 +1,6 @@
 project:
   title: "Atelier du la sphère sondage sur l'estimation de variance"
-  output-dir: _output
+  output-dir: docs
   type: website
 
 
