@@ -6,16 +6,12 @@ format:
     crossrefs-hover: true
 filters:
   - webr
+webr:
+  packages: ['gustave', 'rlang']
+
 ---
 
 # Estimation de variance analytique avec `gustave`
-
-
-```{webr-r}
-library("gustave")
-```
-
-
 
 `gustave` est un package permettant d’estimer la variance d’estimateurs dans un contexte d’échantillonnage en population finie. Ce package s’inscrit dans une logique d’harmonisation des programmes à l'Insee introduite avec la macro Calker en SAS. Ce package simplifie les estimations de variance analytique en mutualisant des opérations mobilisées dans plusieurs enquêtes et en imposant une distinction entre les enjeux méthodologiques et de diffusion. `gustave` garde un niveau d’abstraction suffisant afin de pouvoir ajouter simplement des spécificités propres à certaines enquêtes.
 
@@ -23,7 +19,7 @@ L’estimation de la variance avec `gustave` peut se décomposer en trois étape
 
 Afin d'illustrer le cheminement permettant d'obtenir les estimations de variance avec `gustave`, nous proposons d'estimer la précision dans le cadre d'un exemple. Nous considérons un tirage à deux degrés selon des sondages aléatoires simples sans remise : 
 
-- un tirage d'un échantillon de $n_\text{UP} = $ 1 000 unités primaires $S_\text{UP}$ parmi $N_\text{UP} = $ 10 000 selon un plan aléatoire simple stratifié avec allocation proportionnelle, 
+- un tirage d'un échantillon de $n_\text{UP} =  1 000$ unités primaires $S_\text{UP}$ parmi $N_\text{UP} = 10 000$  selon un plan aléatoire simple stratifié avec allocation proportionnelle, 
 - un tirage de $n_u = 4$ unités secondaires parmi les $N_u = 10$ unités secondaires dont chaque unité primaire $u$ dispose. L'échantillon des unités secondaires obtenu est noté $S_\text{US}$.
 Un calage sur marges est ensuité réalisé au niveau des unités secondaires sur cinq variables quantitivatives $\{ \textbf{x}^\text{cal}_k \}_{k \in S_ \text{US}}$ où pour tout $k$, $\textbf{x}^\text{cal}_k = (\textbf{x}^\text{cal}_{k,1}, \hdots, \textbf{x}^\text{cal}_{k,5})$ : la pondération calée est notée $\{w^\text{cal}_k\}_{k \in S_\text{US}}$.
 
@@ -37,6 +33,7 @@ download.file(url = "https://minio.lab.sspcloud.fr/klarbi/Colloque_sondage/donne
              destfile = "donnees.Rdata")
 #Chargement des données
 load("donnees.Rdata")
+ls()
 ```
 
 Le fichier .Rdata contient trois tables **info\_ech**, **var_ech_cal**, **var\_interet** dont le contenu est décrit par les dictionnaires suivants : 
@@ -63,24 +60,48 @@ Le fichier .Rdata contient trois tables **info\_ech**, **var_ech_cal**, **var\_i
 |          y         |       Variable d'intérêt $y$       |
 |          z         |       Variable d'intérêt $z$       |
 
+
+
+::: {.callout-tip}
+## Objectifs
+
+Dans cet exercice, nous souhaitons produire deux estimateurs de variance basés sur deux variables d'intérêt $\{y_k \}_{k \in S_\text{US}}$ et $\{z_k \}_{k \in S_\text{US}}$ : 
+
+- $\displaystyle \widehat{\mathbb{V}}(\hat{t}_{y,\text{cal}})$, un estimateur de la variance de $\displaystyle \sum_{k \in S_\text{US}} y_k w_k^\text{cal}$,
+- $\displaystyle  \widehat{\mathbb{V}}(\frac{\hat{t}_{y,\text{cal}}}{\hat{t}_{z,\text{cal}}})$, un estimateur de la variance de $\displaystyle \frac{\sum_{k \in S_\text{US}} y_k w_k^\text{cal}}{\sum_{k \in S_\text{US}} z_k w_k^\text{cal}}$.
+- $\displaystyle  \widehat{\mathbb{V}}(\frac{1}{\hat{t}_{y,\text{cal}}})$, un estimateur de la variance de $\displaystyle \frac{1}{\sum_{k \in S_\text{US}} z_k w_k^\text{cal}}$.
+:::
+
+
+
 ## Etape 1 : Estimateur de la variance d'un estimateur calé du total
 
 ### Estimateur de la variance d'un estimateur du total d'Horvitz-Thompson
 
 Afin d’estimer la variance d’une statistique régulière, il est nécessaire de proposer un estimateur dans le cas simple de l’estimateur du total. Ce travail, réalisé par le méthodologue,
 consiste à utiliser des résultats théoriques et l’information sur la collecte (plan de sondage,
-redressements, ...) afin d’approcher au mieux un estimateur sans biais de la variance. Dans
-certains cas simples (cas d’un sondage aléatoire simple sans remise), il n’est pas nécessaire
+redressements, ...) afin d’approcher au mieux un estimateur sans biais de la variance. 
+
+Dans certains cas simples (cas d’un sondage aléatoire simple sans remise), il n’est pas nécessaire
 d’implémenter l’estimateur : des fonctions prêtes à l’emploi sont disponibles (fonction qvar
 par exemple).
 
 Un estimateur de la variance d'un estimateur du total d'Horvitz-Thompson $\hat{t}_{y,\text{HT}}$ sous le plan de l'exemple est :
-MODIFIER ESTIM ? 
+
 $$
-    \widehat{\mathbb{V}}(\hat{t}_{y,\text{HT}}) = \frac{N_\text{UP}^2}{n_\text{UP}} \left(1-\underbrace{\frac{n_\text{UP}}{N_\text{UP}}}_{= f_\text{up}} \right) s^2_{\{\hat{t}_{y,\text{HT}, u}\}_{u \in S_\text{UP}}} + \frac{N_\text{UP}}{n_\text{UP}} \left( \sum_{u \in S_\text{UP}}  \frac{N^2_u}{n_u} (1 - \underbrace{\frac{n_u}{N_u}}_{=f_u}) s^2_{\{{y_k}\}_{k \in S_\text{US}   \cap u}}\right)$${#eq-varht}
+    \widehat{\mathbb{V}}(\hat{t}_{y,\text{HT}}) = \sum_{\text{st} = 1}^{n_\text{st}} \widehat{\mathbb{V}}(\hat{t}_{y,\text{HT},\text{st}})
+$$    
+    où
+$$\widehat{\mathbb{V}}(\hat{t}_{y,\text{HT},\text{st}}) = \frac{N^2_{\text{UP}\cap \text{st}}}{n_{\text{UP}\cap  \text{st}}} \left(1-\underbrace{\frac{n_{\text{UP} \cap \text{st}}}{N_\text{UP}}}_{= f_\text{up}} \right) s^2_{\{\hat{t}_{y,\text{HT}, u}\}_{u \in S_\text{UP} \cap \text{st}}} + \frac{N_{\text{UP}\cap \text{st}}}{n_{\text{UP}\cap \text{st}}} \left( \sum_{u \in S_\text{UP} \cap \text{st}}  \frac{N^2_u}{n_u} (1 - \underbrace{\frac{n_u}{N_u}}_{=f_u}) s^2_{\{{y_k}\}_{k \in S_\text{US}   \cap u}}\right)$${#eq-varht}
 
 
 où pour tout $u\in S_\text{UP}$, $\displaystyle  \hat{t}_{y,\text{HT},u} = \frac{N_u}{n_u}\sum_{k \in S_\text{US} \cap u} {y_k}$ et $s^2_{\{\hat{t}_{y,\text{HT}, u}\}_{u \in S_\text{UP}}}$ (resp.  $s^2_{\{y_k}\}_{k \in S_\text{US}   \cap u}$) désigne la dispersion de la variable $\{{\hat{t}_{y,\text{HT}, u}}\}_{u \in S_\text{UP}}$  (resp. ${\{y_k\}}_{k \in S_\text{US} \cap u}$) sur l'échantillon $S_\text{UP}$ (resp.  $S_\text{US} \cap u$).
+
+::: {.callout-tip collapse="true"}
+## Preuve de l'expression de $\widehat{\mathbb{V}}(\hat{t}_{y,\text{HT},\text{st}})$
+
+Il suffit d'appliquer la formule de Rao en utilisant l'estimateur de Sen-Yen-Grundy pour la variance d'un estimateur du total sous un plan aléatoire simple sans remise d'où $q_u = \frac{N_{\text{UP} \cap \text{st}}^2}{n_{\text{UP} \cap \text{st}}^2} \left(1-f \right)$ et $\pi_u^{(1)} = \frac{n_{\text{UP}}{N_{\text{UP}}$.
+:::
 
 ### Prise en compte du calage
 
@@ -96,7 +117,7 @@ $${#eq-varcal}
 ### Estimateur de la variance d'un estimateur calé du total
 
 En réunissant l'@eq-varht et l'@eq-varcal, il en vient que :
-$$ $$
+$$\widehat{\mathbb{V}}(\hat{t}_{y,\text{cal}}) \approx \sum_{\text{st} = 1}^{n_\text{st}} \widehat{\mathbb{V}}(\hat{t}_{\varepsilon,\text{HT},\text{st}})$$
 
 ## Etape 2 : Implémentation
 
@@ -128,11 +149,9 @@ Comme vu durant la présentation, la fonction `res_cal` permet de récupérer le
 
 
 ```{webr-r}
-var_cal_interet <- merge(var_ech_cal, var_interet, by.x = "id_ssu", by.y = "identifiant")
-```
-
-
-```{webr-r}
+#Création d'une matrice contenant une variable quelconque
+#Ici, j'ai pris la variable d'intérêt mais j'aurais pu générer une variable.
+#On cherche juste à vérifier la bonne exécution du res_cal.
 y <- matrix(var_cal_interet$y, ncol = 1)
 rownames(y) <- var_cal_interet$id_ssu
 ```
@@ -361,8 +380,7 @@ The inputted id variable (id argument) appears not to match the reference
 id variable provided when the variance wrapper was defined: it is reordered
 and everything should be fine. Issues may nonetheless arise if part of the
 call is to be evaluated outside of the inputted data.frame (data argument).
-gustave remettra en ordre la table.
-</span>
+</span> $\to$ `gustave` remettra en ordre la table.
 
 Pour autant, il est indiqué que dans
 certains cas, des comportements inattendus peuvent apparaître : il est
@@ -374,3 +392,119 @@ precision_estim(data = var_interet,
                total(y))
 ```
 :::
+
+
+
+::: {.callout-caution}
+## Table des variables d'intérêt avec des observations supplémentaires
+
+Si la table `var_interet` contient des individus non renseignés dans le
+paramètre `reference_id` de la fonction `define_variance_wrapper`, ils
+seront retirés et le message d’avertissement suivant apparaîtra :
+
+<span style="color:red;">
+xxx observations do not match any responding units of the survey. They
+are discarded
+</span>
+
+```{webr-r}
+#Ajout d'une observation qui n'a pas été prise en compte dans le calcul
+#de précision 
+var_interet_ajout <- rbind(var_interet_ord,
+                 data.frame("identifiant" = "toto", "y" = 10, "z" = 10))
+precision_estim(data = var_interet_ajout,
+               total(y))
+```
+:::
+
+
+
+::: {.callout-caution}
+## Table des variables d'intérêt avec des observations supplémentaires
+
+Si certains individus renseignés dans le paramètre `reference_id` de
+la fonction `define_variance_wrapper` ne sont pas dans la table
+`var_interet` alors le message d’avertissement suivant apparaître :
+
+<span style="color:red;">
+xxx observations do not match any responding units of the survey. They
+are discarded.
+</span>
+
+Les estimations de variance seront très probablement fausses. Il est recom-
+mandé de comparer les tables utilisées lors de la création de variance
+wrapper et celles contenant les variables d’intérêt
+
+```{webr-r}
+#Ajout d'une observation qui n'a pas été prise en compte dans le calcul
+#de précision 
+var_interet_ajout <- rbind(var_interet_ord,
+                 data.frame("identifiant" = "toto", "y" = 10, "z" = 10))
+precision_estim(data = var_interet_ajout,
+               total(y))
+```
+:::
+
+### Utilisation de linéarisation
+
+L'objectif de cet exercice est de proposer une estimation de : 
+
+- $\displaystyle \widehat{\mathbb{V}}(\hat{t}_{y,\text{cal}})$, un estimateur de la variance de $\displaystyle \sum_{k \in S_\text{US}} y_k w_k^\text{cal}$,
+- $\displaystyle  \widehat{\mathbb{V}}(\frac{\hat{t}_{y,\text{cal}}}{\hat{t}_{z,\text{cal}}})$, un estimateur de la variance de $\displaystyle \frac{\sum_{k \in S_\text{US}} y_k w_k^\text{cal}}{\sum_{k \in S_\text{US}} z_k w_k^\text{cal}}$.
+- $\displaystyle  \widehat{\mathbb{V}}(\frac{1}{\hat{t}_{y,\text{cal}}})$, un estimateur de la variance de $\displaystyle \frac{1}{\sum_{k \in S_\text{US}} z_k w_k^\text{cal}}$
+
+
+Rappel sur les statistic wrapper
+
+
+#### $\displaystyle \widehat{\mathbb{V}}(\hat{t}_{y,\text{cal}})$
+
+Dans ce premier cas, il s'agit d'estimer la variance du total d'un estimateur calé. Cette estimation correspond au cas implémenté directement dans la fonction `calcul_var` renseignée dans l'argument `variance_function` de la fonction `define_variance_wrapper`.
+Nous n'avons pas besoin ici de linéariser la fonction d'intérêt considérée (Il est assez immédiat de montrer que si la linéarisation par développement de Taylor était utilisée ici alors on retrouverait la variable d'intérêt comme variable linéarisée estimée).
+
+Dans le cas du total, il n'est pas nécessaire d'indiquer le statistic wrapper `total`. Pour autant, pour plus de lisibilité, il est recommandé de **toujours** indiquer la fonction. 
+
+```{webr-r}
+res_avec_tot <- precision_estim(data = var_interet_ord,
+               total(y))
+res_sans_tot <- precision_estim(data = var_interet_ord,
+                  y)
+
+print(res_avec_tot)
+print(res_sans_tot)
+```
+
+
+
+#### 
+REMARQUE : MEAN = ESTIMATEUR D'HAYEK 
+
+
+### `variance wrapper` et confidentialité
+
+Le `variance wrapper` contient toute l'information nécessaire au calcul de précision : cela passe par les données de calage, les données utilisées pour certains plans de sondage, ... Ces données peuvent présenter un enjeu de confidentialité en exposant ces données.
+
+Prenons l'exemple d'un utilisateur ne disposant que du `variance wrapper` `precision_estim`.
+```{webr-r}
+#On supprime tout sauf precision_estim
+rm(list = ls()[ls() != "precision_estim"]
+```
+Lorsqu'un utilisateur affiche le contenu de la fonction `precision_estim`, il ne voit pas les données associées.
+
+```{webr-r}
+print(precision_estim)
+print(str(precision_estim))
+```
+
+Ouf ? Pas de problème donc ... ? Non, lorsqu'un utilsateur considère l'**environnement** associé au `variance wrapper`, il est possible de retrouver les données.
+
+```{web-r}
+env_prec_estim <- environment(precision_estim)
+rlang::env_print(env_prec_estim)
+```
+
+On peut, par exemple, afficher les variables de calage : 
+```{web-r}
+env_prec_estim$technical_data$calage$x
+```
+## Débogage
