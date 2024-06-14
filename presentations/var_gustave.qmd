@@ -153,6 +153,7 @@ Comme vu durant la présentation, la fonction `res_cal` permet de récupérer le
 #On cherche juste à vérifier la bonne exécution du res_cal.
 y <- matrix(rnorm(nrow(var_ech_cal)), ncol = 1)
 rownames(y) <- var_ech_cal$id_ssu
+str(y)
 ```
 
 
@@ -161,6 +162,7 @@ rescal_avec_y <- res_cal(y = y,
         x = as.matrix(var_ech_cal[, paste0("var_cal", 1:5)]),
         w = var_ech_cal$poids_avant_calage,
        id = var_ech_cal$id_ssu)
+cat("Création de la variable rescal_avec_y")
 ```
 
 Si la variable d'intérêt n'est pas disponible, il est possible de précalculer certains éléments entrants dans le calcul des résidus. Dans ce cas, il faudra renseigner `NULL` à l'argument `y`. 
@@ -171,6 +173,7 @@ rescal_sans_y <- res_cal(y = NULL,
         x = as.matrix(var_ech_cal[, paste0("var_cal", 1:5)]),
         w = var_ech_cal$poids_avant_calage, 
        id = var_ech_cal$id_ssu)
+cat("Création de la variable rescal_sans_y")
 ```
 
 Le résultat lorsque `y` est renseigné est de la même forme que `y`.
@@ -225,8 +228,8 @@ Si les lignes de la variable `y` ne sont pas nommées ou si l'argument `id` n'a 
 
 ```{webr-r}
 rescal_sans_y_sans_id <- res_cal(y = NULL,
-        x = as.matrix(var_cal_interet[, paste0("var_cal", 1:5)]),
-        w = var_cal_interet$poids_avant_calage)
+        x = as.matrix(var_ech_cal[, paste0("var_cal", 1:5)]),
+        w = var_ech_cal$poids_avant_calage)
 
 rescal_precalc_y_permu_sans_ic <- res_cal(y = y[permutation, , drop = FALSE], 
         precalc = rescal_sans_y_sans_id)
@@ -278,8 +281,12 @@ calcul_var <- function(y, f_up, f_us, strate, up, calage){
 }
 ```
 
-MEMO : 
-- Construire la fonction `calcul_var` en faisant comme si `y` était une matrice (éventuellement à une colonne) : cela permettra de pouvoir estimer la variance de plusieurs fonctions d'intérêt plus rapidement.
+::: {.callout-tip}
+## Conseil pour l'implémentation de la fonction calculant la variance
+
+Il est recommandé de construire la fonction `calcul_var` en faisant comme si `y` était une matrice (éventuellement à une colonne) : cela permettra de pouvoir estimer la variance de plusieurs fonctions d'intérêt plus rapidement.
+:::
+
 
 
 ### Création d'un `wrapper variance`
@@ -305,6 +312,8 @@ cal <- res_cal(y = NULL, #y = NULL, res_cal va renvoyer une liste avec des élé
                w = var_ech_cal$poids_avant_calage, #Vecteur contenant les poids avant tirage
                id = var_ech_cal$id_ssu #Identifiant
               )
+
+str(cal)
 ```
 
 
@@ -316,6 +325,8 @@ technical$f_us <- 0.4
 technical$strate <- info_ech$strate_psu
 technical$up <- info_ech$id_psu
 technical$calage <- cal
+
+str(technical)
 ```
 
 
@@ -353,6 +364,7 @@ Nous allons réaliser une première tentative en remettant les identifiants dans
 
 ```{webr-r}
 var_interet_ord <- var_interet[match(info_ech$id_ssu, var_interet$identifiant), ]
+print("Création de la table var_interet_ord")
 ```
 
 Tout se passe bien : aucun message d'avertissement ou d'erreur.
@@ -415,34 +427,6 @@ precision_estim(data = var_interet_ajout,
 ```
 :::
 
-
-
-::: {.callout-caution}
-## Table des variables d'intérêt avec des observations supplémentaires
-
-Si certains individus renseignés dans le paramètre `reference_id` de
-la fonction `define_variance_wrapper` ne sont pas dans la table
-`var_interet` alors le message d’avertissement suivant apparaître :
-
-<span style="color:red;">
-xxx observations do not match any responding units of the survey. They
-are discarded.
-</span>
-
-Les estimations de variance seront très probablement fausses. Il est recom-
-mandé de comparer les tables utilisées lors de la création de variance
-wrapper et celles contenant les variables d’intérêt
-
-```{webr-r}
-#Ajout d'une observation qui n'a pas été prise en compte dans le calcul
-#de précision 
-var_interet_ajout <- rbind(var_interet_ord,
-                 data.frame("identifiant" = "toto", "y" = 10, "z" = 10))
-precision_estim(data = var_interet_ajout,
-               total(y))
-```
-:::
-
 ### Utilisation de linéarisation
 
 L'objectif de cet exercice est de proposer une estimation de : 
@@ -452,10 +436,17 @@ L'objectif de cet exercice est de proposer une estimation de :
 - $\displaystyle  \widehat{\mathbb{V}}(\frac{1}{\hat{t}_{y,\text{cal}}})$, un estimateur de la variance de $\displaystyle \frac{1}{\sum_{k \in S_\text{US}} z_k w_k^\text{cal}}$
 
 
-Rappel sur les statistic wrapper
+Les `statistic wrapper` permettent de calculer l'estimation de la fonction d'intérêt à partir des données de la table contenant les variables d'intérêt ainsi que dans la pondération renseignée dans l'argument `reference_weight` de la fonction `variance wrapper`.
+Ces fonctions permettent également de calculer les variables linéarisées estimées. La liste des `statistic wrapper` prédéfinis dans `gustave` est disponible ici :
+
+```{webr-r}
+?standard_statistic_wrapper 
+```
+
+Il est possible à l'utilisateur d'en ajouter en utilisant la fonction `define_statistic_wrapper`.
 
 
-#### $\displaystyle \widehat{\mathbb{V}}(\hat{t}_{y,\text{cal}})$
+#### Calcul de $\displaystyle \widehat{\mathbb{V}}(\hat{t}_{y,\text{cal}})$
 
 Dans ce premier cas, il s'agit d'estimer la variance du total d'un estimateur calé. Cette estimation correspond au cas implémenté directement dans la fonction `calcul_var` renseignée dans l'argument `variance_function` de la fonction `define_variance_wrapper`.
 Nous n'avons pas besoin ici de linéariser la fonction d'intérêt considérée (Il est assez immédiat de montrer que si la linéarisation par développement de Taylor était utilisée ici alors on retrouverait la variable d'intérêt comme variable linéarisée estimée).
@@ -472,11 +463,37 @@ print(res_avec_tot)
 print(res_sans_tot)
 ```
 
+#### Calcul de $\displaystyle  \widehat{\mathbb{V}}(\frac{\hat{t}_{y,\text{cal}}}{\hat{t}_{z,\text{cal}}})$
 
+Pour l'estimation de la variance de $\frac{\hat{t}_{y,\text{cal}}}{\hat{t}_{z,\text{cal}}}$, il est nécessaire d'avoir recours au principe de linéarisation. Parmi les `statistic wrapper` prédéfinis dans `gustave`, il y a la fonction `ratio`. Cette dernière va être mobilisée lors de l'appel au `variance wrapper`  `precision_estim`
 
-#### 
-REMARQUE : MEAN = ESTIMATEUR D'HAYEK 
+```{webr-r}
+res_ratio <- precision_estim(data = var_interet_ord,
+               ratio(y, z))
+print(res_ratio)
+```
+#### Calcul de  $\displaystyle  \widehat{\mathbb{V}}(\frac{1}{\hat{t}_{y,\text{cal}}})$
 
+Comme dans le cas précédent, il va être nécessaire d'utiliser le principe de linéarisation. Néanmoins, il n'existe pas de `statistic wrapper` dans `gustave` correspondant à la fonction inverse. Nous allons le construire à l'aide de la fonction `define_statistic_wrapper`. Avant cela, il est nécessaire de calculer la variable linéarisée estimée.
+
+La variable linéarisée estimée est $\widehat{u_k} = - \frac{y_k}{\hat{t}_{y,\text{cal}}}$.
+
+```{webr-r}
+inverse <- define_statistic_wrapper(
+  statistic_function = function(y, weight){
+    point <- 1/sum(y*weight)
+    lin <- (- y)/((sum(y*weight))^2)
+    list(point = point, lin = lin, metadata = list(n = length(y)))
+  },
+  arg_type = list(data = "y", weight = "weight")
+)
+```
+
+```{webr-r}
+res_inverse <- precision_estim(data = var_interet_ord,
+               inverse(y))
+print(res_inverse)
+```
 
 ### `variance wrapper` et confidentialité
 
@@ -485,25 +502,26 @@ Le `variance wrapper` contient toute l'information nécessaire au calcul de pré
 Prenons l'exemple d'un utilisateur ne disposant que du `variance wrapper` `precision_estim`.
 ```{webr-r}
 #On supprime tout sauf precision_estim
-rm(list = ls()[ls() != "precision_estim"]
+rm(list = ls()[ls() != "precision_estim"])
 ```
 Lorsqu'un utilisateur affiche le contenu de la fonction `precision_estim`, il ne voit pas les données associées.
 
 ```{webr-r}
 print(precision_estim)
+
+cat("\n")
 print(str(precision_estim))
 ```
 
 Ouf ? Pas de problème donc ... ? Non, lorsqu'un utilsateur considère l'**environnement** associé au `variance wrapper`, il est possible de retrouver les données.
 
-```{web-r}
+```{webr-r}
 env_prec_estim <- environment(precision_estim)
 rlang::env_print(env_prec_estim)
 ```
 
 On peut, par exemple, afficher les variables de calage : 
 
-```{web-r}
+```{webr-r}
 env_prec_estim$technical_data$calage$x
 ```
-## Débogage
