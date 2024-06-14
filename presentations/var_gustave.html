@@ -250,7 +250,7 @@ body.reveal.quarto-dark div.qwebr-console-area {
 // Document level settings ----
 
 // Determine if we need to install R packages
-globalThis.qwebrInstallRPackagesList = [''];
+globalThis.qwebrInstallRPackagesList = ['gustave', 'rlang'];
 
 // Specify possible locations to search for the repository
 globalThis.qwebrPackageRepoURLS = ['https://repo.r-wasm.org/'];
@@ -272,7 +272,7 @@ globalThis.qwebrCustomizedWebROptions = {
 };
 
 // Store cell data
-globalThis.qwebrCellDetails = [{"options":{"dpi":72,"read-only":"false","context":"interactive","classes":"","autorun":"false","fig-width":7,"out-width":"700px","editor-quick-suggestions":"false","editor-font-scale":"1","label":"unnamed-chunk-1","fig-height":5,"out-height":"","editor-max-height":"","output":"true","comment":"","results":"markup","message":"true","fig-cap":"","warning":"true"},"code":"library(\"gustave\")","id":1},{"options":{"dpi":72,"read-only":"false","context":"interactive","classes":"","autorun":"false","fig-width":7,"out-width":"700px","editor-quick-suggestions":"false","editor-font-scale":"1","label":"unnamed-chunk-2","fig-height":5,"out-height":"","editor-max-height":"","output":"true","comment":"","results":"markup","message":"true","fig-cap":"","warning":"true"},"code":"#Téléchargement des données\ndownload.file(url = \"https://minio.lab.sspcloud.fr/klarbi/Colloque_sondage/donnees.Rdata\",\n             destfile = \"donnees.Rdata\")\n#Chargement des données\nload(\"donnees.Rdata\")","id":2},{"options":{"dpi":72,"read-only":"false","context":"interactive","classes":"","autorun":"false","fig-width":7,"out-width":"700px","editor-quick-suggestions":"false","editor-font-scale":"1","label":"unnamed-chunk-3","fig-height":5,"out-height":"","editor-max-height":"","output":"true","comment":"","results":"markup","message":"true","fig-cap":"","warning":"true"},"code":"var_cal_interet <- merge(var_ech_cal, var_interet, by.x = \"id_ssu\", by.y = \"identifiant\")","id":3},{"options":{"dpi":72,"read-only":"false","context":"interactive","classes":"","autorun":"false","fig-width":7,"out-width":"700px","editor-quick-suggestions":"false","editor-font-scale":"1","label":"unnamed-chunk-4","fig-height":5,"out-height":"","editor-max-height":"","output":"true","comment":"","results":"markup","message":"true","fig-cap":"","warning":"true"},"code":"y <- matrix(var_cal_interet$y, ncol = 1)\nrownames(y) <- var_cal_interet$id_ssu","id":4},{"options":{"dpi":72,"read-only":"false","context":"interactive","classes":"","autorun":"false","fig-width":7,"out-width":"700px","editor-quick-suggestions":"false","editor-font-scale":"1","label":"unnamed-chunk-5","fig-height":5,"out-height":"","editor-max-height":"","output":"true","comment":"","results":"markup","message":"true","fig-cap":"","warning":"true"},"code":"rescal_avec_y <- res_cal(y = y,\n        x = as.matrix(var_cal_interet[, paste0(\"var_cal\", 1:5)]),\n        w = var_cal_interet$poids_avant_calage,\n       id = var_cal_interet$id_ssu)","id":5},{"options":{"dpi":72,"read-only":"false","context":"interactive","classes":"","autorun":"false","fig-width":7,"out-width":"700px","editor-quick-suggestions":"false","editor-font-scale":"1","label":"unnamed-chunk-6","fig-height":5,"out-height":"","editor-max-height":"","output":"true","comment":"","results":"markup","message":"true","fig-cap":"","warning":"true"},"code":"rescal_sans_y <- res_cal(y = NULL,\n        x = as.matrix(var_cal_interet[, paste0(\"var_cal\", 1:5)]),\n        w = var_cal_interet$poids_avant_calage, \n       id = var_cal_interet$id_ssu)","id":6},{"options":{"dpi":72,"read-only":"false","context":"interactive","classes":"","autorun":"false","fig-width":7,"out-width":"700px","editor-quick-suggestions":"false","editor-font-scale":"1","label":"unnamed-chunk-7","fig-height":5,"out-height":"","editor-max-height":"","output":"true","comment":"","results":"markup","message":"true","fig-cap":"","warning":"true"},"code":"str(rescal_avec_y)","id":7},{"options":{"dpi":72,"read-only":"false","context":"interactive","classes":"","autorun":"false","fig-width":7,"out-width":"700px","editor-quick-suggestions":"false","editor-font-scale":"1","label":"unnamed-chunk-8","fig-height":5,"out-height":"","editor-max-height":"","output":"true","comment":"","results":"markup","message":"true","fig-cap":"","warning":"true"},"code":"str(rescal_sans_y)","id":8},{"options":{"dpi":72,"read-only":"false","context":"interactive","classes":"","autorun":"false","fig-width":7,"out-width":"700px","editor-quick-suggestions":"false","editor-font-scale":"1","label":"unnamed-chunk-9","fig-height":5,"out-height":"","editor-max-height":"","output":"true","comment":"","results":"markup","message":"true","fig-cap":"","warning":"true"},"code":"rescal_precalc_y <- res_cal(y = y, \n        precalc = rescal_sans_y)\n#Comparaison des résidus calculés avec le precalc et directement en renseignant y\nall((rescal_precalc_y - rescal_avec_y)[,1] == 0)        ","id":9},{"options":{"dpi":72,"read-only":"false","context":"interactive","classes":"","autorun":"false","fig-width":7,"out-width":"700px","editor-quick-suggestions":"false","editor-font-scale":"1","label":"unnamed-chunk-10","fig-height":5,"error":"true","out-height":"","editor-max-height":"","output":"true","comment":"","results":"markup","message":"true","fig-cap":"","warning":"true"},"code":"\npermutation <- sample(nrow(y))\npermutation_inv <- order(permutation)\n\n\nrescal_precalc_y_permu <- res_cal(y = y[permutation, , drop = FALSE], \n        precalc = rescal_sans_y)","id":10},{"options":{"dpi":72,"read-only":"false","context":"interactive","classes":"","autorun":"false","fig-width":7,"out-width":"700px","editor-quick-suggestions":"false","editor-font-scale":"1","label":"unnamed-chunk-11","fig-height":5,"out-height":"","editor-max-height":"","output":"true","comment":"","results":"markup","message":"true","fig-cap":"","warning":"true"},"code":"rescal_sans_y_sans_id <- res_cal(y = NULL,\n        x = as.matrix(var_cal_interet[, paste0(\"var_cal\", 1:5)]),\n        w = var_cal_interet$poids_avant_calage)\n\nrescal_precalc_y_permu_sans_ic <- res_cal(y = y[permutation, , drop = FALSE], \n        precalc = rescal_sans_y_sans_id)\n\n#Comparaison des résidus calculés avec le precalc sans id et en permutant les y\n#et les résidus calculés avec id et sans permutation \n\n#Il n'y a pas eu de message d'erreur et pourtant ...\nall(rescal_precalc_y_permu_sans_ic - rescal_avec_y[, ,drop = FALSE] == 0)","id":11},{"options":{"dpi":72,"read-only":"false","context":"interactive","classes":"","autorun":"false","fig-width":7,"out-width":"700px","editor-quick-suggestions":"false","editor-font-scale":"1","label":"unnamed-chunk-12","fig-height":5,"out-height":"","editor-max-height":"","output":"true","comment":"","results":"markup","message":"true","fig-cap":"","warning":"true"},"code":"calcul_var <- function(y, f_up, f_us, strate, up, calage){\n  #Calcul des résidus\n  eps <- res_cal(y = y, precalc = calage)\n  #Calcul de l'estimation de la variance de l'estimateur du total des résidus\n  ### Calcul des totaux estimés au sein de chaque up\n  tot_par_up <- sum_by(y = eps, by = up, w = rep(1/f_us, nrow(eps)))\n  ### Nombre d'unités primaires dans l'échantillon\n  n_up <- length(unique(up))\n  ### Nombre d'unités primaires dans la population\n  N_up <- n_up/f_up\n  ### Strate pour chaque up \n  strate_up <- unique(cbind(strate,up))\n  strate_up <- setNames(strate_up[,1], strate_up[,2]) #il s'agit d'un vecteur dont les noms sont\n  #des noms d'UP et les éléments, les strates correspondantes.\n  ### Première partie \n  v_a <- var_srs(y = tot_par_up, \n                 pik = rep(f_up, nrow(tot_par_up)), \n                 strata = strate_up[rownames(tot_par_up)])\n  ### Deuxième partie \n  v_b <- var_srs(y = eps, \n                 pik = rep(f_us, nrow(eps)),\n                 strata = up #le tirage des SSU est indépendant d'une PSU à l'autre --> ~ tirage stratifié\n                 )\n  v <- v_a + v_b\n  return(v)\n}","id":12},{"options":{"dpi":72,"read-only":"false","context":"interactive","classes":"","autorun":"false","fig-width":7,"out-width":"700px","editor-quick-suggestions":"false","editor-font-scale":"1","label":"unnamed-chunk-13","fig-height":5,"out-height":"","editor-max-height":"","output":"true","comment":"","results":"markup","message":"true","fig-cap":"","warning":"true"},"code":"#Les variables auxiliaires doivent être renseignées sous la forme d'une matrice\nvar_aux <- var_ech_cal[, colnames(var_ech_cal)[startsWith(colnames(var_ech_cal), \"var_cal\")]]\nvar_aux <- as.matrix(var_aux)\n\n#Création \ncal <- res_cal(y = NULL, #y = NULL, res_cal va renvoyer une liste avec des éléments permettant de calculer les résidus\n               x = var_aux, #Matrice des variables de calage par individu de l'échantillon\n               w = var_ech_cal$poids_avant_calage, #Vecteur contenant les poids avant tirage\n               id = var_ech_cal$id_ssu #Identifiant\n              )","id":13},{"options":{"dpi":72,"read-only":"false","context":"interactive","classes":"","autorun":"false","fig-width":7,"out-width":"700px","editor-quick-suggestions":"false","editor-font-scale":"1","label":"unnamed-chunk-14","fig-height":5,"out-height":"","editor-max-height":"","output":"true","comment":"","results":"markup","message":"true","fig-cap":"","warning":"true"},"code":"technical <- list()\n\ntechnical$f_up <- 0.1\ntechnical$f_us <- 0.4\ntechnical$strate <- info_ech$strate_psu\ntechnical$up <- info_ech$id_psu\ntechnical$calage <- cal","id":14},{"options":{"dpi":72,"read-only":"false","context":"interactive","classes":"","autorun":"false","fig-width":7,"out-width":"700px","editor-quick-suggestions":"false","editor-font-scale":"1","label":"unnamed-chunk-15","fig-height":5,"out-height":"","editor-max-height":"","output":"true","comment":"","results":"markup","message":"true","fig-cap":"","warning":"true"},"code":"precision_estim <- define_variance_wrapper(\n  variance_function = calcul_var,\n  reference_id = info_ech$id_ssu,\n  reference_weight = info_ech$poids_apres_calage,\n  default_id = \"identifiant\", #Nom par défaut de la colonne contenant l'identifiant des individus dans le fichier contenant les variables d'intérêt\n  technical_data = technical #Liste des données nécessaire à l'application de la fonction calculant la variance\n)","id":15},{"options":{"dpi":72,"read-only":"false","context":"interactive","classes":"","autorun":"false","fig-width":7,"out-width":"700px","editor-quick-suggestions":"false","editor-font-scale":"1","label":"unnamed-chunk-16","fig-height":5,"out-height":"","editor-max-height":"","output":"true","comment":"","results":"markup","message":"true","fig-cap":"","warning":"true"},"code":"str(var_interet)","id":16},{"options":{"dpi":72,"read-only":"false","context":"interactive","classes":"","autorun":"false","fig-width":7,"out-width":"700px","editor-quick-suggestions":"false","editor-font-scale":"1","label":"unnamed-chunk-17","fig-height":5,"out-height":"","editor-max-height":"","output":"true","comment":"","results":"markup","message":"true","fig-cap":"","warning":"true"},"code":"var_interet_ord <- var_interet[match(info_ech$id_ssu, var_interet$identifiant), ]","id":17},{"options":{"dpi":72,"read-only":"false","context":"interactive","classes":"","autorun":"false","fig-width":7,"out-width":"700px","editor-quick-suggestions":"false","editor-font-scale":"1","label":"unnamed-chunk-18","fig-height":5,"out-height":"","editor-max-height":"","output":"true","comment":"","results":"markup","message":"true","fig-cap":"","warning":"true"},"code":"precision_estim(data = var_interet_ord,\n               total(y))","id":18},{"options":{"dpi":72,"read-only":"false","context":"interactive","classes":"","autorun":"false","fig-width":7,"out-width":"700px","editor-quick-suggestions":"false","editor-font-scale":"1","label":"unnamed-chunk-19","fig-height":5,"out-height":"","editor-max-height":"","output":"true","comment":"","results":"markup","message":"true","fig-cap":"","warning":"true"},"code":"precision_estim(data = var_interet,\n               total(y))","id":19}];
+globalThis.qwebrCellDetails = [{"options":{"results":"markup","out-width":"700px","label":"unnamed-chunk-1","warning":"true","fig-height":5,"message":"true","context":"interactive","comment":"","autorun":"false","editor-font-scale":"1","out-height":"","classes":"","dpi":72,"output":"true","fig-width":7,"fig-cap":"","editor-max-height":"","editor-quick-suggestions":"false","read-only":"false"},"code":"#Téléchargement des données\ndownload.file(url = \"https://minio.lab.sspcloud.fr/klarbi/Colloque_sondage/donnees.Rdata\",\n             destfile = \"donnees.Rdata\")\n#Chargement des données\nload(\"donnees.Rdata\")\nls()","id":1},{"options":{"results":"markup","out-width":"700px","label":"unnamed-chunk-2","warning":"true","fig-height":5,"message":"true","context":"interactive","comment":"","autorun":"false","editor-font-scale":"1","out-height":"","classes":"","dpi":72,"output":"true","fig-width":7,"fig-cap":"","editor-max-height":"","editor-quick-suggestions":"false","read-only":"false"},"code":"#Création d'une matrice contenant une variable quelconque\n#Ici, j'ai pris la variable d'intérêt mais j'aurais pu générer une variable.\n#On cherche juste à vérifier la bonne exécution du res_cal.\ny <- matrix(var_cal_interet$y, ncol = 1)\nrownames(y) <- var_cal_interet$id_ssu","id":2},{"options":{"results":"markup","out-width":"700px","label":"unnamed-chunk-3","warning":"true","fig-height":5,"message":"true","context":"interactive","comment":"","autorun":"false","editor-font-scale":"1","out-height":"","classes":"","dpi":72,"output":"true","fig-width":7,"fig-cap":"","editor-max-height":"","editor-quick-suggestions":"false","read-only":"false"},"code":"rescal_avec_y <- res_cal(y = y,\n        x = as.matrix(var_cal_interet[, paste0(\"var_cal\", 1:5)]),\n        w = var_cal_interet$poids_avant_calage,\n       id = var_cal_interet$id_ssu)","id":3},{"options":{"results":"markup","out-width":"700px","label":"unnamed-chunk-4","warning":"true","fig-height":5,"message":"true","context":"interactive","comment":"","autorun":"false","editor-font-scale":"1","out-height":"","classes":"","dpi":72,"output":"true","fig-width":7,"fig-cap":"","editor-max-height":"","editor-quick-suggestions":"false","read-only":"false"},"code":"rescal_sans_y <- res_cal(y = NULL,\n        x = as.matrix(var_cal_interet[, paste0(\"var_cal\", 1:5)]),\n        w = var_cal_interet$poids_avant_calage, \n       id = var_cal_interet$id_ssu)","id":4},{"options":{"results":"markup","out-width":"700px","label":"unnamed-chunk-5","warning":"true","fig-height":5,"message":"true","context":"interactive","comment":"","autorun":"false","editor-font-scale":"1","out-height":"","classes":"","dpi":72,"output":"true","fig-width":7,"fig-cap":"","editor-max-height":"","editor-quick-suggestions":"false","read-only":"false"},"code":"str(rescal_avec_y)","id":5},{"options":{"results":"markup","out-width":"700px","label":"unnamed-chunk-6","warning":"true","fig-height":5,"message":"true","context":"interactive","comment":"","autorun":"false","editor-font-scale":"1","out-height":"","classes":"","dpi":72,"output":"true","fig-width":7,"fig-cap":"","editor-max-height":"","editor-quick-suggestions":"false","read-only":"false"},"code":"str(rescal_sans_y)","id":6},{"options":{"results":"markup","out-width":"700px","label":"unnamed-chunk-7","warning":"true","fig-height":5,"message":"true","context":"interactive","comment":"","autorun":"false","editor-font-scale":"1","out-height":"","classes":"","dpi":72,"output":"true","fig-width":7,"fig-cap":"","editor-max-height":"","editor-quick-suggestions":"false","read-only":"false"},"code":"rescal_precalc_y <- res_cal(y = y, \n        precalc = rescal_sans_y)\n#Comparaison des résidus calculés avec le precalc et directement en renseignant y\nall((rescal_precalc_y - rescal_avec_y)[,1] == 0)        ","id":7},{"options":{"results":"markup","out-width":"700px","label":"unnamed-chunk-8","warning":"true","fig-height":5,"message":"true","context":"interactive","classes":"","comment":"","autorun":"false","editor-font-scale":"1","out-height":"","error":"true","dpi":72,"output":"true","fig-width":7,"fig-cap":"","editor-max-height":"","editor-quick-suggestions":"false","read-only":"false"},"code":"\npermutation <- sample(nrow(y))\npermutation_inv <- order(permutation)\n\n\nrescal_precalc_y_permu <- res_cal(y = y[permutation, , drop = FALSE], \n        precalc = rescal_sans_y)","id":8},{"options":{"results":"markup","out-width":"700px","label":"unnamed-chunk-9","warning":"true","fig-height":5,"message":"true","context":"interactive","comment":"","autorun":"false","editor-font-scale":"1","out-height":"","classes":"","dpi":72,"output":"true","fig-width":7,"fig-cap":"","editor-max-height":"","editor-quick-suggestions":"false","read-only":"false"},"code":"rescal_sans_y_sans_id <- res_cal(y = NULL,\n        x = as.matrix(var_cal_interet[, paste0(\"var_cal\", 1:5)]),\n        w = var_cal_interet$poids_avant_calage)\n\nrescal_precalc_y_permu_sans_ic <- res_cal(y = y[permutation, , drop = FALSE], \n        precalc = rescal_sans_y_sans_id)\n\n#Comparaison des résidus calculés avec le precalc sans id et en permutant les y\n#et les résidus calculés avec id et sans permutation \n\n#Il n'y a pas eu de message d'erreur et pourtant ...\nall(rescal_precalc_y_permu_sans_ic - rescal_avec_y[, ,drop = FALSE] == 0)","id":9},{"options":{"results":"markup","out-width":"700px","label":"unnamed-chunk-10","warning":"true","fig-height":5,"message":"true","context":"interactive","comment":"","autorun":"false","editor-font-scale":"1","out-height":"","classes":"","dpi":72,"output":"true","fig-width":7,"fig-cap":"","editor-max-height":"","editor-quick-suggestions":"false","read-only":"false"},"code":"calcul_var <- function(y, f_up, f_us, strate, up, calage){\n  #Calcul des résidus\n  eps <- res_cal(y = y, precalc = calage)\n  #Calcul de l'estimation de la variance de l'estimateur du total des résidus\n  ### Calcul des totaux estimés au sein de chaque up\n  tot_par_up <- sum_by(y = eps, by = up, w = rep(1/f_us, nrow(eps)))\n  ### Nombre d'unités primaires dans l'échantillon\n  n_up <- length(unique(up))\n  ### Nombre d'unités primaires dans la population\n  N_up <- n_up/f_up\n  ### Strate pour chaque up \n  strate_up <- unique(cbind(strate,up))\n  strate_up <- setNames(strate_up[,1], strate_up[,2]) #il s'agit d'un vecteur dont les noms sont\n  #des noms d'UP et les éléments, les strates correspondantes.\n  ### Première partie \n  v_a <- var_srs(y = tot_par_up, \n                 pik = rep(f_up, nrow(tot_par_up)), \n                 strata = strate_up[rownames(tot_par_up)])\n  ### Deuxième partie \n  v_b <- var_srs(y = eps, \n                 pik = rep(f_us, nrow(eps)),\n                 strata = up #le tirage des SSU est indépendant d'une PSU à l'autre --> ~ tirage stratifié\n                 )\n  v <- v_a + v_b\n  return(v)\n}","id":10},{"options":{"results":"markup","out-width":"700px","label":"unnamed-chunk-11","warning":"true","fig-height":5,"message":"true","context":"interactive","comment":"","autorun":"false","editor-font-scale":"1","out-height":"","classes":"","dpi":72,"output":"true","fig-width":7,"fig-cap":"","editor-max-height":"","editor-quick-suggestions":"false","read-only":"false"},"code":"#Les variables auxiliaires doivent être renseignées sous la forme d'une matrice\nvar_aux <- var_ech_cal[, colnames(var_ech_cal)[startsWith(colnames(var_ech_cal), \"var_cal\")]]\nvar_aux <- as.matrix(var_aux)\n\n#Création \ncal <- res_cal(y = NULL, #y = NULL, res_cal va renvoyer une liste avec des éléments permettant de calculer les résidus\n               x = var_aux, #Matrice des variables de calage par individu de l'échantillon\n               w = var_ech_cal$poids_avant_calage, #Vecteur contenant les poids avant tirage\n               id = var_ech_cal$id_ssu #Identifiant\n              )","id":11},{"options":{"results":"markup","out-width":"700px","label":"unnamed-chunk-12","warning":"true","fig-height":5,"message":"true","context":"interactive","comment":"","autorun":"false","editor-font-scale":"1","out-height":"","classes":"","dpi":72,"output":"true","fig-width":7,"fig-cap":"","editor-max-height":"","editor-quick-suggestions":"false","read-only":"false"},"code":"technical <- list()\n\ntechnical$f_up <- 0.1\ntechnical$f_us <- 0.4\ntechnical$strate <- info_ech$strate_psu\ntechnical$up <- info_ech$id_psu\ntechnical$calage <- cal","id":12},{"options":{"results":"markup","out-width":"700px","label":"unnamed-chunk-13","warning":"true","fig-height":5,"message":"true","context":"interactive","comment":"","autorun":"false","editor-font-scale":"1","out-height":"","classes":"","dpi":72,"output":"true","fig-width":7,"fig-cap":"","editor-max-height":"","editor-quick-suggestions":"false","read-only":"false"},"code":"precision_estim <- define_variance_wrapper(\n  variance_function = calcul_var,\n  reference_id = info_ech$id_ssu,\n  reference_weight = info_ech$poids_apres_calage,\n  default_id = \"identifiant\", #Nom par défaut de la colonne contenant l'identifiant des individus dans le fichier contenant les variables d'intérêt\n  technical_data = technical #Liste des données nécessaire à l'application de la fonction calculant la variance\n)","id":13},{"options":{"results":"markup","out-width":"700px","label":"unnamed-chunk-14","warning":"true","fig-height":5,"message":"true","context":"interactive","comment":"","autorun":"false","editor-font-scale":"1","out-height":"","classes":"","dpi":72,"output":"true","fig-width":7,"fig-cap":"","editor-max-height":"","editor-quick-suggestions":"false","read-only":"false"},"code":"str(var_interet)","id":14},{"options":{"results":"markup","out-width":"700px","label":"unnamed-chunk-15","warning":"true","fig-height":5,"message":"true","context":"interactive","comment":"","autorun":"false","editor-font-scale":"1","out-height":"","classes":"","dpi":72,"output":"true","fig-width":7,"fig-cap":"","editor-max-height":"","editor-quick-suggestions":"false","read-only":"false"},"code":"var_interet_ord <- var_interet[match(info_ech$id_ssu, var_interet$identifiant), ]","id":15},{"options":{"results":"markup","out-width":"700px","label":"unnamed-chunk-16","warning":"true","fig-height":5,"message":"true","context":"interactive","comment":"","autorun":"false","editor-font-scale":"1","out-height":"","classes":"","dpi":72,"output":"true","fig-width":7,"fig-cap":"","editor-max-height":"","editor-quick-suggestions":"false","read-only":"false"},"code":"precision_estim(data = var_interet_ord,\n               total(y))","id":16},{"options":{"results":"markup","out-width":"700px","label":"unnamed-chunk-17","warning":"true","fig-height":5,"message":"true","context":"interactive","comment":"","autorun":"false","editor-font-scale":"1","out-height":"","classes":"","dpi":72,"output":"true","fig-width":7,"fig-cap":"","editor-max-height":"","editor-quick-suggestions":"false","read-only":"false"},"code":"precision_estim(data = var_interet,\n               total(y))","id":17},{"options":{"results":"markup","out-width":"700px","label":"unnamed-chunk-18","warning":"true","fig-height":5,"message":"true","context":"interactive","comment":"","autorun":"false","editor-font-scale":"1","out-height":"","classes":"","dpi":72,"output":"true","fig-width":7,"fig-cap":"","editor-max-height":"","editor-quick-suggestions":"false","read-only":"false"},"code":"#Ajout d'une observation qui n'a pas été prise en compte dans le calcul\n#de précision \nvar_interet_ajout <- rbind(var_interet_ord,\n                 data.frame(\"identifiant\" = \"toto\", \"y\" = 10, \"z\" = 10))\nprecision_estim(data = var_interet_ajout,\n               total(y))","id":18},{"options":{"results":"markup","out-width":"700px","label":"unnamed-chunk-19","warning":"true","fig-height":5,"message":"true","context":"interactive","comment":"","autorun":"false","editor-font-scale":"1","out-height":"","classes":"","dpi":72,"output":"true","fig-width":7,"fig-cap":"","editor-max-height":"","editor-quick-suggestions":"false","read-only":"false"},"code":"#Ajout d'une observation qui n'a pas été prise en compte dans le calcul\n#de précision \nvar_interet_ajout <- rbind(var_interet_ord,\n                 data.frame(\"identifiant\" = \"toto\", \"y\" = 10, \"z\" = 10))\nprecision_estim(data = var_interet_ajout,\n               total(y))","id":19},{"options":{"results":"markup","out-width":"700px","label":"unnamed-chunk-20","warning":"true","fig-height":5,"message":"true","context":"interactive","comment":"","autorun":"false","editor-font-scale":"1","out-height":"","classes":"","dpi":72,"output":"true","fig-width":7,"fig-cap":"","editor-max-height":"","editor-quick-suggestions":"false","read-only":"false"},"code":"res_avec_tot <- precision_estim(data = var_interet_ord,\n               total(y))\nres_sans_tot <- precision_estim(data = var_interet_ord,\n                  y)\n\nprint(res_avec_tot)\nprint(res_sans_tot)","id":20},{"options":{"results":"markup","out-width":"700px","label":"unnamed-chunk-21","warning":"true","fig-height":5,"message":"true","context":"interactive","comment":"","autorun":"false","editor-font-scale":"1","out-height":"","classes":"","dpi":72,"output":"true","fig-width":7,"fig-cap":"","editor-max-height":"","editor-quick-suggestions":"false","read-only":"false"},"code":"#On supprime tout sauf precision_estim\nrm(list = ls()[ls() != \"precision_estim\"]","id":21},{"options":{"results":"markup","out-width":"700px","label":"unnamed-chunk-22","warning":"true","fig-height":5,"message":"true","context":"interactive","comment":"","autorun":"false","editor-font-scale":"1","out-height":"","classes":"","dpi":72,"output":"true","fig-width":7,"fig-cap":"","editor-max-height":"","editor-quick-suggestions":"false","read-only":"false"},"code":"print(precision_estim)\nprint(str(precision_estim))","id":22}];
 
 </script>
 <script type="module">
@@ -1204,7 +1204,10 @@ window.Quarto = {
   <li><a href="#etape-3-utilisation-et-diffusion" id="toc-etape-3-utilisation-et-diffusion" class="nav-link" data-scroll-target="#etape-3-utilisation-et-diffusion">Etape 3 : Utilisation et diffusion</a>
   <ul class="collapse">
   <li><a href="#vérification-de-la-table-contenant-les-variables-dintérêt" id="toc-vérification-de-la-table-contenant-les-variables-dintérêt" class="nav-link" data-scroll-target="#vérification-de-la-table-contenant-les-variables-dintérêt">Vérification de la table contenant les variables d’intérêt</a></li>
+  <li><a href="#utilisation-de-linéarisation" id="toc-utilisation-de-linéarisation" class="nav-link" data-scroll-target="#utilisation-de-linéarisation">Utilisation de linéarisation</a></li>
+  <li><a href="#variance-wrapper-et-confidentialité" id="toc-variance-wrapper-et-confidentialité" class="nav-link" data-scroll-target="#variance-wrapper-et-confidentialité"><code>variance wrapper</code> et confidentialité</a></li>
   </ul></li>
+  <li><a href="#débogage" id="toc-débogage" class="nav-link" data-scroll-target="#débogage">Débogage</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -1466,17 +1469,15 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 
 <section id="estimation-de-variance-analytique-avec-gustave" class="level1">
 <h1>Estimation de variance analytique avec <code>gustave</code></h1>
-<div id="qwebr-insertion-location-1"></div>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <p><code>gustave</code> est un package permettant d’estimer la variance d’estimateurs dans un contexte d’échantillonnage en population finie. Ce package s’inscrit dans une logique d’harmonisation des programmes à l’Insee introduite avec la macro Calker en SAS. Ce package simplifie les estimations de variance analytique en mutualisant des opérations mobilisées dans plusieurs enquêtes et en imposant une distinction entre les enjeux méthodologiques et de diffusion. <code>gustave</code> garde un niveau d’abstraction suffisant afin de pouvoir ajouter simplement des spécificités propres à certaines enquêtes.</p>
 <p>L’estimation de la variance avec <code>gustave</code> peut se décomposer en trois étapes&nbsp;: calcul d’un estimateur de la variance d’un estimateur d’un total, implémentation de l’estimateur et utilisation des variables linéarisées.</p>
 <p>Afin d’illustrer le cheminement permettant d’obtenir les estimations de variance avec <code>gustave</code>, nous proposons d’estimer la précision dans le cadre d’un exemple. Nous considérons un tirage à deux degrés selon des sondages aléatoires simples sans remise :</p>
 <ul>
-<li>un tirage d’un échantillon de $n_ = $ 1 000 unités primaires <span class="math inline">\(S_\text{UP}\)</span> parmi $N_ = $ 10 000 selon un plan aléatoire simple stratifié avec allocation proportionnelle,</li>
+<li>un tirage d’un échantillon de <span class="math inline">\(n_\text{UP} =  1 000\)</span> unités primaires <span class="math inline">\(S_\text{UP}\)</span> parmi <span class="math inline">\(N_\text{UP} = 10 000\)</span> selon un plan aléatoire simple stratifié avec allocation proportionnelle,</li>
 <li>un tirage de <span class="math inline">\(n_u = 4\)</span> unités secondaires parmi les <span class="math inline">\(N_u = 10\)</span> unités secondaires dont chaque unité primaire <span class="math inline">\(u\)</span> dispose. L’échantillon des unités secondaires obtenu est noté <span class="math inline">\(S_\text{US}\)</span>. Un calage sur marges est ensuité réalisé au niveau des unités secondaires sur cinq variables quantitivatives <span class="math inline">\(\{ \textbf{x}^\text{cal}_k \}_{k \in S_ \text{US}}\)</span> où pour tout <span class="math inline">\(k\)</span>, <span class="math inline">\(\textbf{x}^\text{cal}_k = (\textbf{x}^\text{cal}_{k,1}, \hdots, \textbf{x}^\text{cal}_{k,5})\)</span> : la pondération calée est notée <span class="math inline">\(\{w^\text{cal}_k\}_{k \in S_\text{US}}\)</span>.</li>
 </ul>
 <p>Les données sont téléchargeables à l’adresse <a href="https://minio.lab.sspcloud.fr/klarbi/Colloque_sondage/donnees.Rdata">suivante</a>.</p>
-<div id="qwebr-insertion-location-2"></div>
+<div id="qwebr-insertion-location-1"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <p>Le fichier .Rdata contient trois tables <strong>info_ech</strong>, <strong>var_ech_cal</strong>, <strong>var_interet</strong> dont le contenu est décrit par les dictionnaires suivants :</p>
 <table class="caption-top table">
@@ -1565,14 +1566,52 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 </tr>
 </tbody>
 </table>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Objectifs
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Dans cet exercice, nous souhaitons produire deux estimateurs de variance basés sur deux variables d’intérêt <span class="math inline">\(\{y_k \}_{k \in S_\text{US}}\)</span> et <span class="math inline">\(\{z_k \}_{k \in S_\text{US}}\)</span> :</p>
+<ul>
+<li><span class="math inline">\(\displaystyle \widehat{\mathbb{V}}(\hat{t}_{y,\text{cal}})\)</span>, un estimateur de la variance de <span class="math inline">\(\displaystyle \sum_{k \in S_\text{US}} y_k w_k^\text{cal}\)</span>,</li>
+<li><span class="math inline">\(\displaystyle  \widehat{\mathbb{V}}(\frac{\hat{t}_{y,\text{cal}}}{\hat{t}_{z,\text{cal}}})\)</span>, un estimateur de la variance de <span class="math inline">\(\displaystyle \frac{\sum_{k \in S_\text{US}} y_k w_k^\text{cal}}{\sum_{k \in S_\text{US}} z_k w_k^\text{cal}}\)</span>.</li>
+<li><span class="math inline">\(\displaystyle  \widehat{\mathbb{V}}(\frac{1}{\hat{t}_{y,\text{cal}}})\)</span>, un estimateur de la variance de <span class="math inline">\(\displaystyle \frac{1}{\sum_{k \in S_\text{US}} z_k w_k^\text{cal}}\)</span>.</li>
+</ul>
+</div>
+</div>
 <section id="etape-1-estimateur-de-la-variance-dun-estimateur-calé-du-total" class="level2">
 <h2 class="anchored" data-anchor-id="etape-1-estimateur-de-la-variance-dun-estimateur-calé-du-total">Etape 1 : Estimateur de la variance d’un estimateur calé du total</h2>
 <section id="estimateur-de-la-variance-dun-estimateur-du-total-dhorvitz-thompson" class="level3">
 <h3 class="anchored" data-anchor-id="estimateur-de-la-variance-dun-estimateur-du-total-dhorvitz-thompson">Estimateur de la variance d’un estimateur du total d’Horvitz-Thompson</h3>
-<p>Afin d’estimer la variance d’une statistique régulière, il est nécessaire de proposer un estimateur dans le cas simple de l’estimateur du total. Ce travail, réalisé par le méthodologue, consiste à utiliser des résultats théoriques et l’information sur la collecte (plan de sondage, redressements, …) afin d’approcher au mieux un estimateur sans biais de la variance. Dans certains cas simples (cas d’un sondage aléatoire simple sans remise), il n’est pas nécessaire d’implémenter l’estimateur : des fonctions prêtes à l’emploi sont disponibles (fonction qvar par exemple).</p>
-<p>Un estimateur de la variance d’un estimateur du total d’Horvitz-Thompson <span class="math inline">\(\hat{t}_{y,\text{HT}}\)</span> sous le plan de l’exemple est : MODIFIER ESTIM ? <span id="eq-varht"><span class="math display">\[
-    \widehat{\mathbb{V}}(\hat{t}_{y,\text{HT}}) = \frac{N_\text{UP}^2}{n_\text{UP}} \left(1-\underbrace{\frac{n_\text{UP}}{N_\text{UP}}}_{= f_\text{up}} \right) s^2_{\{\hat{t}_{y,\text{HT}, u}\}_{u \in S_\text{UP}}} + \frac{N_\text{UP}}{n_\text{UP}} \left( \sum_{u \in S_\text{UP}}  \frac{N^2_u}{n_u} (1 - \underbrace{\frac{n_u}{N_u}}_{=f_u}) s^2_{\{{y_k}\}_{k \in S_\text{US}   \cap u}}\right) \tag{1}\]</span></span></p>
+<p>Afin d’estimer la variance d’une statistique régulière, il est nécessaire de proposer un estimateur dans le cas simple de l’estimateur du total. Ce travail, réalisé par le méthodologue, consiste à utiliser des résultats théoriques et l’information sur la collecte (plan de sondage, redressements, …) afin d’approcher au mieux un estimateur sans biais de la variance.</p>
+<p>Dans certains cas simples (cas d’un sondage aléatoire simple sans remise), il n’est pas nécessaire d’implémenter l’estimateur : des fonctions prêtes à l’emploi sont disponibles (fonction qvar par exemple).</p>
+<p>Un estimateur de la variance d’un estimateur du total d’Horvitz-Thompson <span class="math inline">\(\hat{t}_{y,\text{HT}}\)</span> sous le plan de l’exemple est :</p>
+<p><span class="math display">\[
+    \widehat{\mathbb{V}}(\hat{t}_{y,\text{HT}}) = \sum_{\text{st} = 1}^{n_\text{st}} \widehat{\mathbb{V}}(\hat{t}_{y,\text{HT},\text{st}})
+\]</span><br>
+où <span id="eq-varht"><span class="math display">\[\widehat{\mathbb{V}}(\hat{t}_{y,\text{HT},\text{st}}) = \frac{N^2_{\text{UP}\cap \text{st}}}{n_{\text{UP}\cap  \text{st}}} \left(1-\underbrace{\frac{n_{\text{UP} \cap \text{st}}}{N_\text{UP}}}_{= f_\text{up}} \right) s^2_{\{\hat{t}_{y,\text{HT}, u}\}_{u \in S_\text{UP} \cap \text{st}}} + \frac{N_{\text{UP}\cap \text{st}}}{n_{\text{UP}\cap \text{st}}} \left( \sum_{u \in S_\text{UP} \cap \text{st}}  \frac{N^2_u}{n_u} (1 - \underbrace{\frac{n_u}{N_u}}_{=f_u}) s^2_{\{{y_k}\}_{k \in S_\text{US}   \cap u}}\right) \tag{1}\]</span></span></p>
 <p>où pour tout <span class="math inline">\(u\in S_\text{UP}\)</span>, <span class="math inline">\(\displaystyle  \hat{t}_{y,\text{HT},u} = \frac{N_u}{n_u}\sum_{k \in S_\text{US} \cap u} {y_k}\)</span> et <span class="math inline">\(s^2_{\{\hat{t}_{y,\text{HT}, u}\}_{u \in S_\text{UP}}}\)</span> (resp. <span class="math inline">\(s^2_{\{y_k}\}_{k \in S_\text{US}   \cap u}\)</span>) désigne la dispersion de la variable <span class="math inline">\(\{{\hat{t}_{y,\text{HT}, u}}\}_{u \in S_\text{UP}}\)</span> (resp. <span class="math inline">\({\{y_k\}}_{k \in S_\text{US} \cap u}\)</span>) sur l’échantillon <span class="math inline">\(S_\text{UP}\)</span> (resp. <span class="math inline">\(S_\text{US} \cap u\)</span>).</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Preuve de l’expression de <span class="math inline">\(\widehat{\mathbb{V}}(\hat{t}_{y,\text{HT},\text{st}})\)</span>
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Il suffit d’appliquer la formule de Rao en utilisant l’estimateur de Sen-Yen-Grundy pour la variance d’un estimateur du total sous un plan aléatoire simple sans remise d’où <span class="math inline">\(q_u = \frac{N_{\text{UP} \cap \text{st}}^2}{n_{\text{UP} \cap \text{st}}^2} \left(1-f \right)\)</span> et <span class="math inline">\(\pi_u^{(1)} = \frac{n_{\text{UP}}{N_{\text{UP}}\)</span>.</p>
+</div>
+</div>
+</div>
 </section>
 <section id="prise-en-compte-du-calage" class="level3">
 <h3 class="anchored" data-anchor-id="prise-en-compte-du-calage">Prise en compte du calage</h3>
@@ -1584,7 +1623,7 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 </section>
 <section id="estimateur-de-la-variance-dun-estimateur-calé-du-total" class="level3">
 <h3 class="anchored" data-anchor-id="estimateur-de-la-variance-dun-estimateur-calé-du-total">Estimateur de la variance d’un estimateur calé du total</h3>
-<p>En réunissant l’<a href="#eq-varht" class="quarto-xref">Equation&nbsp;1</a> et l’<a href="#eq-varcal" class="quarto-xref">Equation&nbsp;2</a>, il en vient que : <span class="math display">\[ \]</span></p>
+<p>En réunissant l’<a href="#eq-varht" class="quarto-xref">Equation&nbsp;1</a> et l’<a href="#eq-varcal" class="quarto-xref">Equation&nbsp;2</a>, il en vient que : <span class="math display">\[\widehat{\mathbb{V}}(\hat{t}_{y,\text{cal}}) \approx \sum_{\text{st} = 1}^{n_\text{st}} \widehat{\mathbb{V}}(\hat{t}_{\varepsilon,\text{HT},\text{st}})\]</span></p>
 </section>
 </section>
 <section id="etape-2-implémentation" class="level2">
@@ -1608,22 +1647,20 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <p>Dans le cas des résidus de la régression de la variable d’intérêt <span class="math inline">\(\{y_k\}\)</span> sur les variables d’intérêt <span class="math inline">\(\{\textbf{x}_k\}\)</span>, il est possible de calculer l’inverse de la matrice <span class="math inline">\(\displaystyle \sum_{k \in S} \frac{\textbf{x}_k \textbf{x}_k^T}{\pi_k}\)</span> qui interviendra dans tous les calculs de résidus (et indépendamment de la variable <span class="math inline">\(\{x_k\}\)</span>.</p>
 <p><code>gustave</code> permet de stocker ces informations dans un format consistant et de réutiliser ces informations facilement. Il s’agit des <code>precalc</code></p>
 <p>Comme vu durant la présentation, la fonction <code>res_cal</code> permet de récupérer les résidus :</p>
+<div id="qwebr-insertion-location-2"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <div id="qwebr-insertion-location-3"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<p>Si la variable d’intérêt n’est pas disponible, il est possible de précalculer certains éléments entrants dans le calcul des résidus. Dans ce cas, il faudra renseigner <code>NULL</code> à l’argument <code>y</code>.</p>
 <div id="qwebr-insertion-location-4"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<p>Le résultat lorsque <code>y</code> est renseigné est de la même forme que <code>y</code>.</p>
 <div id="qwebr-insertion-location-5"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>Si la variable d’intérêt n’est pas disponible, il est possible de précalculer certains éléments entrants dans le calcul des résidus. Dans ce cas, il faudra renseigner <code>NULL</code> à l’argument <code>y</code>.</p>
+<p>Par contre, lorsque <code>y = NULL</code>, la fonction renvoie un <code>precalc</code> (formellement, il s’agit d’une liste). Cette liste contient les poids de sondage, la matrice des variables auxiliaires et l’inverse de la matrice de Gram <code>inv</code>.</p>
 <div id="qwebr-insertion-location-6"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>Le résultat lorsque <code>y</code> est renseigné est de la même forme que <code>y</code>.</p>
 <div id="qwebr-insertion-location-7"></div>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<p>Par contre, lorsque <code>y = NULL</code>, la fonction renvoie un <code>precalc</code> (formellement, il s’agit d’une liste). Cette liste contient les poids de sondage, la matrice des variables auxiliaires et l’inverse de la matrice de Gram <code>inv</code>.</p>
-<div id="qwebr-insertion-location-8"></div>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<div id="qwebr-insertion-location-9"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <div class="callout callout-style-default callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -1643,7 +1680,7 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <li>Si ce n’est pas le cas, <code>gustave</code> renvoie une erreur.</li>
 </ul></li>
 </ul>
-<div id="qwebr-insertion-location-10"></div>
+<div id="qwebr-insertion-location-8"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </div>
 </div>
@@ -1658,7 +1695,7 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 </div>
 <div class="callout-body-container callout-body">
 <p>Si les lignes de la variable <code>y</code> ne sont pas nommées ou si l’argument <code>id</code> n’a pas été complété au moment de la définition du <code>precalc</code> alors aucune vérification ne pourra être réalisée.</p>
-<div id="qwebr-insertion-location-11"></div>
+<div id="qwebr-insertion-location-9"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </div>
 </div>
@@ -1672,7 +1709,7 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <li>calcul de la variance de premier degré en utilisant la</li>
 <li>calcul de la variance du second degré.</li>
 </ul>
-<div id="qwebr-insertion-location-12"></div>
+<div id="qwebr-insertion-location-10"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <p>MEMO : - Construire la fonction <code>calcul_var</code> en faisant comme si <code>y</code> était une matrice (éventuellement à une colonne) : cela permettra de pouvoir estimer la variance de plusieurs fonctions d’intérêt plus rapidement.</p>
 </section>
@@ -1686,11 +1723,11 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <li>les poids utilisés pour l’estimation (argument <code>reference_weight</code>) : il s’agit d’un vecteur numérique contenant la pondération des individus. L’ordre des poids dans ce vecteur doit correspondre à celui des identifiants dans <code>reference_id</code>. Ces poids vont permettre à gustave de calculer l’estimation du paramètre d’intérêt,</li>
 <li>la liste des données utilisées par la fonction décrite dans l’argument <code>variance_function</code> (argument <code>technical_data</code>) : il s’agit d’une liste nommée contenant toutes les données nécessaires au calcul de la variance. Les noms des éléments de la liste doivent correspondre aux arguments de la fonction décrite dans <code>variance_function</code> excepté l’argument <span class="math inline">\(y\)</span>.</li>
 </ul>
+<div id="qwebr-insertion-location-11"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<div id="qwebr-insertion-location-12"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <div id="qwebr-insertion-location-13"></div>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<div id="qwebr-insertion-location-14"></div>
-<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
-<div id="qwebr-insertion-location-15"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
 </section>
@@ -1701,14 +1738,14 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 <section id="vérification-de-la-table-contenant-les-variables-dintérêt" class="level3">
 <h3 class="anchored" data-anchor-id="vérification-de-la-table-contenant-les-variables-dintérêt">Vérification de la table contenant les variables d’intérêt</h3>
 <p>La table contenant les variables d’intérêt (ici <code>var_interet</code>) doit contenir un identifiant dont le nom correspond à celui de l’argument <code>default_id</code> de la fonction <code>define_variance_wrapper</code>.</p>
-<div id="qwebr-insertion-location-16"></div>
+<div id="qwebr-insertion-location-14"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <p>Les identifiants de la table <code>var_interet</code> ne semblent pas être dans le même ordre que ceux de la table <code>info_ech</code>.</p>
 <p>Nous allons réaliser une première tentative en remettant les identifiants dans le même ordre.</p>
-<div id="qwebr-insertion-location-17"></div>
+<div id="qwebr-insertion-location-15"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <p>Tout se passe bien : aucun message d’avertissement ou d’erreur.</p>
-<div id="qwebr-insertion-location-18"></div>
+<div id="qwebr-insertion-location-16"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 <div class="callout callout-style-default callout-caution callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -1721,15 +1758,87 @@ Table des variables d’intérêt non triée
 </div>
 <div class="callout-body-container callout-body">
 <p>Si la variable identifiant de la table var_interet n’est pas triée dans le même ordre que le vecteur renseigné dans l’argument reference_id de define_variance_wrapper, le message d’avertissement suivant apparaîtra dans la console :</p>
-<p><span style="color:red;"> The inputted id variable (id argument) appears not to match the reference id variable provided when the variance wrapper was defined: it is reordered and everything should be fine. Issues may nonetheless arise if part of the call is to be evaluated outside of the inputted data.frame (data argument). gustave remettra en ordre la table. </span></p>
+<p><span style="color:red;"> The inputted id variable (id argument) appears not to match the reference id variable provided when the variance wrapper was defined: it is reordered and everything should be fine. Issues may nonetheless arise if part of the call is to be evaluated outside of the inputted data.frame (data argument). </span> <span class="math inline">\(\to\)</span> <code>gustave</code> remettra en ordre la table.</p>
 <p>Pour autant, il est indiqué que dans certains cas, des comportements inattendus peuvent apparaître : il est donc recommandé de vérifier l’ordre de la table en intrant du variance wrapper.</p>
+<div id="qwebr-insertion-location-17"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Table des variables d’intérêt avec des observations supplémentaires
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Si la table <code>var_interet</code> contient des individus non renseignés dans le paramètre <code>reference_id</code> de la fonction <code>define_variance_wrapper</code>, ils seront retirés et le message d’avertissement suivant apparaîtra :</p>
+<p><span style="color:red;"> xxx observations do not match any responding units of the survey. They are discarded </span></p>
+<div id="qwebr-insertion-location-18"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Table des variables d’intérêt avec des observations supplémentaires
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Si certains individus renseignés dans le paramètre <code>reference_id</code> de la fonction <code>define_variance_wrapper</code> ne sont pas dans la table <code>var_interet</code> alors le message d’avertissement suivant apparaître :</p>
+<p><span style="color:red;"> xxx observations do not match any responding units of the survey. They are discarded. </span></p>
+<p>Les estimations de variance seront très probablement fausses. Il est recom- mandé de comparer les tables utilisées lors de la création de variance wrapper et celles contenant les variables d’intérêt</p>
 <div id="qwebr-insertion-location-19"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </div>
 </div>
-
-
 </section>
+<section id="utilisation-de-linéarisation" class="level3">
+<h3 class="anchored" data-anchor-id="utilisation-de-linéarisation">Utilisation de linéarisation</h3>
+<p>L’objectif de cet exercice est de proposer une estimation de :</p>
+<ul>
+<li><span class="math inline">\(\displaystyle \widehat{\mathbb{V}}(\hat{t}_{y,\text{cal}})\)</span>, un estimateur de la variance de <span class="math inline">\(\displaystyle \sum_{k \in S_\text{US}} y_k w_k^\text{cal}\)</span>,</li>
+<li><span class="math inline">\(\displaystyle  \widehat{\mathbb{V}}(\frac{\hat{t}_{y,\text{cal}}}{\hat{t}_{z,\text{cal}}})\)</span>, un estimateur de la variance de <span class="math inline">\(\displaystyle \frac{\sum_{k \in S_\text{US}} y_k w_k^\text{cal}}{\sum_{k \in S_\text{US}} z_k w_k^\text{cal}}\)</span>.</li>
+<li><span class="math inline">\(\displaystyle  \widehat{\mathbb{V}}(\frac{1}{\hat{t}_{y,\text{cal}}})\)</span>, un estimateur de la variance de <span class="math inline">\(\displaystyle \frac{1}{\sum_{k \in S_\text{US}} z_k w_k^\text{cal}}\)</span></li>
+</ul>
+<p>Rappel sur les statistic wrapper</p>
+<section id="displaystyle-widehatmathbbvhatt_ytextcal" class="level4">
+<h4 class="anchored" data-anchor-id="displaystyle-widehatmathbbvhatt_ytextcal"><span class="math inline">\(\displaystyle \widehat{\mathbb{V}}(\hat{t}_{y,\text{cal}})\)</span></h4>
+<p>Dans ce premier cas, il s’agit d’estimer la variance du total d’un estimateur calé. Cette estimation correspond au cas implémenté directement dans la fonction <code>calcul_var</code> renseignée dans l’argument <code>variance_function</code> de la fonction <code>define_variance_wrapper</code>. Nous n’avons pas besoin ici de linéariser la fonction d’intérêt considérée (Il est assez immédiat de montrer que si la linéarisation par développement de Taylor était utilisée ici alors on retrouverait la variable d’intérêt comme variable linéarisée estimée).</p>
+<p>Dans le cas du total, il n’est pas nécessaire d’indiquer le statistic wrapper <code>total</code>. Pour autant, pour plus de lisibilité, il est recommandé de <strong>toujours</strong> indiquer la fonction.</p>
+<div id="qwebr-insertion-location-20"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+</section>
+<section id="section" class="level4">
+<h4 class="anchored" data-anchor-id="section"></h4>
+<p>REMARQUE : MEAN = ESTIMATEUR D’HAYEK</p>
+</section>
+</section>
+<section id="variance-wrapper-et-confidentialité" class="level3">
+<h3 class="anchored" data-anchor-id="variance-wrapper-et-confidentialité"><code>variance wrapper</code> et confidentialité</h3>
+<p>Le <code>variance wrapper</code> contient toute l’information nécessaire au calcul de précision : cela passe par les données de calage, les données utilisées pour certains plans de sondage, … Ces données peuvent présenter un enjeu de confidentialité en exposant ces données.</p>
+<p>Prenons l’exemple d’un utilisateur ne disposant que du <code>variance wrapper</code> <code>precision_estim</code>.</p>
+<div id="qwebr-insertion-location-21"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<p>Lorsqu’un utilisateur affiche le contenu de la fonction <code>precision_estim</code>, il ne voit pas les données associées.</p>
+<div id="qwebr-insertion-location-22"></div>
+<noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
+<p>Ouf ? Pas de problème donc … ? Non, lorsqu’un utilsateur considère l’<strong>environnement</strong> associé au <code>variance wrapper</code>, il est possible de retrouver les données.</p>
+<pre class="{web-r}"><code>env_prec_estim &lt;- environment(precision_estim)
+rlang::env_print(env_prec_estim)</code></pre>
+<p>On peut, par exemple, afficher les variables de calage :</p>
+<pre class="{web-r}"><code>env_prec_estim$technical_data$calage$x</code></pre>
+</section>
+</section>
+<section id="débogage" class="level2">
+<h2 class="anchored" data-anchor-id="débogage">Débogage</h2>
+
+
 </section>
 </section>
 
