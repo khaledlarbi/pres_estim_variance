@@ -19,9 +19,9 @@ L’estimation de la variance avec `gustave` peut se décomposer en trois étape
 
 Afin d'illustrer le cheminement permettant d'obtenir les estimations de variance avec `gustave`, nous proposons d'estimer la précision dans le cadre d'un exemple. Nous considérons un tirage à deux degrés selon des sondages aléatoires simples sans remise : 
 
-- un tirage d'un échantillon de $n_\text{UP} =  1 000$ unités primaires $S_\text{UP}$ parmi $N_\text{UP} = 10 000$  selon un plan aléatoire simple stratifié avec allocation proportionnelle, 
+- un tirage d'un échantillon de $n_\text{UP} =  1 000$ unités primaires $S_\text{UP}$, réparties en cinq strates, parmi $N_\text{UP} = 10 000$  selon un plan aléatoire simple stratifié avec allocation proportionnelle, 
 - un tirage de $n_u = 4$ unités secondaires parmi les $N_u = 10$ unités secondaires dont chaque unité primaire $u$ dispose. L'échantillon des unités secondaires obtenu est noté $S_\text{US}$.
-Un calage sur marges est ensuité réalisé au niveau des unités secondaires sur cinq variables quantitivatives $\{ \textbf{x}^\text{cal}_k \}_{k \in S_ \text{US}}$ où pour tout $k$, $\textbf{x}^\text{cal}_k = (\textbf{x}^\text{cal}_{k,1}, \hdots, \textbf{x}^\text{cal}_{k,5})$ : la pondération calée est notée $\{w^\text{cal}_k\}_{k \in S_\text{US}}$.
+Un calage sur marges est ensuité réalisé au niveau des unités secondaires sur cinq variables quantitivatives $\{ \textbf{x}^\text{cal}_k \}_{k \in S_ \text{US}}$ où pour tout $k$, $\textbf{x}^\text{cal}_k = (\textbf{x}^\text{cal}_{k,1}, \hdots, \textbf{x}^\text{cal}_{k,5})$ : la pondération calée est notée $\{w^\text{cal}_k\}_{k \in S_\text{US}}$. La méthode mobilisée est linéaire. 
 
 
 Les données sont téléchargeables à l'adresse [suivante](https://minio.lab.sspcloud.fr/klarbi/Colloque_sondage/donnees.Rdata).
@@ -476,7 +476,7 @@ print(res_ratio)
 
 Comme dans le cas précédent, il va être nécessaire d'utiliser le principe de linéarisation. Néanmoins, il n'existe pas de `statistic wrapper` dans `gustave` correspondant à la fonction inverse. Nous allons le construire à l'aide de la fonction `define_statistic_wrapper`. Avant cela, il est nécessaire de calculer la variable linéarisée estimée.
 
-La variable linéarisée estimée est $\widehat{u_k} = - \frac{y_k}{\hat{t}_{y,\text{cal}}}$.
+La variable linéarisée estimée est $\widehat{u_k} = - \frac{y_k}{\hat{t}_{y,\text{cal}}}^2$.
 
 ```{webr-r}
 inverse <- define_statistic_wrapper(
