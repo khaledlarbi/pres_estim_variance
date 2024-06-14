@@ -92,7 +92,7 @@ $$
     \widehat{\mathbb{V}}(\hat{t}_{y,\text{HT}}) = \sum_{\text{st} = 1}^{n_\text{st}} \widehat{\mathbb{V}}(\hat{t}_{y,\text{HT},\text{st}})
 $$    
     où
-$$\widehat{\mathbb{V}}(\hat{t}_{y,\text{HT},\text{st}}) = \frac{N^2_{\text{UP}\cap \text{st}}}{n_{\text{UP}\cap  \text{st}}} \left(1-\underbrace{\frac{n_{\text{UP} \cap \text{st}}}{N_\text{UP}}}_{= f_\text{up}} \right) s^2_{\{\hat{t}_{y,\text{HT}, u}\}_{u \in S_\text{UP} \cap \text{st}}} + \frac{N_{\text{UP}\cap \text{st}}}{n_{\text{UP}\cap \text{st}}} \left( \sum_{u \in S_\text{UP} \cap \text{st}}  \frac{N^2_u}{n_u} (1 - \underbrace{\frac{n_u}{N_u}}_{=f_u}) s^2_{\{{y_k}\}_{k \in S_\text{US}   \cap u}}\right)$${#eq-varht}
+$$\widehat{\mathbb{V}}(\hat{t}_{y,\text{HT},\text{st}}) = \frac{N^2_{\text{UP}\cap \text{st}}}{n_{\text{UP}\cap  \text{st}}} \left(1-\underbrace{\frac{n_{\text{UP} \cap \text{st}}}{N_{\text{UP}\cap \text{st}}}}_{= f_\text{up}} \right) s^2_{\{\hat{t}_{y,\text{HT}, u}\}_{u \in S_\text{UP} \cap \text{st}}} + \frac{N_{\text{UP}\cap \text{st}}}{n_{\text{UP}\cap \text{st}}} \left( \sum_{u \in S_\text{UP} \cap \text{st}}  \frac{N^2_u}{n_u} (1 - \underbrace{\frac{n_u}{N_u}}_{=f_u}) s^2_{\{{y_k}\}_{k \in S_\text{US}   \cap u}}\right)$${#eq-varht}
 
 
 où pour tout $u\in S_\text{UP}$, $\displaystyle  \hat{t}_{y,\text{HT},u} = \frac{N_u}{n_u}\sum_{k \in S_\text{US} \cap u} {y_k}$ et $s^2_{\{\hat{t}_{y,\text{HT}, u}\}_{u \in S_\text{UP}}}$ (resp.  $s^2_{\{y_k}\}_{k \in S_\text{US}   \cap u}$) désigne la dispersion de la variable $\{{\hat{t}_{y,\text{HT}, u}}\}_{u \in S_\text{UP}}$  (resp. ${\{y_k\}}_{k \in S_\text{US} \cap u}$) sur l'échantillon $S_\text{UP}$ (resp.  $S_\text{US} \cap u$).
@@ -150,18 +150,17 @@ Comme vu durant la présentation, la fonction `res_cal` permet de récupérer le
 
 ```{webr-r}
 #Création d'une matrice contenant une variable quelconque
-#Ici, j'ai pris la variable d'intérêt mais j'aurais pu générer une variable.
 #On cherche juste à vérifier la bonne exécution du res_cal.
-y <- matrix(var_cal_interet$y, ncol = 1)
-rownames(y) <- var_cal_interet$id_ssu
+y <- matrix(rnorm(nrow(var_ech_cal)), ncol = 1)
+rownames(y) <- var_ech_cal$id_ssu
 ```
 
 
 ```{webr-r}
 rescal_avec_y <- res_cal(y = y,
-        x = as.matrix(var_cal_interet[, paste0("var_cal", 1:5)]),
-        w = var_cal_interet$poids_avant_calage,
-       id = var_cal_interet$id_ssu)
+        x = as.matrix(var_ech_cal[, paste0("var_cal", 1:5)]),
+        w = var_ech_cal$poids_avant_calage,
+       id = var_ech_cal$id_ssu)
 ```
 
 Si la variable d'intérêt n'est pas disponible, il est possible de précalculer certains éléments entrants dans le calcul des résidus. Dans ce cas, il faudra renseigner `NULL` à l'argument `y`. 
@@ -169,9 +168,9 @@ Si la variable d'intérêt n'est pas disponible, il est possible de précalculer
 
 ```{webr-r}
 rescal_sans_y <- res_cal(y = NULL,
-        x = as.matrix(var_cal_interet[, paste0("var_cal", 1:5)]),
-        w = var_cal_interet$poids_avant_calage, 
-       id = var_cal_interet$id_ssu)
+        x = as.matrix(var_ech_cal[, paste0("var_cal", 1:5)]),
+        w = var_ech_cal$poids_avant_calage, 
+       id = var_ech_cal$id_ssu)
 ```
 
 Le résultat lorsque `y` est renseigné est de la même forme que `y`.
@@ -271,10 +270,9 @@ calcul_var <- function(y, f_up, f_us, strate, up, calage){
                  pik = rep(f_up, nrow(tot_par_up)), 
                  strata = strate_up[rownames(tot_par_up)])
   ### Deuxième partie 
-  v_b <- var_srs(y = eps, 
+  v_b <- (N_up/n_up)*var_srs(y = eps, 
                  pik = rep(f_us, nrow(eps)),
-                 strata = up #le tirage des SSU est indépendant d'une PSU à l'autre --> ~ tirage stratifié
-                 )
+                 strata = up)
   v <- v_a + v_b
   return(v)
 }
@@ -504,6 +502,7 @@ rlang::env_print(env_prec_estim)
 ```
 
 On peut, par exemple, afficher les variables de calage : 
+
 ```{web-r}
 env_prec_estim$technical_data$calage$x
 ```
