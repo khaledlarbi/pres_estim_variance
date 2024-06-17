@@ -7,14 +7,16 @@ library("data.table")
 
 
 set.seed(2404)
+
+
 N_psu <- 10000 #
 n_psu <- 1000
-nb_strate_psu <- 5
+nb_strate_psu <- 5 #number of strates in PSU population
 nom_strate_psu <- LETTERS[1:nb_strate_psu]
 nb_var_cal <- 5
-nb_ssu_per_psu <- 10 #
-N_ssu <- N_psu * nb_ssu_per_psu
-n_ssu_per_psu <- 4
+nb_ssu_per_psu <- 10 #number of ssu in each PSU
+N_ssu <- N_psu * nb_ssu_per_psu #number of ssu in the whole population
+n_ssu_per_psu <- 4 #ssu sample size in each psu
 
 #Génération des variables selon une loi normale
 var_cal <- matrix(rnorm(nb_var_cal*N_ssu), ncol = nb_var_cal)
@@ -41,7 +43,8 @@ pop_data <- cbind(pop_data, var_cal)
 #Variable d'intérêt 1/2
 pop_data$y <- 100 + as.matrix(var_cal) %*% c(0.2,0.3,0.5,0.1,5) + 30*(pop_data$strate_psu == "A") + 
   15*((pop_data$strate_psu %in% c("B","C"))) + 3*(!(pop_data$strate_psu %in% c("A","B","C")))
-pop_data$z <- 3 + (pop_data$y)^2 + rnorm(nrow(pop_data))
+#pop_data$z <- 3 + sqrt(pop_data$y) + rnorm(nrow(pop_data), 0, 1)
+pop_data$z <- 3 + 2*pop_data$var_cal2 - pop_data$var_cal1*pop_data$var_cal4 + rnorm(nrow(pop_data), 0, 1)
 boxplot(pop_data$y ~ pop_data$strate_psu) #On a bien des comportements différents selon la strate
 boxplot(pop_data$z ~ pop_data$strate_psu) #On a bien des comportements différents selon la strate
 
@@ -49,7 +52,6 @@ boxplot(pop_data$z ~ pop_data$strate_psu) #On a bien des comportements différen
 marges <- colSums(pop_data[, paste0("var_cal",1:nb_var_cal), with = F])
 #marges <- c(marges, c('eff' = nrow(pop_data)))
 ###Mise au format icarus
-
 marges_table <- cbind(names(marges), "0", marges)
 #summary(lm(data = pop_data, y ~ var_cal1 + var_cal2 +  var_cal3 +  var_cal4 +  var_cal5))
 #summary(lm(data = pop_data, y ~ var_cal1 + var_cal2 +  var_cal3 +  var_cal4 +  var_cal5-1))
@@ -78,10 +80,13 @@ rm(list = setdiff(ls(), c("pop_data","n_psu","nb_strate_psu",
 
 
 tirage <- function(pop_data, n_psu, N_psu,  nb_strate_psu, n_ssu_per_psu, nb_ssu_per_psu){
-  
+  #Population of PSU
   sample_psu <- unique(pop_data[, .(strate_psu, id_psu)])
+  #Tirage selon une loi uniforme
   sample_psu$tirage_psu <- runif(nrow(sample_psu))
+  #Tri selon les réalisations
   setorder(sample_psu, tirage_psu)
+  #Tirage
   sample_psu <- sample_psu[,lapply(.SD, function(x){head(unique(x), n = as.integer(n_psu/nb_strate_psu))}), by = strate_psu]
   
   #Vérification
@@ -125,10 +130,17 @@ simulation <- function(pop_data,
                       nb_strate_psu, 
                       n_ssu_per_psu,
                       nb_ssu_per_psu)
-    res[[i]] <- c("v1" = sum(donnees$y * donnees$poids_apres_calage),
+    res[[i]] <- c("v1" = sum(donnees$z * donnees$poids_apres_calage),
+                  "v11" = sum(donnees$z * donnees$poids_avant_calage),
                      "v2" = sum(donnees$y * donnees$poids_apres_calage)/sum(donnees$z * donnees$poids_apres_calage),
+                  "v21" = sum(donnees$y * donnees$poids_avant_calage)/sum(donnees$z * donnees$poids_avant_calage),
+                  
                      "v3" = 1/sum(donnees$z * donnees$poids_apres_calage),
-                  "v4" = log(sum(donnees$z * donnees$poids_apres_calage)))
+                  "v31" = 1/sum(donnees$z * donnees$poids_avant_calage),
+                  
+                  "v4" = log(sum(donnees$z * donnees$poids_apres_calage)),
+                  "v41" = log(sum(donnees$z * donnees$poids_avant_calage))
+                  )
     
   }
   return(res)
@@ -141,7 +153,7 @@ res_var <- simulation(pop_data,
            nb_strate_psu, 
            n_ssu_per_psu,
            nb_ssu_per_psu,
-           nb_sim = 500L)
+           nb_sim = 1000L)
 
 
 res <- Reduce(rbind, res_var) #différence mais pourquoi ? 
