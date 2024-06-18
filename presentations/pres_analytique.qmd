@@ -224,7 +224,7 @@ $p_{\text{SASSR}(n;N)}$ est un plan aléatoire simple sans remise de taille $n$ 
 - tous les échantillons de taille $n$ ont même probabilité d'être tiré,
 - si tous les échantillons de taille différente de $n$ ont une probabilité nulle d'être tiré.
 
-Si $S \sim $p_{\text{SASSR}(n;N)}$ alors pour tout $(k,l) \in \mathcal{U}^2, ~~ \pi_k = \frac{n}{N}$ et si $k \neq l~~$, $\pi_{kl} = \frac{n(n-1)}{N(N-1)}$
+Si $p_{\text{SASSR}(n;N)}$ alors pour tout $(k,l) \in \mathcal{U}^2, ~~ \pi_k = \frac{n}{N}$ et si $k \neq l~~$, $\pi_{kl} = \frac{n(n-1)}{N(N-1)}$
 
 <u>Application</u> : $\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}}) = \hat{\mathbb{V}}_\text{HT}(\hat t_{y,\text{HT}}) = \frac{N^2}{n} (1 - \frac{n}{N}) s^2_y$ où $s^2_y$ est la dispersion de la variable $\{y_k\}$ sur l'échantillon $S$.
 :::
@@ -255,16 +255,16 @@ $p_{\text{Poisson}(\textbf{p})}$ où $\textbf{p} = (p_1, ..., p_N) \in [0;1]^N$ 
 - tous les individus sont tirés indépendamment les uns des autres, 
 - la probabilité d'un individu $k$ soit dans l'échantillon est $p_k$.
 
-Si $\sim $p_{\text{Poisson}(\textbf{p})}$ alors pour tout $(k,l) \in \mathcal{U}^2, ~~ \pi_k = \textbf{p}_k$ et si $k \neq l~~$, $\pi_{kl} = \textbf{p}_k \textbf{p}_l$
+Si $p_{\text{Poisson}(\textbf{p})}$ alors pour tout $(k,l) \in \mathcal{U}^2, ~~ \pi_k = \textbf{p}_k$ et si $k \neq l~~$, $\pi_{kl} = \textbf{p}_k \textbf{p}_l$
 
-<u>Application</u> : $\displaystyle \hat{\mathbb{V}}_\text{HT}(\hat t_{y,\text{HT}}) = \sum_{k \in S} y_k^2 \frac{1-\textbf{p}_k}{\textbf{p}_k}$
+<u>Application</u> : $\displaystyle \hat{\mathbb{V}}_\text{HT}(\hat t_{y,\text{HT}}) = \sum_{k \in S} y_k^2 \frac{1-\textbf{p}_k}{\textbf{p}_k^2}$
 :::
 
 ```{webr-r}
 n <- 100
 y <- 1:n
 pik <- rep(0.5, n)
-gustave::var_srs(y = y, pik =  pik, w = NULL)
+gustave::var_pois(y = y, pik =  pik, w = NULL)
 ```
 
 ## Approximations classiques
