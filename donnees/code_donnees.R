@@ -41,7 +41,7 @@ pop_data <- cbind(pop_data, var_cal)
 #Variable d'intérêt 1/2
 pop_data$y <- 100 + as.matrix(var_cal) %*% c(0.2,0.3,0.5,0.1,5) + 30*(pop_data$strate_psu == "A") + 
   15*((pop_data$strate_psu %in% c("B","C"))) + 3*(!(pop_data$strate_psu %in% c("A","B","C")))
-pop_data$z <- 3 + (pop_data$y)^2 + rnorm(nrow(pop_data))
+pop_data$z <- 3 + 2*pop_data$var_cal2 - pop_data$var_cal1*pop_data$var_cal4 + rnorm(nrow(pop_data), 0, 1)
 boxplot(pop_data$y ~ pop_data$strate_psu) #On a bien des comportements différents selon la strate
 boxplot(pop_data$z ~ pop_data$strate_psu) #On a bien des comportements différents selon la strate
 
@@ -115,6 +115,7 @@ library(gustave)
 
 #Les variables auxiliaires doivent être renseignées sous la forme d'une matrice
 var_aux <- var_ech_cal[, colnames(var_ech_cal)[startsWith(colnames(var_ech_cal), "var_cal")]]
+#var_aux$eff <- 1
 var_aux <- as.matrix(var_aux)
 
 #Création 
@@ -131,9 +132,71 @@ r1 <- res_cal(y_test, precalc = cal)
 #r2 <- res_cal(y_test[sample(nrow(y_test)),,drop = FALSE], precalc = cal)
 
 
-calcul_variance_srs_srs <- function(y, f_up, f_us, strate, up, calage){
+# calcul_variance_srs_srs <- function(y, f_up, f_us, strate, 
+#                                     up, calage, avec_calage = TRUE,
+#                                     w_cal = NULL){
+#   #Calcul des résidus
+#   if(avec_calage){
+#     if(is.null(w_cal)){
+#       eps <- res_cal(y = y, precalc = calage)
+#     } else {
+#       w_cal <- w_cal[calage$id, , drop = FALSE]
+#       g <- w_cal/calage$w
+#       y_modif <- g*y
+#       eps <- res_cal(y = y_modif, precalc = calage)
+#     }
+#   } else {
+#     eps <- y
+#   }
+#   #eps <- y
+#   #Calcul de l'estimation de la variance de l'estimateur du total des résidus
+#   ### Calcul des totaux estimés au sein de chaque up
+#   tot_par_up <- sum_by(y = eps, by = up, w = rep(1/f_us, nrow(eps)))
+#   #tot_par_up2 <- sum_by(y = y, by = up, w = rep(1/f_us, nrow(eps)))
+#   ### Nombre d'unités primaires dans l'échantillon
+#   n_up <- length(unique(up))
+#   ### Nombre d'unités primaires dans la population
+#   N_up <- n_up/f_up #10 000 comme dans l'énoncé
+#   
+#   ### Strate pour chaque up 
+#   strate_up <- unique(cbind(strate,up))
+#   strate_up <- setNames(strate_up[,1], strate_up[,2]) #il s'agit d'un vecteur dont les noms sont
+#   #des noms d'UP et les éléments, les strates correspondantes.
+#   
+#   ### Première partie 
+#   v_a <- var_srs(y = tot_par_up, 
+#                  pik = rep(f_up, nrow(tot_par_up)), 
+#                  strata = strate_up[rownames(tot_par_up)])
+#   # v_a2 <- var_srs(y = tot_par_up2, 
+#   #                pik = rep(f_up, nrow(tot_par_up)), 
+#   #                strata = strate_up[rownames(tot_par_up)])
+#   # print(v_a)
+#   # print(v_a2)
+#   ### Deuxième partie 
+#   #le tirage des SSU est indépendant d'une PSU à l'autre --> ~ tirage stratifié
+#   v_b <- (N_up/n_up)*var_srs(y = eps, 
+#                  pik = rep(f_us, nrow(eps)),
+#                  strata = up)
+#   print(v_b)
+#   v <- v_a + v_b
+#   return(v)
+# }
+# calcul_variance_srs_srs(y_test,
+#                         0.1,
+#                         0.4,
+#                         echantillon$strate_psu,
+#                         echantillon$id_psu,
+#                         cal, 
+#                         TRUE,
+#                         poids_apres_calage)
+
+
+calcul_variance_srs_srs <- function(y, f_up, f_us, strate, 
+                                    up, calage){
   #Calcul des résidus
   eps <- res_cal(y = y, precalc = calage)
+   
+  #eps <- y
   #Calcul de l'estimation de la variance de l'estimateur du total des résidus
   ### Calcul des totaux estimés au sein de chaque up
   tot_par_up <- sum_by(y = eps, by = up, w = rep(1/f_us, nrow(eps)))
@@ -151,15 +214,19 @@ calcul_variance_srs_srs <- function(y, f_up, f_us, strate, up, calage){
   v_a <- var_srs(y = tot_par_up, 
                  pik = rep(f_up, nrow(tot_par_up)), 
                  strata = strate_up[rownames(tot_par_up)])
+ 
   ### Deuxième partie 
   #le tirage des SSU est indépendant d'une PSU à l'autre --> ~ tirage stratifié
   v_b <- (N_up/n_up)*var_srs(y = eps, 
-                 pik = rep(f_us, nrow(eps)),
-                 strata = up)
-  
+                             pik = rep(f_us, nrow(eps)),
+                             strata = up)
   v <- v_a + v_b
   return(v)
 }
+
+
+poids_apres_calage <- matrix(echantillon$poids_apres_calage, ncol = 1)
+rownames(poids_apres_calage) <- echantillon$id_ssu
 
 #Vérification
 calcul_variance_srs_srs(y_test,
@@ -179,6 +246,15 @@ technical$strate <- info_ech$strate_psu
 technical$up <- info_ech$id_psu
 technical$calage <- cal
 
+# precision_estim <- define_variance_wrapper(
+#   variance_function = calcul_variance_srs_srs,
+#   reference_id = info_ech$id_ssu,
+#   reference_weight = info_ech$poids_apres_calage,
+#   default_id = "identifiant",
+#   technical_data = technical,
+#   technical_param = list("avec_calage" = TRUE, "w_cal" = NULL)
+# )
+
 precision_estim <- define_variance_wrapper(
   variance_function = calcul_variance_srs_srs,
   reference_id = info_ech$id_ssu,
@@ -187,36 +263,22 @@ precision_estim <- define_variance_wrapper(
   technical_data = technical
 )
 
-precision_estim(data = var_interet, total(y))
-precision_estim(data = var_interet[1:10,], total(y))
-
-var_interet2 <- var_interet
-var_interet2$identifiant <- paste0(var_interet$identifiant, "b")
-var_interet2 <- rbind(var_interet, var_interet2)
-
-precision_estim(data = var_interet2, total(y))
-
-
-
-mean2 <- define_statistic_wrapper(
+log_lin <- define_statistic_wrapper(
   statistic_function = function(y, weight){
-    point <- sum(y * weight) / sum(weight)
-    lin <- (y - point) / sum(weight)
+    point <- log(sum(y*weight))
+    if(point <= 0){
+      stop("Non-positive total lead to an error while log.
+           Please make sure that the total is greater that zero.")
+    }
+    lin <- y/sum(y*weight)
     list(point = point, lin = lin, metadata = list(n = length(y)))
   },
   arg_type = list(data = "y", weight = "weight")
 )
 
 
-inverse <- define_statistic_wrapper(
-  statistic_function = function(y, weight){
-    point <- 1/sum(y*weight)
-    lin <- (- y)/((sum(y*weight))^2)
-    list(point = point, lin = lin, metadata = list(n = length(y)))
-  },
-  arg_type = list(data = "y", weight = "weight")
-)
 
-precision_estim(data = var_interet, total(y))
-precision_estim(data = var_interet, inverse(y))
 
+precision_estim(data = var_interet, total(z))
+precision_estim(data = var_interet, ratio(y,z))
+precision_estim(data = var_interet, log_lin(z))
