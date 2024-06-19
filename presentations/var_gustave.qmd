@@ -277,6 +277,8 @@ calcul_var <- function(y, f_up, f_us, strate, up, calage){
   v <- v_a + v_b
   return(v)
 }
+
+str(calcul_var)
 ```
 
 ::: {.callout-tip}
@@ -336,6 +338,8 @@ precision_estim <- define_variance_wrapper(
   default_id = "identifiant", #Nom par défaut de la colonne contenant l'identifiant des individus dans le fichier contenant les variables d'intérêt
   technical_data = technical #Liste des données nécessaire à l'application de la fonction calculant la variance
 )
+
+str(precision_estim)
 ```
 
 ## Etape 3 : Utilisation et diffusion
@@ -397,7 +401,7 @@ wrapper.
 
 ```{webr-r}
 precision_estim(data = var_interet,
-               total(y))
+               total(z))
 ```
 :::
 
@@ -421,7 +425,7 @@ are discarded
 var_interet_ajout <- rbind(var_interet_ord,
                  data.frame("identifiant" = "toto", "y" = 10, "z" = 10))
 precision_estim(data = var_interet_ajout,
-               total(y))
+               total(z))
 ```
 :::
 
@@ -444,7 +448,7 @@ Ces fonctions permettent également de calculer les variables linéarisées esti
 Il est possible à l'utilisateur d'en ajouter en utilisant la fonction `define_statistic_wrapper`.
 
 
-#### Calcul de $\displaystyle \widehat{\mathbb{V}}(\hat{t}_{y,\text{cal}})$
+#### Calcul de $\displaystyle \widehat{\mathbb{V}}(\hat{t}_{z,\text{cal}})$
 
 Dans ce premier cas, il s'agit d'estimer la variance du total d'un estimateur calé. Cette estimation correspond au cas implémenté directement dans la fonction `calcul_var` renseignée dans l'argument `variance_function` de la fonction `define_variance_wrapper`.
 Nous n'avons pas besoin ici de linéariser la fonction d'intérêt considérée (Il est assez immédiat de montrer que si la linéarisation par développement de Taylor était utilisée ici alors on retrouverait la variable d'intérêt comme variable linéarisée estimée).
@@ -453,9 +457,9 @@ Dans le cas du total, il n'est pas nécessaire d'indiquer le statistic wrapper `
 
 ```{webr-r}
 res_avec_tot <- precision_estim(data = var_interet_ord,
-               total(y))
+               total(z))
 res_sans_tot <- precision_estim(data = var_interet_ord,
-                  y)
+                  z)
 
 print(res_avec_tot)
 print(res_sans_tot)
@@ -470,17 +474,21 @@ res_ratio <- precision_estim(data = var_interet_ord,
                ratio(y, z))
 print(res_ratio)
 ```
-#### Calcul de  $\displaystyle  \widehat{\mathbb{V}}(\frac{1}{\hat{t}_{y,\text{cal}}})$
+#### Calcul de  $\displaystyle  \widehat{\mathbb{V}}(\frac{1}{\hat{t}_{z,\text{cal}}})$
 
 Comme dans le cas précédent, il va être nécessaire d'utiliser le principe de linéarisation. Néanmoins, il n'existe pas de `statistic wrapper` dans `gustave` correspondant à la fonction inverse. Nous allons le construire à l'aide de la fonction `define_statistic_wrapper`. Avant cela, il est nécessaire de calculer la variable linéarisée estimée.
 
-La variable linéarisée estimée est $\widehat{u_k} = - \frac{y_k}{\hat{t}_{y,\text{cal}}}^2$.
+La variable linéarisée estimée est $\widehat{u_k} = \frac{z_k}{\hat{t}_{z,\text{cal}}}$.
 
 ```{webr-r}
-inverse <- define_statistic_wrapper(
+log_lin <- define_statistic_wrapper(
   statistic_function = function(y, weight){
-    point <- 1/sum(y*weight)
-    lin <- (- y)/((sum(y*weight))^2)
+    point <- log(sum(y*weight))
+    if(point <= 0){
+      stop("Non-positive total lead to an error while log.
+           Please make sure that the total is greater that zero.")
+    }
+    lin <- y/sum(y*weight)
     list(point = point, lin = lin, metadata = list(n = length(y)))
   },
   arg_type = list(data = "y", weight = "weight")
@@ -489,11 +497,14 @@ inverse <- define_statistic_wrapper(
 
 ```{webr-r}
 res_inverse <- precision_estim(data = var_interet_ord,
-               inverse(y))
+               log_lin(z))
 print(res_inverse)
 ```
 
-### `variance wrapper` et confidentialité
+### Vérification par simulation 
+
+
+## `variance wrapper` et confidentialité
 
 Le `variance wrapper` contient toute l'information nécessaire au calcul de précision : cela passe par les données de calage, les données utilisées pour certains plans de sondage, ... Ces données peuvent présenter un enjeu de confidentialité en exposant ces données.
 
