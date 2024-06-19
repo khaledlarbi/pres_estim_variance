@@ -17,7 +17,7 @@ author:
   - name: Khaled Larbi
     email: prenom point nom arobase insee point fr
     affiliations: Insee
-date: last-modified
+date: 20/06/2024
 filters:
   - webr
 webr:
@@ -51,10 +51,10 @@ Dans cette présentation, on notera :
 ::: {.fragment}
 Pour l'inférence, il est commode d'introduire : 
 
-- pour tout individu $k \in \mathcal{U}, ~ \pi_k = \mathbb{P}(k \in S)$ $\to$ probabilité d'inclusion d'ordre 1.
-  - il s'agit de la probabilité que l'individu $k$ soit dans l'échantillon $S$.
-- pour tout couple d'individus $(k,l) \in \mathcal{U}^2, ~ \pi_{kl} = \mathbb{P}(k \in S \cap l \in S)$ $\to$ probabilité d'inclusion d'ordre 2.
-  - il s'agit de la probabilité que les individus $k$ et $l$ soient conjointement dans l'échantillon $S$.
+- Pour tout individu $k \in \mathcal{U}, ~ \pi_k = \mathbb{P}(k \in S)$ $\to$ probabilité d'inclusion d'ordre 1.
+  - Il s'agit de la probabilité que l'individu $k$ soit dans l'échantillon $S$.
+- Pour tout couple d'individus $(k,l) \in \mathcal{U}^2, ~ \pi_{kl} = \mathbb{P}(k \in S \cap l \in S)$ $\to$ probabilité d'inclusion d'ordre 2.
+  - Il s'agit de la probabilité que les individus $k$ et $l$ soient conjointement dans l'échantillon $S$.
 :::
 
 
@@ -62,7 +62,7 @@ Pour l'inférence, il est commode d'introduire :
 
 ::: {.fragment}
 - Comment estimer le total $\displaystyle t_y = \sum_{k \in \mathcal{U}} y_k$ en utilisant l'information disponible uniquement sur l'échantillon $S$ ?
-  - L'estimateur $\hat{t}_{y,\text{HT}} = \sum_{k \in S} \frac{y_k}{\pi_k}$ est appelé estimateur d'Hovitz-Thompson du total. 
+  - L'estimateur $\displaystyle \hat{t}_{y,\text{HT}} = \sum_{k \in S} \frac{y_k}{\pi_k}$ est appelé estimateur d'Hovitz-Thompson du total. 
 :::
 
 ::: {.fragment}
@@ -117,7 +117,7 @@ La variance permet de quantifier la variabilité d'un estimateur.
 ::: {.fragment}
 - Quid de la variance de $\hat{t}_{y,\text{HT}}$ ?
   - $$\mathbb{V}(\hat t_{y,\text{HT}}) = \sum_{k \in \color{red}{\mathcal{U}}} \sum_{l \in \color{red}{\mathcal{U}}} \frac{y_k}{\pi_k} \frac{y_l}{\pi_l} \Delta_{kl}$$ où $\Delta_{kl} = \pi_{kl} - \pi_k \pi_l$
-  - <u>Problème</u> : la variance est fonction des valeurs de $\{y_k\}$ sur $\color{red}{\mathcal{U}}$ mais cette information n'est disponible que sur $\mathcal{S}$
+  - <u>Problème</u> : la variance est fonction des valeurs de $\{y_k\}$ sur $\color{red}{\mathcal{U}}$ mais cette information n'est disponible que sur $\mathcal{S}$.
   - <u>Solution</u> : estimer la variance.
 :::
 
@@ -157,24 +157,20 @@ $$\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}}) =  - \frac{1}{2} \sum_{k \in
 
 ## Théorème central limite en sondage {#sec-tclsondage}
 ::: {.fragment}
-- Rappel sur le théorème central limite dans le cas iid : [[Rappel]{.button}](#sec-icidd)
+- Rappel sur le théorème central limite dans le cas i.i.d : [[Rappel]{.button}](#sec-icidd)
 - Est-ce que le théorème central limite est applicable en sondage sur l'estimateur d'Horvitz-Thompson ? 
 
 - Par exemple : 
-$$\frac{1}{\mathbb{V}^{\frac{1}{2}}(\hat t_{y,\text{HT}})}(\hat t_{y,\text{HT}} - t_y) \hookrightarrow \mathcal{N}(0,1) $$
+$$\frac{1}{\mathbb{V}^{\frac{1}{2}}(\hat t_{y,\text{HT}})}(\hat t_{y,\text{HT}} - t_y) \hookrightarrow \mathcal{N}(0,1) $$ 
+où $\hookrightarrow$ désigne la convergence en loi
 :::
 
 
 ::: {.fragment}
-- Qu'est-ce que $n \to \infty$ ?
-    - Cadré proposé par exemple dans @Isaki1982SurveyDU : $N \to \infty$ ?
-:::
-
-::: {.fragment}
-- Un théorème central limite pour tous les plans de sondage : :x:
+- *Un théorème central limite pour les gouverner tous* : :x:
     - @hajek1960limiting : pour le SRS.
-    - @Chauvet2015CouplingMF : pour les sondages à plusieurs degrés avec un $\text{SASSR}$ au premier degré.
     - @Berger1998RateOC : pour les plans à forte entropie.
+    - @Chauvet2015CouplingMF : pour les sondages à plusieurs degrés avec un $\text{SASSR}$ au premier degré.
     ...
 
 - Champ de recherche ouvert : théorie unifiée ? D'autres TCL ?
@@ -221,10 +217,10 @@ $\to$ Remplacement de $\mathbb{V}(\hat t_{y,\text{HT}})$ par un estimateur $\hat
 ## Plan aléatoire simple sans remise 
 $p_{\text{SASSR}(n;N)}$ est un plan aléatoire simple sans remise de taille $n$ parmi $N$ si :
 
-- tous les échantillons de taille $n$ ont même probabilité d'être tiré,
-- si tous les échantillons de taille différente de $n$ ont une probabilité nulle d'être tiré.
+- Tous les échantillons de taille $n$ ont la même probabilité d'être tiré,
+- Si tous les échantillons de taille différente de $n$ ont une probabilité nulle d'être tiré.
 
-Si $p_{\text{SASSR}(n;N)}$ alors pour tout $(k,l) \in \mathcal{U}^2, ~~ \pi_k = \frac{n}{N}$ et si $k \neq l~~$, $\pi_{kl} = \frac{n(n-1)}{N(N-1)}$
+Si $S \sim p_{\text{SASSR}(n;N)}$ alors pour tout $(k,l) \in \mathcal{U}^2, ~~ \pi_k = \frac{n}{N}$ et si $k \neq l~~$, $\pi_{kl} = \frac{n(n-1)}{N(N-1)}$
 
 <u>Application</u> : $\hat{\mathbb{V}}_\text{SYG}(\hat t_{y,\text{HT}}) = \hat{\mathbb{V}}_\text{HT}(\hat t_{y,\text{HT}}) = \frac{N^2}{n} (1 - \frac{n}{N}) s^2_y$ où $s^2_y$ est la dispersion de la variable $\{y_k\}$ sur l'échantillon $S$.
 :::
@@ -252,10 +248,10 @@ gustave::varSYG(y = y, pikl = pikl)
 ## Plan poissonien
 $p_{\text{Poisson}(\textbf{p})}$ où $\textbf{p} = (p_1, ..., p_N) \in [0;1]^N$ est un plan de Poisson si :
 
-- tous les individus sont tirés indépendamment les uns des autres, 
-- la probabilité d'un individu $k$ soit dans l'échantillon est $p_k$.
+- Tous les individus sont tirés indépendamment les uns des autres, 
+- La probabilité d'un individu $k$ soit dans l'échantillon est $p_k$.
 
-Si $p_{\text{Poisson}(\textbf{p})}$ alors pour tout $(k,l) \in \mathcal{U}^2, ~~ \pi_k = \textbf{p}_k$ et si $k \neq l~~$, $\pi_{kl} = \textbf{p}_k \textbf{p}_l$
+Si $S \sim p_{\text{Poisson}(\textbf{p})}$ alors pour tout $(k,l) \in \mathcal{U}^2, ~~ \pi_k = \textbf{p}_k$ et si $k \neq l~~$, $\pi_{kl} = \textbf{p}_k \textbf{p}_l$
 
 <u>Application</u> : $\displaystyle \hat{\mathbb{V}}_\text{HT}(\hat t_{y,\text{HT}}) = \sum_{k \in S} y_k^2 \frac{1-\textbf{p}_k}{\textbf{p}_k^2}$
 :::
@@ -279,7 +275,7 @@ gustave::var_pois(y = y, pik =  pik, w = NULL)
 
 ::: {.fragment}
 - Pour les plans équilibrés à forte entropie : formule de Deville-Tiilé (@varDT).
-$$\hat{\mathbb{V}}_\text{DT}(\hat{t}_{y,\text{HT}}) = \frac{n}{n-d}\sum_{k \in S} (1 - \pi_k) \left(\frac{y_k}{\pi_k} - \frac{x_k}{\pi_k} \hat{\beta} \right)^2$$ où $\hat{\beta}$ est le coefficient estimé de la régression de $\{\frac{y_k}{\pi_k}\}$ par $\{\frac{x_k}{\pi_k}\} \in \mathbb{R}^d$ pondérée par $1-\pi_k$. 
+$$\hat{\mathbb{V}}_\text{DT}(\hat{t}_{y,\text{HT}}) = \frac{n}{n-d}\sum_{k \in S} (1 - \pi_k) \left(\frac{y_k}{\pi_k} - \frac{x_k}{\pi_k} \hat{\beta} \right)^2$$ où $\hat{\beta}$ est le coefficient estimé sur $\mathcal{S}$ de la régression de $\{\frac{y_k}{\pi_k}\}$ par $\{\frac{x_k}{\pi_k}\} \in \mathbb{R}^d$ pondérée par $1-\pi_k$. 
   - Remarque : le plan aléatoire simple sans remise $p_{\text{SASSR}(n;N)}$ est un plan équilibré sur la variable $\{\pi_k\}$ $\to$ il est donc possible d'utiliser l'approximation de Deville-Tillé et $\hat{\mathbb{V}}_\text{DT}(\hat{t}_{y,\text{HT}}) = \hat{\mathbb{V}}_\text{SYG}(\hat{t}_{y,\text{HT}}) = \hat{\mathbb{V}}_\text{HT}(\hat{t}_{y,\text{HT}})$
 :::
 
@@ -357,32 +353,43 @@ conditionnellement à l'échantillon des UP.
 probabilités d'inclusion d'ordre 1 d'une unité secondaire
 $l \in U_\text{UP}$.
 
-Soit $\hat y$, l'estimateur d'Horvitz-Thompson d'une variable d'intérêt
-$y$ :
-$$\hat y = \sum_{k \in S_{\text{US}}} \frac{y_k}{\pi_k^{(1,2)}} = \sum_{u \in S_\text{UP}} \frac{\hat{y}_{(u)}}{\pi_u^{(1)}} \text{  avec  } \hat{y}_{(u)} = \sum_{k \in u \cap S_\text{US}} \frac{y_k}{\pi_k^{(2|1)}}$$
+Soit $\hat{t}_{y,\text{HT}}$, l'estimateur d'Horvitz-Thompson d'une variable d'intérêt
+$\{y_k\}$ :
+$$\hat{t}_{y,\text{HT}} = \sum_{k \in S_{\text{US}}} \frac{y_k}{\pi_k^{(1,2)}} = \sum_{u \in S_\text{UP}} \frac{\hat{t}_{y,\text{HT},u}}{\pi_u^{(1)}} \text{  avec  } \hat{t}_{y,\text{HT},u} = \sum_{k \in u \cap S_\text{US}} \frac{y_k}{\pi_k^{(2|1)}}$$
 
 ##
 
 
 Supposons que :
 
+::: fragment
 -   le tirage des unités secondaires au sein des unités primaires sont
     indépendants d'une unité primaire à l'autre.
--   l'existence d'un estimateur $\hat{\mathbb{V}^{1}}(\hat y)$ sans
-    biais de la variance lié au premier degré d'échantillonnage
-    $\mathbb{V}^{1}(\hat y)$ pouvant s'écrire sous la forme
-    $\displaystyle \hat{\mathbb{V}} (\hat y) = Q(y_{(1)}, ..., y_{(n_\text{UP})}) = \sum_{i} \sum_{j \neq i} q_{ij} y_{(i)} y_{(j)} + \sum_{i} q_{i} y_{(i)}^2$
-    .
--   pour tout $u \in \mathcal{U}_\text{UP}$, l'existence d'un estimateur
-    sans biais $\hat y_{(u)}$ (sous le deuxième degré) de
-    $\displaystyle y_{(u)} = \sum_{k \in u} y_k$
--   pour tout $u \in \mathcal{U}_\text{UP}$, l'existence d'un estimateur
-    sans biais $\hat{\mathbb{V}}^{2|1}(\hat{y}_{(u)})$ (sous le deuxième
-    degré) de la variance de l'estimateur $\hat y_(u)$.
+:::
 
-Sous ces hypothèses, la variance totale de l'estimateur
-d'Horvitz-Thompson sous le plan $p$ peut être estimée sans biais par
-$$\hat{\mathbb{V}}^{(1,2)}(\hat y_{(u)}) = \hat{\mathbb{V}}^{(1,2)}(\{ y_{l} : l \in S_\text{US} \}) =  Q(\hat{y}_{(1)}, ..., \hat{y}_{(n_\text{UP})}) + \sum_{u \in S_\text{UP}} \left( \frac{1}{(\pi_u^{(1)})^2} - q_u \right) \hat{\mathbb{V}}^{2|1}(\hat{y}_{(u)}) $$
+::: fragment
+-   l'existence d'un estimateur $\hat{\mathbb{V}^{1}}(\hat{t}_{y,\text{HT}})$ sans
+    biais de la variance lié au premier degré d'échantillonnage
+    $\mathbb{V}^{1}(\hat{t}_{y,\text{HT}})$ pouvant s'écrire sous la forme
+    $\displaystyle \hat{\mathbb{V}} (\hat{t}_{y,\text{HT}}) = Q(t_{y_{(1)}}, ..., t_{y_{(n_\text{UP})}}) = \sum_{i} \sum_{j \neq i} q_{ij} t_{y_{(i)}} t_{y_{(j)}} + \sum_{i} q_{i} t_{y_{(i)}}^2$
+:::
+
+::: fragment
+-   pour tout $u \in \mathcal{U}_\text{UP}$, l'existence d'un estimateur
+    sans biais $\hat{t}_{y,\text{HT},u}$ (sous le deuxième degré) de
+    $\displaystyle t_{y_{(u)}} = \sum_{k \in u} y_k$
+:::
+
+::: fragment
+-   pour tout $u \in \mathcal{U}_\text{UP}$, l'existence d'un estimateur
+    sans biais $\hat{\mathbb{V}}^{2|1}(\hat{t}_{y,\text{HT},u})$ (sous le deuxième
+    degré) de la variance de l'estimateur $\hat{t}_{y,\text{HT},u}$.
+:::
+
+::: fragment
+Sous ces hypothèses, la variance totale de l'estimateur d'Horvitz-Thompson sous le plan $p$ peut être estimée sans biais par
+$$\hat{\mathbb{V}}^{(1,2)}(\hat{t}_{y,\text{HT}}) = \hat{\mathbb{V}}^{(1,2)}(\{ y_{l} : l \in S_\text{US} \}) =  Q(\hat{t}_{y,\text{HT},1}, ..., \hat{t}_{y,\text{HT},n_{\text{US}}}) + \sum_{u \in S_\text{UP}} \left( \frac{1}{(\pi_u^{(1)})^2} - q_u \right) \hat{\mathbb{V}}^{2|1}(\hat{t}_{y,\text{HT},u})$$
+:::
 
 
 ## Récapitulatif
@@ -398,9 +405,9 @@ $$\hat{\mathbb{V}}^{(1,2)}(\hat y_{(u)}) = \hat{\mathbb{V}}^{(1,2)}(\{ y_{l} : l
 :::
 
 ::: fragment
-- En pratique, on s'intéresse à d'autres paramètres (univariés) : $\theta = f(t_{y^{(1)}}, ..., t_{y^{(d)}})$
-  - Exemple 1 : la moyenne de la variable $\mu_{y^{(1)}} = \frac{1}{N} t_{y_{1}}$
-  - Exemple 2 : le rapport des totaux des variables $\{y_{1,k}\}$ $\{y_{2,k}\}$ $R_{{y^{(1)}},{y^{(2)}}} = \frac{t_{y_{1}}}{t_{y_{2}}}$
+- En pratique, on s'intéresse à d'autres paramètres (univariés) : $\theta = f(t_{y^{1}}, ..., t_{y^{d}})$
+  - Exemple 1 : la moyenne de la variable $\{y_k\}$ notée $\mu_{y^{1}} = \frac{1}{N} t_{y^{1}}$
+  - Exemple 2 : le rapport des totaux des variables $\{y^{1}_{k}\}$ et $\{y^{2}_{k}\}$ noté $R_{{y^{1}},{y^{2}}} = \frac{t_{y^{1}}}{t_{y^{2}}}$
 :::
 
 ::: fragment
@@ -409,8 +416,8 @@ $$\hat{\mathbb{V}}^{(1,2)}(\hat y_{(u)}) = \hat{\mathbb{V}}^{(1,2)}(\{ y_{l} : l
 
 ::: fragment
 - Principe de subtitution : on remplace les paramètres inconnus par des estimations.
-  - Exemple 1 : la moyenne de la variable $\frac{1}{N} \hat{t}_{y_1, \text{HT}}$
-  - Exemple 2 : la moyenne de la variable $\hat{R}_{{y^{(1)}},{y^{(2)}}} = \frac{\hat{t}_{y_1, \text{HT}}}{\hat{t}_{y_2, \text{HT}}}$
+  - Exemple 1 : la moyenne de la variable $\frac{1}{N} \hat{t}_{y^{1}, \text{HT}}$
+  - Exemple 2 : la moyenne de la variable $\hat{R}_{{y^{1}},{y^{2}}} = \frac{\hat{t}_{y^{1}, \text{HT}}}{\hat{t}_{y^{2}, \text{HT}}}$
 :::
 
 ::: fragment
@@ -425,7 +432,7 @@ $$\hat{\mathbb{V}}^{(1,2)}(\hat y_{(u)}) = \hat{\mathbb{V}}^{(1,2)}(\{ y_{l} : l
 :::
 
 ::: fragment
-- L'idée est d'approximer la variance de l'estimateur par subtitution $\hat{\theta} = \mathbb{V}(f(\hat{t}_{y^{(1),\text{HT}}, \text{HT}}, ..., \hat{t}_{y^{(d),\text{HT}}}))$ par celle de l'estimateur du total d'Horvitz-Thompson d'une variable $\mathbb{V}(\hat{t}_{u,\text{HT}})$.
+- L'idée est d'approximer la variance de l'estimateur par subtitution $\mathbb{V}(f(\hat{t}_{y^{1,\text{HT}}, \text{HT}}, ..., \hat{t}_{y^{d,\text{HT}}}))$ par celle de l'estimateur du total d'Horvitz-Thompson d'une variable $\mathbb{V}(\hat{t}_{u,\text{HT}})$.
 :::
 
 ::: fragment
@@ -434,14 +441,14 @@ $$\hat{\mathbb{V}}^{(1,2)}(\hat y_{(u)}) = \hat{\mathbb{V}}^{(1,2)}(\{ y_{l} : l
 
 ::: fragment
 - Plusieurs approches différentes :
-  - Si $\hat{\theta} = \mathbb{V}(f(\hat{t}_{y^{(1),\text{HT}}, \text{HT}}, ..., \hat{t}_{y^{(d),\text{HT}}}))$ où $f$ est différentiable. 
+  - Si $\hat{\theta} = f(\hat{t}_{y^{1,\text{HT}}, \text{HT}}, ..., \hat{t}_{y^{d,\text{HT}}})$ où $f$ est différentiable. 
   - Si $\hat{\theta}$ est solution d'une équation estimante.
   - Si $\hat{\theta}$ est une fonctionnelle. 
 :::
 
 ## Approche 1 : si $f$ différentiable
 
-- Supposons de plus que $f$ est régulière : $f$ différentiable. 
+- Supposons de plus que $f$ soit régulière : $f$ différentiable. 
 
 ::: {.fragment}
 - En utilisant un développement de Taylor (cas où $f : \mathbb{R} \to \mathbb{R}$): 
@@ -471,7 +478,7 @@ Si l'estimateur d'Horvitz-Thompson $\hat{t}_{y,\text{HT}}$ est sans biais pour $
 ## Approche 1 : si $f$ différentiable
 
 ::: {.fragment}
-- La variance d'un estimateur de la forme $f(\hat t_{y,\text{HT}})$ est approximativement égale à la variance de l'estimateur du total de la variable $u$ définie pour tout individu $k, ~~ u_k = f'(t_y) \times y_k$ : $$ \mathbb{V}(f(\hat t_{y,\text{HT}})) \approx \mathbb{V}(\hat t_{u,HT}) $$
+- La variance d'un estimateur de la forme $f(\hat t_{y,\text{HT}})$ est approximativement égale à la variance de l'estimateur du total de la variable $\{u_k\}$ définie pour tout individu $k, ~~ u_k = f'(t_y) \times y_k$ : $$ \mathbb{V}(f(\hat t_{y,\text{HT}})) \approx \mathbb{V}(\hat t_{u,HT}) $$
 :::
 
 ::: {.fragment}
@@ -479,11 +486,11 @@ Si l'estimateur d'Horvitz-Thompson $\hat{t}_{y,\text{HT}}$ est sans biais pour $
 :::
 
 ::: {.fragment}
-- La variable $\{u_k\}_{k \in \mathcal{U}}$ est appelée *variable linéarisée* associée à $f$.
+- La variable $\{u_k\}$ est appelée *variable linéarisée* associée à $f$.
 :::
 
 ::: {.fragment}
-- Problème : cette variable est définie par pour tout individu $k \in \mathcal{U} ~~ u_k = f'(\color{red}{t_y}\color{black}) \times y_k \to$ il est donc nécessaire de connaître $\displaystyle t_y = \sum_{k \in \mathcal{U}} y_k$ qui est inconnu.
+- Problème : cette variable est définie pour tout individu $k \in \mathcal{U} ~~ u_k = f'(\color{red}{t_y}\color{black}) \times y_k \to$ il est donc nécessaire de connaître $\displaystyle t_y = \sum_{k \in \mathcal{U}} y_k$ qui est inconnu.
 :::
 
 ::: {.fragment}
@@ -500,7 +507,7 @@ Si l'estimateur d'Horvitz-Thompson $\hat{t}_{y,\text{HT}}$ est sans biais pour $
 ::: {#thm-lin}
 ## Estimation de la variance par linéarisation - cas unidimensionnel
 
-L'estimateur de la variance par linéarisation d'une fonction d'intérêt de la forme $f(t_{y})$ est donné par $\displaystyle \hat{\mathbb{V}}_\text{lin}(f(\hat{t}_{y,\text{HT}})) = \mathbb{V}(\hat t_{\hat{u},HT})$
+L'estimateur de la variance par linéarisation d'une fonction d'intérêt de la forme $f(t_{y})$ est donné par $\displaystyle \hat{\mathbb{V}}_\text{lin}(f(\hat{t}_{y,\text{HT}})) = \hat{\mathbb{V}}(\hat t_{\hat{u},HT})$
 :::
 :::
 
@@ -509,7 +516,7 @@ L'estimateur de la variance par linéarisation d'une fonction d'intérêt de la 
 
 
 ::: {.fragment}
-- On suppose que l'échantillon $S$ dont nous disposons est tiré selon un plan de sondage tel que pour tout individu $k \in \mathcal{U}, ~ \pi_k > 0$
+- On suppose que l'échantillon $S$ dont nous disposons soit tiré selon un plan de sondage tel que pour tout individu $k \in \mathcal{U}, ~ \pi_k > 0$
 $\to$ l'estimateur du total d'Horvitz-Thompson $\hat{t}_{y,\text{HT}}$ est un estimateur sans biais de $t_y$.  
 :::
 
@@ -528,15 +535,11 @@ $\to$ l'estimateur du total d'Horvitz-Thompson $\hat{t}_{y,\text{HT}}$ est un es
 :::
 
 ::: {.fragment}
-- L'estimateur de la variance par linéarisation est donné par $\mathbb{V}(\hat t_{\hat{u},HT})$ où pour tout $k \in \mathcal{U}$, $\hat{u}_k = \frac{y_k}{\hat{t}_{y,\text{HT}}}$.
+- L'estimateur de la variance par linéarisation est donné par $\hat{\mathbb{V}}(\hat t_{\hat{u},HT})$ où pour tout $k \in \mathcal{U}$, $\hat{u}_k = \frac{y_k}{\hat{t}_{y,\text{HT}}}$.
 
 Il reste à utiliser les résultats propres au plan de sondage afin de déterminer un estimateur de la variance. 
 :::
 
-
-## Simulation
-
-A FAIRE
 
 
 ## Linéarisation d'une fonction de plusieurs totaux
@@ -546,18 +549,18 @@ A FAIRE
 :::
 
 ::: {.fragment}
-- Principe de subtitution : un estimateur de $f(t_{y^1}, ..., t_{y^d})$ est donné par $f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d,\text{HT}}})$.
+- Principe de subtitution : un estimateur de $\theta := f(t_{y^1}, ..., t_{y^d})$ est donné par $\hat{\theta} := f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d,\text{HT}}})$.
 :::
 
 ::: {.fragment}
-- Même idée : en utilisant la formule de Taylor $$  f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d,\text{HT}}}) \approx f(t_{y^1}, ..., t_{y^d}) +  \nabla f(t_{y^1}, ..., t_{y^d})( \hat{t}_{y^1, \text{HT}} - t_{y^1} , ..., \hat{t}_{y^d,\text{HT}} - t_{y^d})^T  $$
+- Même idée : en utilisant la formule de Taylor $$f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d,\text{HT}}}) \approx f(t_{y^1}, ..., t_{y^d}) +  ( \hat{t}_{y^1, \text{HT}} - t_{y^1} , ..., \hat{t}_{y^d,\text{HT}} - t_{y^d}) \nabla f(t_{y^1}, ..., t_{y^d})$$
 :::
 
 ::: {.fragment}
 - Il est possible d'obtenir l'approximation de la variance suivante :
-$$\mathbb{V}(f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d,\text{HT}}})) \approx \mathbb{V}(\nabla f(t_{y^1}, ..., t_{y^d})  ( \hat{t}_{y^1, \text{HT}}  , ..., \hat{t}_{y^d,\text{HT}})^T) = \hat{t}_{u,\text{HT}}$$ 
+$$\mathbb{V}(f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d,\text{HT}}})) \approx \mathbb{V}(  ( \hat{t}_{y^1, \text{HT}}  , ..., \hat{t}_{y^d,\text{HT}}) \nabla f(t_{y^1}, ..., t_{y^d})   ) = \hat{t}_{u,\text{HT}}$$ 
 
-où la variable $\{u_k\}_{k \in \mathcal{U}}$ est définie pour tout $k \in \mathcal{U}$ par $u_k = \nabla f(t_{y^1}, ..., t_{y^d}) (y^1_k, ..., y^d_k)^T$
+où la variable $\{u_k\}_{k \in \mathcal{U}}$ est définie pour tout $k \in \mathcal{U}$ par $u_k =  (y^1_k, ..., y^d_k) \nabla f(t_{y^1}, ..., t_{y^d})$
 :::
 
 ::: {.fragment}
@@ -573,40 +576,48 @@ $\to$ utilisation de la variable linéarisée estimée : $\hat u_k = \nabla f(\h
 :::
 
 ::: {.fragment}
-- Estimation par subtitution : $\hat{V}_\text{lin}(f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d,\text{HT}}})) =  \mathbb{V}( \nabla f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d},\text{HT}}) ( \hat{t}_{y^1, \text{HT}} , ..., \hat{t}_{y^d,\text{HT}} )^T) = \mathbb{V}(\hat{t}_{\hat{u},\text{HT}})$
+- Estimation par subtitution : $\hat{\mathbb{V}}_\text{lin}(f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d,\text{HT}}})) =  \hat{\mathbb{V}}(  ( \hat{t}_{y^1, \text{HT}} , ..., \hat{t}_{y^d,\text{HT}} ) \nabla f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d},\text{HT}})) = \mathbb{V}(\hat{t}_{\hat{u},\text{HT}})$
 :::
 
 ::: {.fragment}
 ::: {#thm-linmul}
 ## Estimation de la variance par linéarisation
 
-L'estimateur de la variance par linéarisation d'une fonction d'intérêt de la forme $f(t_{y^1}, ..., t_{y^d})$ est donné par $\displaystyle \hat{\mathbb{V}}_\text{lin}(f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d,\text{HT}}})) = \mathbb{V}( \nabla f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d},\text{HT}}) ( \hat{t}_{y^1, \text{HT}} , ..., \hat{t}_{y^d,\text{HT}})^T)$
+L'estimateur de la variance par linéarisation d'une fonction d'intérêt de la forme $f(t_{y^1}, ..., t_{y^d})$ est donné par $\displaystyle \hat{\mathbb{V}}_\text{lin}(f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d,\text{HT}}})) = \mathbb{V}(  ( \hat{t}_{y^1, \text{HT}} , ..., \hat{t}_{y^d,\text{HT}}) \nabla f(\hat{t}_{y^1,\text{HT}}, ..., \hat{t}_{{y^d},\text{HT}}))$
 :::
 :::
 
 ## Exemple de linéarisation
 
-- Supposons que nous disposons de deux variables d'intérêt $y^{(1)}$ (par exemple, la part de transferts sociaux) et $y^{(2)}$ (par exemple, le revenu total) et que nous souhaitons connaître un estimateur du ratio des totaux $R_{y^{(1)}, y^{(2)}} = \frac{t_{y^{(1)}}}{t_{y^{(2)}}}$.
+- Supposons que nous disposons de deux variables d'intérêt $y^{1}$ (par exemple, les dépenses alimentaires) et $y^{2}$ (par exemple, le revenu total) et que nous souhaitons connaître un estimateur du ratio des totaux $R_{y^{1}, y^{2}} = \frac{t_{y^{1}}}{t_{y^{2}}}$.
 
-- L'estimateur par subtitution de $R_{y^{(1)}, y^{(2)}}$ noté $\hat{R}_{\y^{(1)}, y^{(2)}, \text{sub}}$ est donné par $\hat{R}_{y^{(1)}, y^{(2)}, \text{sub}} = \frac{\hat{t}_{y^{(1)},\text{HT}}}{\hat{t}_{y^{(2)},\text{HT}}}$ .
+- L'estimateur par subtitution de $R_{y^{1}, y^{2}}$ noté $\hat{R}_{y^{1}, y^{2}}$ est donné par $\hat{R}_{y^{1}, y^{2}} = \frac{\hat{t}_{y^{1},\text{HT}}}{\hat{t}_{y^{2},\text{HT}}}$ .
 
 - Cet estimateur est approximativement sans biais (le biais est d'autant plus faible que les estimateurs des totaux ont une faible variance et que la fonction d'intérêt *ne fluctue pas trop* - on suppose que pour tout $k \in \mathcal{U}, \pi_k > 0$).
 
 - Quid de la variance ? 
-    - Malheureusement, $\mathbb{V}(\hat{R}_{\text{sub}}) = \mathbb{V}(\frac{\hat{t}_{y^{(1)},\text{HT}}}{\hat{t}_{y^{(2)},\text{HT}}}) \neq  \frac{\mathbb{V}(\hat{t}_{y^{(1)},\text{HT}})}{\mathbb{V}({\hat{t}_{y^{(2)},\text{HT}})}}$
+    - Malheureusement, $\mathbb{V}(\hat{R}_{y^{1}, y^{2}}) = \mathbb{V}(\frac{\hat{t}_{y^{(1)},\text{HT}}}{\hat{t}_{y^{(2)},\text{HT}}}) \neq  \frac{\mathbb{V}(\hat{t}_{y^{(1)},\text{HT}})}{\mathbb{V}({\hat{t}_{y^{(2)},\text{HT}})}}$
     - Utilisation du principe de substitution.
 
 ## Exemple de linéarisation (2)
 
+::: {.fragment}
 - $f : (x,y) \in \mathbb{R} \times \mathbb{R}^* \to \frac{x}{y}$
-- Pour tout $(x,y) \in \mathbb{R} \times \mathbb{R}^*$, $\nabla f(x,y) = (\frac{1}{y}, \frac{-x}{y})$
+:::
 
-- La variable linéarisée pour un individu $k$ vaut donc $u_k = \frac{y^{(1)}_k}{t_{y^{(2)}}} - \frac{t_{y^{(1)}}}{t_{y^{(2)}}^2} y^{(2)}_k = \frac{1}{t_{y^{(2)}}} (y^{(1)}_k - R_{y^{(1)}, y^{(2)}} y^{(2)}_k)$
+::: {.fragment}
+- Pour tout $(x,y) \in \mathbb{R} \times \mathbb{R}^*$, $\nabla f(x,y) = (\frac{1}{y}, \frac{-x}{y})^T$
+:::
 
-- La variable linéarisée estimée pour un individu $k$ vaut $\hat{u}_k =  \frac{1}{\hat{t}_{y^{(2)},\text{HT}}} (y^{(1)}_k - \hat{R}_{y^{(1)}, y^{(2)},\text{sub}} y^{(2)}_k)$
+::: {.fragment}
+- La variable linéarisée pour un individu $k$ vaut donc $u_k = \frac{y^{1}_k}{t_{y^{2}}} - \frac{t_{y^{1}}}{t_{y^{2}}^2} y^{2}_k = \frac{1}{t_{y^{2}}} (y^{1}_k - R_{y^{1}, y^{2}} y^{2}_k)$
+:::
 
+::: {.fragment}
+- La variable linéarisée estimée pour un individu $k$ vaut $\hat{u}_k =  \frac{1}{\hat{t}_{y^{2},\text{HT}}} (y^{1}_k - \hat{R}_{y^{1}, y^{2}} y^{2}_k)$
+:::
 
-L'estimateur de la variance par $\mathbb{V}(\hat{R}_{y^1, y^2, \text{sub}})$ est approximativement $\mathbb{V(\hat{t}_{\hat{u}, \text{HT}})}$ où $\hat{u}_k =  \frac{1}{\hat{t}_{y^{(2)},\text{HT}}} (y^{(1)}_k - \hat{R}_{y^{(1)}, y^{(2)},\text{sub}} y^{(2)}_k)$.
+L'estimateur de la variance par linéarisation de  $\mathbb{V}(\hat{R}_{y^1, y^2, \text{sub}})$ est  $\hat{\mathbb{V}}(\hat{t}_{\hat{u}, \text{HT}})$ où $\hat{u}_k =  \frac{1}{\hat{t}_{y^{2},\text{HT}}} (y^{1}_k - \hat{R}_{y^{1}, y^{2}} y^{2}_k)$.
 
 
 ## Linéarisation par fonction objective
@@ -632,7 +643,7 @@ L'estimateur de la variance par $\mathbb{V}(\hat{R}_{y^1, y^2, \text{sub}})$ est
 \end{equation}
 
   - Exemple 1 : la moyenne $\displaystyle {\mu}_y = \frac{1}{N} \sum_{k \in \mathcal{U}} y_k$ avec $\phi(\theta; x_k, y_k) = y_k - \theta$
-  - Exemple 2 : le coefficient de régression $\beta$ de la régression de $y$ sur $x$ avec $\phi(\theta; x_k, y_k) = x_k (y_k - x_k^T \theta)$
+  - Exemple 2 : le coefficient de régression $\beta$ de la régression de $\{y_k\}$ sur $\{x_k\}$ avec $\phi(\theta; x_k, y_k) = x_k (y_k - x_k^T \theta)$
 :::
 
 ## Linéarisation par fonction objective
@@ -655,11 +666,11 @@ L'estimateur de la variance par $\mathbb{V}(\hat{R}_{y^1, y^2, \text{sub}})$ est
 - D'où $$\underbrace{\sum_{k \in S} \frac{\phi(\hat{\theta}; x_k, y_k)}{\pi_k}}_{=0} \approx \sum_{k \in S} \frac{\phi(\theta; x_k, y_k)}{\pi_k} + (\sum_{k \in S} \frac{\text{Jac}(\phi)(\theta; x_k, y_k))}{\pi_k}) (\hat{\theta} - \theta)$$
 
 
-- D'où
+- D'où $(-\sum_{j \in \mathcal{U}} {\text{Jac}(\phi)(\theta; x_j, y_j))})$ inversible :
 \begin{align}
 (\hat{\theta} - \theta) &\approx \sum_{k \in S}  (-\sum_{j \in S} \frac{\text{Jac}(\phi)(\theta; x_j, y_j))}{\pi_j})^{-1} \frac{\phi(\theta; x_k, y_k)}{\pi_k} \\
 &\approx \sum_{k \in S}  (-\sum_{j \in \mathcal{U}} {\text{Jac}(\phi)(\theta; x_j, y_j))})^{-1} \frac{\phi(\theta; x_k, y_k)}{\pi_k} \\
-&\approx \sum_{k \in S} \frac{u^\text{est}_k(\theta)}{\pi_k}
+&\approx \sum_{k \in S} \frac{u_k(\theta)}{\pi_k}
 \end{align}
 
 
@@ -670,23 +681,19 @@ L'estimateur de la variance par $\mathbb{V}(\hat{R}_{y^1, y^2, \text{sub}})$ est
 ::: {#thm-blineq}
 ## Estimateur de la variance par linéarisation de l'équation estimante
 
-L'approximation suivante $\displaystyle \mathbb{V}(\hat{\theta}) \approx \mathbb{V}(\sum_{k \in S} \frac{u^\text{est}_k(\theta)}{\pi_k})$ permet de créer un estimateur $\displaystyle \hat{\mathbb{V}}(\hat{\theta}) \approx \hat{\mathbb{V}}(\sum_{k \in S} \frac{\widehat{u^\text{est}_k(\theta)}}{\pi_k})$
+L'approximation suivante $\displaystyle \mathbb{V}(\hat{\theta}) \approx \mathbb{V}(\sum_{k \in S} \frac{u_k(\theta)}{\pi_k})$ permet de créer un estimateur $\displaystyle \hat{\mathbb{V}}(\hat{\theta}) \approx \hat{\mathbb{V}}(\sum_{k \in S} \frac{\widehat{u_k(\theta)}}{\pi_k})$
 :::
 :::
 
 ::: {.fragment}
-- La variable $\{ u^\text{est}_k(\theta) \}$ est la variable linéarisée associée à l'estimateur $\hat{\theta}$ $\to$ $\theta$ est inconnu.
+- La variable $\{ u_k(\theta) \}$ est la variable linéarisée associée à l'estimateur $\hat{\theta}$ $\to$ $\theta$ est inconnu.
 :::
 
 ::: {.fragment}
-- La variable $\{ u^\text{est}_k(\hat{\theta}) \}$ est la variable linéarisée estimée associée à l'estimateur.
+- La variable $\{ u_k(\hat{\theta}) \}$ est la variable linéarisée estimée associée à l'estimateur.
 :::
 
-::: {.fragment}
-- Pour des développements plus rigoureux :
-  - Preuve de la normalité asymptotique des Z-estimateurs (iid) : 
-  - Preuve de la normalité asymptotique des Z-estimateurs (cas sondage) : 
-:::
+
 
 ## Exemple d'application
 
@@ -742,7 +749,7 @@ $$\min_{w \in \mathbb{R}^n} \sum_{k \in S} d_k G(\frac{w_k}{d_k}) \text{ sous co
 
 ::: {#thm-linmul}
 ## Estimation de la variance d'un estimateur du total calé
-L'estimateur de la variance d'un estimateur du total calé est $\hat{\mathbb{V}}^\text{cal}(\hat{t}_{y,\text{cal}}) = \hat{\mathbb{V}}(\hat{t}_{\varepsilon,\text{HT}})$ où $\hat{\mathbb{V}}$ est un estimateur de la variance d'un estimateur du total d'Horvitz-Tompson.
+L'estimateur de la variance d'un estimateur du total calé est $\hat{\mathbb{V}}^\text{cal}(\hat{t}_{y,\text{cal}}) = \hat{\mathbb{V}}(\hat{t}_{\varepsilon,\text{HT}})$ où $\hat{\mathbb{V}}$ est un estimateur de la variance d'un estimateur du total d'Horvitz-Tompson et $\{\varepsilon_k\}$ désigne les résidus de la régression pondérée de $\{y_k\}$ sur $\{x_k\}$.
 :::
 
 - `gustave` dispose d'une fonction permettant de récupérer les résidus de la régression :
@@ -783,9 +790,9 @@ var_srs(y = matrix(residus, ncol = 1),
 ::: {.column width="50%"}
 -   Le partage des poids permet de calculer les poids lorsque :
 
-    -   le plan de sondage est indirect,
-    -   plusieurs bases de sondage sont mobilisées,
-    -   un panel est utilisé.
+    -   Le plan de sondage est indirect,
+    -   Plusieurs bases de sondage sont mobilisées,
+    -   Un panel est utilisé.
 
 -   Cette méthode permet de prendre en compte qu'un individu de la
     *population-fille* aurait pu être tiré de plusieurs manières / à
@@ -810,9 +817,6 @@ var_srs(y = matrix(residus, ncol = 1),
 
 
 
-Faire des liens avec les théoremes 
-
-
 # Logique de `gustave`
 
 ## Il était une fois, `gustave` ...
@@ -820,19 +824,18 @@ Faire des liens avec les théoremes
 - `gustave` est un package développé en R à l'Insee en 2018.
 
 - Il permet de :
-  - aider au calcul de variance,
-  - proposer un cadre consistant,
-  - réutiliser des opérations déjà implementées,
-  - diffuser les résultats sans que l'utilisateur ait besoin de connaissance en sondage.
+  - Aider au calcul de variance,
+  - Proposer un cadre consistant,
+  - Réutiliser des opérations déjà implementées,
+  - Diffuser les résultats sans que l'utilisateur ait besoin de connaissance en sondage.
 
 - Ce que `gustave` n'est pas : 
-  - un package qui estime **automatiquement** la variance fonctionnant pour tous les plans. 
-  - 
+  - Un package qui estime **automatiquement** la variance fonctionnant pour tous les plans. 
 
 :::{.callout-important}
 ## Important 
 
-Un `package` proposant une estimation de la variance basée uniquement sur des poids (sans autre prise en compte du plan de sondage) se base *a priori* sur **des hypothèses simplificatrices**.
+Un `package` proposant une estimation de la variance basée uniquement sur des poids (sans autre prise en compte du plan de sondage) se base *a priori* sur **des hypothèses (trop ?) simplificatrices**.
 :::
 
 
@@ -943,8 +946,8 @@ precision_lfs(data = lfs_samp_ind, total(unemp), mean(unemp), alpha = 0.9)
 
 ## Construction d'un variance wrapper 
   - Création d'un variance wrapper à partir de cette fonction qui :
-    - aidera à gérer les linéarisations,
-    - incorporera les données. 
+    - Aidera à gérer les linéarisations,
+    - Incorporera les données. 
 
 ```{webr-r}
 precision_lfs <- gustave::define_variance_wrapper(
@@ -968,12 +971,12 @@ precision_lfs <- gustave::define_variance_wrapper(
 
 - Comment `gustave` sait commment linéariser les fonctions d'intérêt ? 
 - Utilisation des *statistic wrapper* - fonction permettant de :
-  - alculer un estimateur d'une fonction d'intérêt à partir des variables d'intérêt et d'autres données.
-  - calculer la linéarisée estimée. 
+  - Calculer un estimateur d'une fonction d'intérêt à partir des variables d'intérêt et d'autres données.
+  - Calculer la linéarisée estimée. 
 
 - `gustave` contient de base **plusieurs statistic wrapper** :
   - `gustave:::mean`, `gustave:::total`, `gustave:::ratio`, `gustave:::diff_of_ratio` ...
-  - Mais comment faire si on souhaite estimer d'autres paramètres ? :'(
+  - Mais comment faire si on souhaite estimer d'autres paramètres ? :cry:
     - Il est possible d'en définir *simplement* avec la fonction `define_statistic_wrapper`.
 
 ## Exemple de définition d'un statistic wrapper 
@@ -981,7 +984,7 @@ precision_lfs <- gustave::define_variance_wrapper(
 - (Re)-définition d'un statistic wrapper pour la linéarisée du ratio : `ratio2`
 
 - `define_statistic_wrapper` nécessite de renseigner :
-  - une fonction calculant la fonction d'intérêt et les linéarisées estimées. Cette fonction renvoie une liste avec **a minima** deux éléments nommés :
+  - une fonction calculant la fonction d'intérêt et les linéarisées estimées. Cette fonction renvoie une liste avec *a minima* deux éléments nommés :
     - `point` : Estimation ponctuelle de la fonction d'intérêt.
     - `lin` : Vecteur contenant la linéarisée estimée. 
   - une liste contenant pour chaque argument de la fonction en argument de `statistic_function` un type parmi `"num"`, `"denom"` ou `"weights"`
@@ -1016,6 +1019,11 @@ precision_lfs(data = lfs_samp_ind,
  ratio2(income, rand_income), 
  alpha = 0.9)
 ```
+
+# Application sur un exemple ? [[En route vers le TP]{.button}](var_gustave.qmd)
+
+
+
 
 
 ## Bibliographie
