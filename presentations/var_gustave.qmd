@@ -21,7 +21,7 @@ Afin d'illustrer le cheminement permettant d'obtenir les estimations de variance
 
 - un tirage d'un échantillon de $n_\text{UP} =  1 000$ unités primaires $S_\text{UP}$, réparties en cinq strates, parmi $N_\text{UP} = 10 000$  selon un plan aléatoire simple stratifié avec allocation proportionnelle, 
 - un tirage de $n_u = 4$ unités secondaires parmi les $N_u = 10$ unités secondaires dont chaque unité primaire $u$ dispose. L'échantillon des unités secondaires obtenu est noté $S_\text{US}$.
-Un calage sur marges est ensuité réalisé au niveau des unités secondaires sur cinq variables quantitivatives $\{ \textbf{x}^\text{cal}_k \}_{k \in S_ \text{US}}$ où pour tout $k$, $\textbf{x}^\text{cal}_k = (\textbf{x}^\text{cal}_{k,1}, \hdots, \textbf{x}^\text{cal}_{k,5})$ : la pondération calée est notée $\{w^\text{cal}_k\}_{k \in S_\text{US}}$. La méthode mobilisée est linéaire. 
+Un calage sur marges est ensuité réalisé au niveau des unités secondaires sur cinq variables quantitivatives $\{ \textbf{x}^\text{cal}_k \}_{k \in S_ \text{US}}$ où pour tout $k$, $\textbf{x}^\text{cal}_k = (\textbf{x}^\text{cal}_{k,1}, ..., \textbf{x}^\text{cal}_{k,5})$ : la pondération calée est notée $\{w^\text{cal}_k\}_{k \in S_\text{US}}$. La méthode mobilisée est linéaire. 
 
 
 Les données sont téléchargeables à l'adresse [suivante](https://minio.lab.sspcloud.fr/klarbi/Colloque_sondage/donnees.Rdata).
@@ -67,9 +67,9 @@ Le fichier .Rdata contient trois tables **info\_ech**, **var_ech_cal**, **var\_i
 
 Dans cet exercice, nous souhaitons produire deux estimateurs de variance basés sur deux variables d'intérêt $\{y_k \}_{k \in S_\text{US}}$ et $\{z_k \}_{k \in S_\text{US}}$ : 
 
-- $\displaystyle \widehat{\mathbb{V}}(\hat{t}_{y,\text{cal}})$, un estimateur de la variance de $\displaystyle \sum_{k \in S_\text{US}} y_k w_k^\text{cal}$,
+- $\displaystyle \widehat{\mathbb{V}}(\hat{t}_{z,\text{cal}})$, un estimateur de la variance de $\displaystyle \sum_{k \in S_\text{US}} z_k w_k^\text{cal}$,
 - $\displaystyle  \widehat{\mathbb{V}}(\frac{\hat{t}_{y,\text{cal}}}{\hat{t}_{z,\text{cal}}})$, un estimateur de la variance de $\displaystyle \frac{\sum_{k \in S_\text{US}} y_k w_k^\text{cal}}{\sum_{k \in S_\text{US}} z_k w_k^\text{cal}}$.
-- $\displaystyle  \widehat{\mathbb{V}}(\frac{1}{\hat{t}_{y,\text{cal}}})$, un estimateur de la variance de $\displaystyle \frac{1}{\sum_{k \in S_\text{US}} z_k w_k^\text{cal}}$.
+- $\displaystyle  \widehat{\mathbb{V}}(\log({\hat{t}_{z,\text{cal}}}))$, un estimateur de la variance de $\displaystyle \log({\hat{t}_{z,\text{cal}}})$.
 :::
 
 
@@ -78,9 +78,7 @@ Dans cet exercice, nous souhaitons produire deux estimateurs de variance basés 
 
 ### Estimateur de la variance d'un estimateur du total d'Horvitz-Thompson
 
-Afin d’estimer la variance d’une statistique régulière, il est nécessaire de proposer un estimateur dans le cas simple de l’estimateur du total. Ce travail, réalisé par le méthodologue,
-consiste à utiliser des résultats théoriques et l’information sur la collecte (plan de sondage,
-redressements, ...) afin d’approcher au mieux un estimateur sans biais de la variance. 
+Afin d’estimer la variance d’une statistique régulière, il est nécessaire de proposer un estimateur dans le cas simple de l’estimateur du total. Ce travail, réalisé par le méthodologue, consiste à utiliser des résultats théoriques et l’information sur la collecte (plan de sondage, redressements, ...) afin d’approcher au mieux un estimateur sans biais de la variance. 
 
 Dans certains cas simples (cas d’un sondage aléatoire simple sans remise), il n’est pas nécessaire
 d’implémenter l’estimateur : des fonctions prêtes à l’emploi sont disponibles (fonction qvar
@@ -100,7 +98,7 @@ où pour tout $u\in S_\text{UP}$, $\displaystyle  \hat{t}_{y,\text{HT},u} = \fra
 ::: {.callout-tip collapse="true"}
 ## Preuve de l'expression de $\widehat{\mathbb{V}}(\hat{t}_{y,\text{HT},\text{st}})$
 
-Il suffit d'appliquer la formule de Rao en utilisant l'estimateur de Sen-Yen-Grundy pour la variance d'un estimateur du total sous un plan aléatoire simple sans remise d'où $q_u = \frac{N_{\text{UP} \cap \text{st}}^2}{n_{\text{UP} \cap \text{st}}^2} \left(1-f \right)$ et $\pi_u^{(1)} = \frac{n_{\text{UP}}{N_{\text{UP}}$.
+Il suffit d'appliquer la formule de Rao en utilisant l'estimateur de Sen-Yen-Grundy pour la variance d'un estimateur du total sous un plan aléatoire simple sans remise d'où $q_u = \frac{N_{\text{UP} \cap \text{st}}^2}{n_{\text{UP} \cap \text{st}}^2} \left( 1-f \right)$ et $\pi_u^{(1)} = \frac{n_{\text{UP}}}{N_{\text{UP}}}$.
 :::
 
 ### Prise en compte du calage
@@ -431,9 +429,9 @@ precision_estim(data = var_interet_ajout,
 
 L'objectif de cet exercice est de proposer une estimation de : 
 
-- $\displaystyle \widehat{\mathbb{V}}(\hat{t}_{y,\text{cal}})$, un estimateur de la variance de $\displaystyle \sum_{k \in S_\text{US}} y_k w_k^\text{cal}$,
+- $\displaystyle \widehat{\mathbb{V}}(\hat{t}_{z,\text{cal}})$, un estimateur de la variance de $\displaystyle \sum_{k \in S_\text{US}} z_k w_k^\text{cal}$,
 - $\displaystyle  \widehat{\mathbb{V}}(\frac{\hat{t}_{y,\text{cal}}}{\hat{t}_{z,\text{cal}}})$, un estimateur de la variance de $\displaystyle \frac{\sum_{k \in S_\text{US}} y_k w_k^\text{cal}}{\sum_{k \in S_\text{US}} z_k w_k^\text{cal}}$.
-- $\displaystyle  \widehat{\mathbb{V}}(\frac{1}{\hat{t}_{y,\text{cal}}})$, un estimateur de la variance de $\displaystyle \frac{1}{\sum_{k \in S_\text{US}} z_k w_k^\text{cal}}$
+- $\displaystyle  \widehat{\mathbb{V}}(\log({\hat{t}_{z,\text{cal}}}))$, un estimateur de la variance de $\displaystyle \log({\hat{t}_{z,\text{cal}}})$.
 
 
 Les `statistic wrapper` permettent de calculer l'estimation de la fonction d'intérêt à partir des données de la table contenant les variables d'intérêt ainsi que dans la pondération renseignée dans l'argument `reference_weight` de la fonction `variance wrapper`.
