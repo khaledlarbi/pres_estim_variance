@@ -662,6 +662,29 @@ res_sim_var <- apply(X = res, 2, var)
 ```
 :::
 
+Les résultats obtenus après $N_\text{sim} = 10~000$ simulations sont :
+
+:::: {.columns}
+
+::: {.column width="50%"}
+<table border=1>
+<caption align="bottom"> Estimation de l'espérance </caption>
+<tr> <th>  </th> <th> Estimation 1 </th> <th> Estimation 2 </th> <th> Estimation 3 </th>  </tr>
+  <tr> <td align="right"> 1 </td> <td align="right"> 2.997E+05 </td> <td align="right"> 3.773E+01 </td> <td align="right"> 1.261E+01 </td> </tr>
+   </table>
+:::
+
+
+::: {.column width="50%"}
+<table border=1>
+<caption align="bottom"> Estimation de la variance </caption>
+<tr> <th>  </th> <th> Estimation 1 </th> <th> Estimation 2 </th> <th> Estimation 3 </th>  </tr>
+  <tr> <td align="right"> 1 </td> <td align="right"> 4.969E+06 </td> <td align="right"> 7.786E-02 </td> <td align="right"> 5.531E-05 </td> </tr>
+   </table>
+:::
+
+::::
+
 
 
 
