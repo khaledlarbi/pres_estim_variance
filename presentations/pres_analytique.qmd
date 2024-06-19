@@ -32,6 +32,70 @@ from: markdown+emoji
 
 # Pourquoi estimer la variance d'un estimateur ? 
 
+##
+
+- La variance permet de quantifier la variabilité d'un estimateur.
+
+- Certaines enquêtes de l'Insee sont soumises à un cadre réglementaire européen, qui leur impose entre autres des niveaux de précision cibles pour quelques indicateurs.
+  
+- Le calcul de précision tend, de fait, à prendre une part de plus en plus importante dans la production de statistiques publiques.
+  
+- Tout calcul de précision doit prendre en compte différents éléments :
+  - Le plan de sondage retenu.
+  - Le choix de l'estimateur initial.
+  - Les différentes étapes de redressements : correction de la non-réponse, partage des poids, calage ...
+
+
+## Intérêt des calculs de variance
+
+::: {.fragment}
+- Pour le **chargé d'études** :
+  - Permet la construction d'un intervalle de confiance
+  - Permet de commenter la significativité des variations d’un indicateur
+:::
+
+::: {.fragment}
+- L’estimation de variance permet de mesurer la **qualité des indicateurs produits** :
+  - Utilisée pour les rapports qualité transmis à Eurostat
+  - Requise pour divers indicateurs dans différentes enquêtes par le règlement IESS
+:::
+
+::: {.fragment}
+- L’estimation de variance gagne en importance dans le **processus de production des enquêtes**
+:::
+
+
+## Le règlement cadre IESS
+
+
+::: {.fragment}
+- Le règlement-cadre IESS (Integrated European Social Statistics) a été adopté en avril 2019.
+- Il vise à imposer un cadre européen harmonisé afin de garantir la comparabilité des indicateurs entre pays des États membres.
+- L'Insee a mis en place un programme de rénovation progressive de ses enquêtes sociales, avec une part grandissante sous règlement européen.
+:::
+
+::: {.fragment}
+- Contraintes sur les écarts-types d’estimateurs nationaux et régionaux (au niveau des NUTS 2 : anciennes régions pour la France).
+  - Les estimateurs concernés sont toujours des taux.
+  - Les contraintes de précision dépendent des tailles de population : contraintes moins strictes pour les petites régions (points 6 et 7 de l’annexe II).
+:::
+
+::: {.fragment}
+- Hormis pour quelques exceptions, l’écart-type estimé des estimateurs ne doit pas excéder $\sqrt{\frac{\widehat{p}(1-\widehat{p})}{a\sqrt{N}+b}}$ où $\widehat{p}$ est l'estimateur considéré, $a$ et $b$ sont des paramètres fixés par IESS et $N$ est un nombre d’individus ou de ménages liés à l’indicateur.
+:::
+
+::: {.fragment}
+- Les contraintes de précision régionales sont plus contraignantes pour les régions plus peuplées.
+:::
+
+## Le règlement FRIBS
+
+- Il existe également un règlement-cadre européen sur les statistiques d’entreprises, nommé FRIBS (Framework Regulation Integrating Business Statistics) et adopté en 2019.
+- FRIBS remplace dix règlements sectoriels en vigueur jusqu'en 2021.
+- Il crée un cadre juridique commun pour les statistiques d’entreprises, réduisant les incohérences entre domaines et les redondances, sans les supprimer totalement.
+- FRIBS s’applique pour l’essentiel à partir de l’année de référence 2021.
+
+
 # Estimation de variance simple
 ## Définitions usuelles et notations. 
 
