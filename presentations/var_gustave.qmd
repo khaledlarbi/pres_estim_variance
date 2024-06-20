@@ -734,5 +734,5 @@ rlang::env_print(env_prec_estim)
 On peut, par exemple, afficher les variables de calage : 
 
 ```{webr-r}
-env_prec_estim$technical_data$calage$x
+head(env_prec_estim$technical_data$calage$x)
 ```

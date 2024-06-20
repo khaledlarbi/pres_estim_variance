@@ -17,7 +17,7 @@ author:
   - name: Khaled Larbi
     email: prenom point nom arobase insee point fr
     affiliations: Insee
-date: 20/06/2024
+date: 06/20/24
 filters:
   - webr
 webr:
@@ -32,7 +32,7 @@ from: markdown+emoji
 
 # Pourquoi estimer la variance d'un estimateur ? 
 
-##
+## Pourquoi ?
 
 - La variance permet de quantifier la variabilité d'un estimateur.
 
