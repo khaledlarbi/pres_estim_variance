@@ -1,0 +1,46 @@
+- Rappel : 
+Définitions / Notations
+Rappel : biais / variance
+
+Estimateur d'Horvitz-Thompson
+
+- Pourquoi s'intéresser à la variance d'estimateurs ? 
+    - Raison législative : les réglèments cadres. Par exemple, IESS pour les enquêtes ménages.
+    - Nécessaire pour certains opérations : tests d'hypothèses, construction d'intervalles de confiance.
+
+- Dichotomie : approche analytique vs approche par réplication.
+
+Dans cette partie, estimateur de HT. 
+
+- Pourquoi estimer la variance et ne pas la calculer directement ? 
+
+- 1er estimateur : l'estimteur de variance à la Horvitz-Thompson
+--> Problème : nécessite la connaissance des probabilités d'inclusion d'ordre 2.
+    - Application à des plans simples à un degré : SRS, Poisson.
+    - Approximation pour des cas plus complexes à un degré : Deville-Tillé pour le cas équilibré. Ce n'est pas tout le temps optimal --> simulation pour vérifier. 
+        - Ajouter une simulation ? 
+        Illustration : pour l'instant dans la boîte à outils
+    - Plan à plusieurs degrés via la formule de Rao 
+
+    --> actuellement on sait estimer la variance pour des plans à un ou plusieurs degrés et pour des estimateurs de HT du total.
+
+Quid si on souhaite estimer la variance d'estimateurs non calés du total ? 
+
+- 
+
+
+- Quid si on souhaite estimer la variance d'estimateurs d'autres paramètres d'intérêt ?
+
+- Si fonction différentiable de totaux : Taylor
+ - Exemple : 1d --> estimateur du log ?
+- Exemple en 2d --> ratio
+Quelques simulations
+Intuition de quand ça ne fonctionne pas : suppose f $C^2$ et $f''$ bornée. 
+
+
+- Si solution d'une équation estimante 
+Exemple du cas du coefficient de régression
+Exemple du cas des coefficients de régression logistique
+
+- Approche basée sur les fonctions d'influence
+

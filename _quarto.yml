@@ -1,5 +1,38 @@
 project:
-  title: "."
+  title: "Atelier du la sphère sondage sur l'estimation de variance"
+  output-dir: docs
+  type: website
 
 
+website:
+  title: "Atelier du la sphère sondage sur l'estimation de variance"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Accueil
+    right:
+      - icon: github
+        href: https://github.com
+  page-navigation: true
 
+toc: false
+number-sections: false
+
+format:
+  html:
+    theme: yeti
+    css: Sites/styles.css
+    toc: true
+  clean-revealjs:
+      transition: slide
+      smaller: true
+      preview-links: true
+      width: 1500
+      margin: 0.05
+      toc: false
+      vertical: false
+
+from: markdown+emoji
+licence: CC BY-NC
+
+editor: visual
