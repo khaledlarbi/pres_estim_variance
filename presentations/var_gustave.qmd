@@ -138,7 +138,7 @@ Ces éléments seront donc des arguments de la fonction `calcul_var`.
 L'estimateur de variance proposé nécessite le calcul des résidus de la régression de la variable d'intérêt $\{y_k\}$ sur les variables d'intérêt $\{\textbf{x}_k\}$. 
 Ce calcul nécessite donc de connaître ... la variable d'intérêt $\{y_k\}$. Pour autant, certaines composantes peuvent être précalculées en amont.
 
-Dans le cas des résidus de la régression de la variable d'intérêt $\{y_k\}$ sur les variables d'intérêt $\{\textbf{x}_k\}$, il est possible de calculer l'inverse de la matrice $\displaystyle \sum_{k \in S} \frac{\textbf{x}_k \textbf{x}_k^T}{\pi_k}$ qui interviendra dans tous les calculs de résidus (et indépendamment de la variable $\{x_k\}$. 
+Dans le cas des résidus de la régression de la variable d'intérêt $\{y_k\}$ sur les variables d'intérêt $\{\textbf{x}_k\}$, il est possible de calculer l'inverse de la matrice $\displaystyle \sum_{k \in S} \frac{\textbf{x}_k \textbf{x}_k^T}{\pi_k}$ qui interviendra dans tous les calculs de résidus (et indépendamment de la variable $\{\textbf{x}_k\}$). 
 
 `gustave` permet de stocker ces informations dans un format consistant et de réutiliser ces informations facilement. Il s'agit des `precalc`
 
@@ -425,6 +425,24 @@ are discarded
 var_interet_ajout <- rbind(var_interet_ord,
                  data.frame("identifiant" = "toto", "y" = 10, "z" = 10))
 precision_estim(data = var_interet_ajout,
+               total(z))
+```
+:::
+
+::: {.callout-caution}
+## Table des variables d'intérêt avec des observations manquantes
+
+Si certains individus renseignés dans le paramètre `reference_id` de la fonction `define_variance_wrapper` ne sont pas dans la table `var_interet` alors le message d'avertissement suivant apparaître : 
+~\\ 
+
+<span style="color:red;">
+Some observations from the survey appear to be missing. The variance estimation function may produce unexpected results.
+</span>
+
+```{webr-r}
+#Retrait d'observations
+var_interet_manq <- var_interet_ord[1:10,]
+precision_estim(data = var_interet_manq,
                total(z))
 ```
 :::
