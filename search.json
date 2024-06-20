@@ -7,11 +7,11 @@
     "text": "Calendrier\nDes coquilles peuvent être cachées dans les documents : n’hésitez pas à le notifier par mail ou faire un pull-request.\n\n\n\nDate\nHeure\nSujet\nLien Google Meet (si nécessaire)\nDéfinitifs ?\nCompléments / Corrections\n\n\n\n\n20 juin 2024\n13:00 - 15:00\nPrésentation du calcul de variance analytique\n\n❌\n\n\n\n20 juin 2024\n13:00 - 15:00\nApplication avec gustave\n\n❌\n\n\n\n2 juillet 2024\n13:00 - 15:00\nPrésentation du calcul de variance par bootstrap\n\n❌"
   },
   {
-    "objectID": "presentations/pres_analytique.html#section",
-    "href": "presentations/pres_analytique.html#section",
+    "objectID": "presentations/pres_analytique.html#pourquoi",
+    "href": "presentations/pres_analytique.html#pourquoi",
     "title": "Atelier du réseau sondage",
-    "section": "",
-    "text": "La variance permet de quantifier la variabilité d’un estimateur.\nCertaines enquêtes de l’Insee sont soumises à un cadre réglementaire européen, qui leur impose entre autres des niveaux de précision cibles pour quelques indicateurs.\nLe calcul de précision tend, de fait, à prendre une part de plus en plus importante dans la production de statistiques publiques.\nTout calcul de précision doit prendre en compte différents éléments :\n\nLe plan de sondage retenu.\nLe choix de l’estimateur initial.\nLes différentes étapes de redressements : correction de la non-réponse, partage des poids, calage …"
+    "section": "Pourquoi ?",
+    "text": "Pourquoi ?\n\nLa variance permet de quantifier la variabilité d’un estimateur.\nCertaines enquêtes de l’Insee sont soumises à un cadre réglementaire européen, qui leur impose entre autres des niveaux de précision cibles pour quelques indicateurs.\nLe calcul de précision tend, de fait, à prendre une part de plus en plus importante dans la production de statistiques publiques.\nTout calcul de précision doit prendre en compte différents éléments :\n\nLe plan de sondage retenu.\nLe choix de l’estimateur initial.\nLes différentes étapes de redressements : correction de la non-réponse, partage des poids, calage …"
   },
   {
     "objectID": "presentations/pres_analytique.html#intérêt-des-calculs-de-variance",
@@ -98,8 +98,8 @@
     "text": "Approximations classiques\n\n\nParfois, il est délicat de calculer les probabilités d’inclusion d’ordre 2.\n\n\n\n\nPour certains plans, des approximations sont utilisées.\n\n\n\n\nPour les plans équilibrés à forte entropie : formule de Deville-Tiilé (Deville et Tillé (2000)). \\[\\hat{\\mathbb{V}}_\\text{DT}(\\hat{t}_{y,\\text{HT}}) = \\frac{n}{n-d}\\sum_{k \\in S} (1 - \\pi_k) \\left(\\frac{y_k}{\\pi_k} - \\frac{x_k}{\\pi_k} \\hat{\\beta} \\right)^2\\] où \\(\\hat{\\beta}\\) est le coefficient estimé sur \\(\\mathcal{S}\\) de la régression de \\(\\{\\frac{y_k}{\\pi_k}\\}\\) par \\(\\{\\frac{x_k}{\\pi_k}\\} \\in \\mathbb{R}^d\\) pondérée par \\(1-\\pi_k\\).\n\nRemarque : le plan aléatoire simple sans remise \\(p_{\\text{SASSR}(n;N)}\\) est un plan équilibré sur la variable \\(\\{\\pi_k\\}\\) \\(\\to\\) il est donc possible d’utiliser l’approximation de Deville-Tillé et \\(\\hat{\\mathbb{V}}_\\text{DT}(\\hat{t}_{y,\\text{HT}}) = \\hat{\\mathbb{V}}_\\text{SYG}(\\hat{t}_{y,\\text{HT}}) = \\hat{\\mathbb{V}}_\\text{HT}(\\hat{t}_{y,\\text{HT}})\\)\n\n\n\n\n\nPour le tirage systématique : approximation par la variance sous un plan aléatoire simple."
   },
   {
-    "objectID": "presentations/pres_analytique.html#section-1",
-    "href": "presentations/pres_analytique.html#section-1",
+    "objectID": "presentations/pres_analytique.html#section",
+    "href": "presentations/pres_analytique.html#section",
     "title": "Atelier du réseau sondage",
     "section": "",
     "text": "Plan de l’enquête Histoire de Vie et Patrimoine\n\n\n\nIdée 1\n\n: utiliser les résultats présentés. ❌\n\n\n\n\n\nProblème 1\n\n: le calcul des probabilités d’inclusion d’ordre deux est (très) délicat.\n\n\n\n\n\nIdée 2\n\n: estimer les probabilités d’inclusion d’ordre deux par simulation. ❌\n\n\n\n\n\nProblème 2\n\n: l’estimation des probabilités d’inclusion d’ordre deux est très gourmande en ressource informatique et peut conduire à des estimations instables.\n\n\n\n\n\nIdée 3\n\n: décomposer le calcul de l’estimateur de la variance degré par degré. ✅\n\n\n\n\n\nIdée 4\n\n: utiliser des méthodes de réplication. ✅"
@@ -112,8 +112,8 @@
     "text": "Estimation de variance pour des plans à plusieurs degrés (Rao (1975))\nSoit \\(p\\) un plan de sondage à deux degrés où \\(p_1\\) désigne le plan de sondage des unités primaires et \\(p_{2|1}\\) le plan de sondage des unités secondaires conditionnellement aux unités primaires. On notera respectivement \\(s_\\text{UP}\\) et \\(s_\\text{US}\\), les échantillons d’unités primaires et secondaires obtenus.\nOn note :\n\n\\(\\pi_u^{(1)}\\), les probabilités d’inclusion d’ordre 1 d’une unité primaire \\(u \\in U_\\text{UP}\\).\n\\(\\pi_l^{(2|1)}\\), les probabilités d’inclusion d’ordre 1 d’une unité secondaire \\(l \\in U_\\text{UP}\\) conditionnellement à l’échantillon des UP.\n\\(\\pi_l^{(1,2)}\\), les probabilités d’inclusion d’ordre 1 d’une unité secondaire \\(l \\in U_\\text{UP}\\).\n\nSoit \\(\\hat{t}_{y,\\text{HT}}\\), l’estimateur d’Horvitz-Thompson d’une variable d’intérêt \\(\\{y_k\\}\\) : \\[\\hat{t}_{y,\\text{HT}} = \\sum_{k \\in S_{\\text{US}}} \\frac{y_k}{\\pi_k^{(1,2)}} = \\sum_{u \\in S_\\text{UP}} \\frac{\\hat{t}_{y,\\text{HT},u}}{\\pi_u^{(1)}} \\text{  avec  } \\hat{t}_{y,\\text{HT},u} = \\sum_{k \\in u \\cap S_\\text{US}} \\frac{y_k}{\\pi_k^{(2|1)}}\\]"
   },
   {
-    "objectID": "presentations/pres_analytique.html#section-3",
-    "href": "presentations/pres_analytique.html#section-3",
+    "objectID": "presentations/pres_analytique.html#section-2",
+    "href": "presentations/pres_analytique.html#section-2",
     "title": "Atelier du réseau sondage",
     "section": "",
     "text": "Supposons que :\n\n\nle tirage des unités secondaires au sein des unités primaires sont indépendants d’une unité primaire à l’autre.\n\n\n\n\nl’existence d’un estimateur \\(\\hat{\\mathbb{V}^{1}}(\\hat{t}_{y,\\text{HT}})\\) sans biais de la variance lié au premier degré d’échantillonnage \\(\\mathbb{V}^{1}(\\hat{t}_{y,\\text{HT}})\\) pouvant s’écrire sous la forme \\(\\displaystyle \\hat{\\mathbb{V}} (\\hat{t}_{y,\\text{HT}}) = Q(t_{y_{(1)}}, ..., t_{y_{(n_\\text{UP})}}) = \\sum_{i} \\sum_{j \\neq i} q_{ij} t_{y_{(i)}} t_{y_{(j)}} + \\sum_{i} q_{i} t_{y_{(i)}}^2\\)\n\n\n\n\npour tout \\(u \\in \\mathcal{U}_\\text{UP}\\), l’existence d’un estimateur sans biais \\(\\hat{t}_{y,\\text{HT},u}\\) (sous le deuxième degré) de \\(\\displaystyle t_{y_{(u)}} = \\sum_{k \\in u} y_k\\)\n\n\n\n\npour tout \\(u \\in \\mathcal{U}_\\text{UP}\\), l’existence d’un estimateur sans biais \\(\\hat{\\mathbb{V}}^{2|1}(\\hat{t}_{y,\\text{HT},u})\\) (sous le deuxième degré) de la variance de l’estimateur \\(\\hat{t}_{y,\\text{HT},u}\\).\n\n\n\nSous ces hypothèses, la variance totale de l’estimateur d’Horvitz-Thompson sous le plan \\(p\\) peut être estimée sans biais par \\[\\hat{\\mathbb{V}}^{(1,2)}(\\hat{t}_{y,\\text{HT}}) = \\hat{\\mathbb{V}}^{(1,2)}(\\{ y_{l} : l \\in S_\\text{US} \\}) =  Q(\\hat{t}_{y,\\text{HT},1}, ..., \\hat{t}_{y,\\text{HT},n_{\\text{US}}}) + \\sum_{u \\in S_\\text{UP}} \\left( \\frac{1}{(\\pi_u^{(1)})^2} - q_u \\right) \\hat{\\mathbb{V}}^{2|1}(\\hat{t}_{y,\\text{HT},u})\\]"
@@ -210,8 +210,8 @@
     "text": "Intuition de la linéarisation par fonction estimante\n\nSi \\(\\phi\\) est différentiable, \\[\\phi(\\hat{\\theta}; x_k, y_k) \\approx \\phi(\\theta; x_k, y_k) + (\\text{Jac}(\\phi)(\\theta)) (\\hat{\\theta} - \\theta)\\]\nD’où \\[\\underbrace{\\sum_{k \\in S} \\frac{\\phi(\\hat{\\theta}; x_k, y_k)}{\\pi_k}}_{=0} \\approx \\sum_{k \\in S} \\frac{\\phi(\\theta; x_k, y_k)}{\\pi_k} + (\\sum_{k \\in S} \\frac{\\text{Jac}(\\phi)(\\theta; x_k, y_k))}{\\pi_k}) (\\hat{\\theta} - \\theta)\\]\nD’où \\((-\\sum_{j \\in \\mathcal{U}} {\\text{Jac}(\\phi)(\\theta; x_j, y_j))})\\) inversible : \\[\\begin{align}\n(\\hat{\\theta} - \\theta) &\\approx \\sum_{k \\in S}  (-\\sum_{j \\in S} \\frac{\\text{Jac}(\\phi)(\\theta; x_j, y_j))}{\\pi_j})^{-1} \\frac{\\phi(\\theta; x_k, y_k)}{\\pi_k} \\\\\n&\\approx \\sum_{k \\in S}  (-\\sum_{j \\in \\mathcal{U}} {\\text{Jac}(\\phi)(\\theta; x_j, y_j))})^{-1} \\frac{\\phi(\\theta; x_k, y_k)}{\\pi_k} \\\\\n&\\approx \\sum_{k \\in S} \\frac{u_k(\\theta)}{\\pi_k}\n\\end{align}\\]"
   },
   {
-    "objectID": "presentations/pres_analytique.html#section-4",
-    "href": "presentations/pres_analytique.html#section-4",
+    "objectID": "presentations/pres_analytique.html#section-3",
+    "href": "presentations/pres_analytique.html#section-3",
     "title": "Atelier du réseau sondage",
     "section": "",
     "text": "Théorème 4 (Estimateur de la variance par linéarisation de l’équation estimante) L’approximation suivante \\(\\displaystyle \\mathbb{V}(\\hat{\\theta}) \\approx \\mathbb{V}(\\sum_{k \\in S} \\frac{u_k(\\theta)}{\\pi_k})\\) permet de créer un estimateur \\(\\displaystyle \\hat{\\mathbb{V}}(\\hat{\\theta}) \\approx \\hat{\\mathbb{V}}(\\sum_{k \\in S} \\frac{\\widehat{u_k(\\theta)}}{\\pi_k})\\)\n\n\n\n\nLa variable \\(\\{ u_k(\\theta) \\}\\) est la variable linéarisée associée à l’estimateur \\(\\hat{\\theta}\\) \\(\\to\\) \\(\\theta\\) est inconnu.\n\n\n\n\nLa variable \\(\\{ u_k(\\hat{\\theta}) \\}\\) est la variable linéarisée estimée associée à l’estimateur."
