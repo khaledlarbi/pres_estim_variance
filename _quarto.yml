@@ -1,11 +1,11 @@
 project:
-  title: "Atelier du la sphère sondage sur l'estimation de variance"
+  title: "Atelier de la sphère sondage sur l'estimation de variance"
   output-dir: docs
   type: website
 
 
 website:
-  title: "Atelier du la sphère sondage sur l'estimation de variance"
+  title: "Atelier de la sphère sondage sur l'estimation de variance"
   navbar:
     left:
       - href: index.qmd

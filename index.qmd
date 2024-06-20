@@ -1,5 +1,5 @@
 ---
-title: "Cours de théorie des sondages"
+title: "Atelier de la sphère sondage sur l'estimation de variance"
 format: html
 ---
 
