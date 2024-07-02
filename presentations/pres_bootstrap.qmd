@@ -1,0 +1,567 @@
+---
+title: Atelier du réseau sondage
+subtitle: Estimation de la variance par bootstrap
+format: 
+    clean-revealjs:
+        transition: slide
+        smaller: true
+        preview-links: true
+        width: 1500
+        margin: 0.05
+        toc: false
+        vertical: false
+html-math-method:
+  method: mathjax
+  url: "https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+author:
+  - name: Khaled Larbi
+    email: prenom point nom arobase insee point fr
+    affiliations: Insee
+date: 07/02/24
+date-format: "DD MMM YYYY"
+lang: fr
+bibliography: references.bib
+from: markdown+emoji
+---
+
+## 
+
+::: {.fragment}
+- L'estimation de la variance est centrale en sondage.
+  - Réponse à des impératifs réglementaires.
+  - Comparaison des résultats.
+  - Nécessaire pour certains outils statistiques.
+:::
+
+::: {.fragment}
+- Traditionnellement à l'Insee, l'estimation de la variance passe par l'approche analytique :
+  - Proposition d'une *formule* pour l'estimateur de la variance.
+:::
+
+::: {.fragment}
+- Des outils simplifient ce calcul : `gustave` permet le calcul et la diffusion des estimations de variance.
+:::
+
+::: {.fragment}
+- Néanmoins, d'autres approches peuvent être utilisés : les méthodes de bootstrap.
+:::
+
+::: {.fragment}
+- D'autres INS ont une utilisation plus fréquente de ces méthodes. 
+:::
+
+# Bootstrap dans le cas i.i.d
+
+## Cadre i.i.d
+
+::: {.fragment}
+- Avant de présenter la problématique du bootstrap dans un cadre de sondage, on considère un cas en population infini.
+:::
+
+::: {.fragment}
+- On considère une distribution $\mathbb{P}_X$.
+  - Exemple 1 : $\mathbb{P}_X$ désigne la loi de Bernouilli de paramètre $p$. 
+  - Exemple 2 : $\mathbb{P}_X$ est une loi gaussienne centrée en $M$.
+:::
+
+::: {.fragment}
+- Cette distribution est considéré comme inconnue ...
+:::
+
+::: {.fragment}
+- On souhaite inférer sur un paramètre $\theta$ qui est fonction de cette distribution.
+  - Exemple 1 : le paramètre $p$.
+  - Exemple 2 : la médiane de la loi gaussienne $M$.
+:::
+
+::: {.fragment}
+- On dispose à la place d'un $n-$échantillon i.i.d $(X_1, ..., X_n) \sim \mathbb{P}_X$
+:::
+
+## 
+
+::: {.fragment}
+- Le paramètre $\theta$ va être estimé par $\hat{\theta} = f(X_1, ..., X_n)$ où $f$ est une fonction mesurable.
+  - Exemple 1 : le paramètre $p$ peut être estimé par $\displaystyle \hat{p} = \frac{1}{n} \sum_{k = 1}^n X_k$[^1]
+  - Exemple 2 : le paramètre $M$ peut être estimé par $\displaystyle \hat{M} = \widehat{\text{Mediane(}}X_1, ..., X_n)$.
+
+- Intuitivement, l'estimateur va nous permettre d'approximer le paramètre inconnu.
+:::
+
+::: {.fragment}
+- Mais est-ce une bonne approximation ? 
+  - Biais et variance (asymptotique)
+:::
+
+::: {.fragment}
+- Dans l'exemple 1, l'estimation de la variance est simple :
+  - $\displaystyle \hat{\mathbb{V}}(\hat{p}) = \frac{\hat{p}(1-\hat{p})}{n}$  est un estimateur consistant de ${\mathbb{V}}(\hat{p})$.
+:::
+
+::: {.fragment}
+- Dans l'exemple 2 ...
+:::
+
+## Estimation de la variance de $\hat{M}$
+
+::: {.fragment}
+- Pour n'importe quel échantillon i.i.d de taille $n \geq 2,~~ (Y_1, ..., Y_n)$ désigne un $n$-échantillon iid suivant une loi $\mathbb{P}_Y$ admettant un moment d'ordre 2 fini, $$\displaystyle \hat{\mathbb{V}}(Y) = \frac{1}{n - 1} \sum_{k = 1}^n \left(Y_k - \bar{Y}_n \right)^2$$ est un estimateur sans biais et consistant de $\mathbb{V}(Y)$.
+:::
+
+
+::: {.fragment}
+- On souhaite estimer $\mathbb{V}(\hat{M})$.
+  - Pourquoi ne pas appliquer le raisonnement précédent ? 
+  - Parce qu'on a qu'une seule variable $(\hat{M})$
+  - Mais si on avait accès à B réplications i.i.d $(\hat{M}_1, ..., \hat{M}_B)$ $\to$ on pourrait calculer
+:::
+
+::: {.fragment}
+- Problème : 
+  - Pour calculer $\hat{M}_1$, il faut un premier échantillon $(X_1, ..., X_n)$
+  - Pour calculer $\hat{M}_2$, il faut un deuxième échantillon $(X_{n+1}, ..., X_{2n})$
+  - Il faudrait $B$ échantillons de taille $n$ alors qu'en pratique, nous n'avons qu'un échantillon de taille $n$.
+:::
+
+
+::: {.fragment}
+- Solution : idée du bootstrap d'@bootEfron
+  - Créer $B$ échantillons *artificiels* de taille $n$ en tirant indépendamment avec remise parmi $\{X_1, ..., X_n\}$.
+:::
+
+
+## Echantillon bootstrap
+
+::: {.fragment}
+- Il est possible de créer un échantillon *artificiel* $(X_{1,1}^*, ..., X_{1,n}^*)$ en tirant avec remise parmi $\{X_1, ..., X_n\}$ $\to$ Estimateur $\hat{\theta}^*_1$.
+:::
+
+::: {.fragment}
+- En réitérant $B-1$ fois, on obtient $(\hat{\theta}^*_1, ..., \hat{\theta}^*_n)$
+:::
+
+::: {.fragment}
+- La variance est estimée par $\displaystyle \hat{\mathbb{V}}_\text{boot}(\hat{\theta}) = \frac{1}{n} \sum_{k = 1}^n \left(\hat{\theta}^*_k - \bar{\hat{\theta}^*} \right)^2$
+:::
+
+::: {.fragment}
+- Application avec $n = 5$ individus et un estimateur $\hat{\theta} = f(X_1, ..., X_n)$
+
+  - Echantillon initial : $(X_1, X_2, X_3, X_4, X_5)$  
+
+  - Echantillon bootstrap 1 : $(X_{1,1}^*, ..., X_{1,5}^*) = (X_1, X_3, X_3, X_1, X_4) ~~ \to \hat{\theta}^{*}_1$
+  - Echantillon bootstrap 2 : $(X_{2,1}^*, ..., X_{2,5}^*) = (X_1, X_4, X_4, X_2, X_3)~~ \to \hat{\theta}^{*}_2$
+  - Echantillon bootstrap 3 : $(X_{3,1}^*, ..., X_{3,5}^*) = (X_5, X_1, X_1, X_2, X_3)~~ \to \hat{\theta}^{*}_3$
+  - ...
+:::
+
+## Construction d'un intervalle de confiance
+
+::: {.fragment}
+- Il est possible de construire un intervalle de confiance de plusieurs manières en utilisant une méthode par bootstrap.
+:::
+
+::: {.fragment}
+- Méthode 1 : estimation de la variance puis utilisation de l'hypothèse de normalité asymptotique de l'estimateur.
+:::
+
+::: {.fragment}
+Un intervalle de confiance de niveau $1-\alpha$ est donné par :
+
+$$[\hat{\theta} - q_{1 - {\frac{\alpha}{2}}} \hat{\mathbb{V}}_\text{boot}^{\frac{1}{2}}(\hat{\theta}); \hat{\theta} + q_{1 - {\frac{\alpha}{2}}} \hat{\mathbb{V}}^{\frac{1}{2}}_\text{boot}(\hat{\theta})] $$
+:::
+
+::: {.fragment}
+- Méthode 2 : estimation de l'intervalle de confiance basée sur la distribution bootstrap.
+
+Un intervalle de confiance de niveau $1-\alpha$ est donné par :
+
+$$[q^*_{{\frac{\alpha}{2}}}; q^*_{1 - \frac{\alpha}{2}}] $$ où $q^*_\beta$ désigne le quantile empirique d'ordre $\beta$ de $(\hat{\theta}^{*}_1, ..., \hat{\theta}^{*}_B)$
+:::
+
+
+## Résumé 
+
+![](illustrations/bootstraap.svg){fig-align="center"}
+
+## Application à la médiane
+
+::: {.fragment}
+- Soit $(X_1, ..., X_n)$, un $n$-échantillon i.i.d avec $X_1 \sim \mathcal{N}(0,1)$ avec $n = 1000$.
+:::
+
+::: {.fragment}
+- On souhaite aussi estimer la variance de $\widehat{\text{Mediane}}(X_1, ..., X_n)$.
+:::
+
+::: {.fragment}
+- Approche basée sur 1000 réplications 
+:::
+
+::: {.fragment}
+```{r echo=TRUE}
+#Définition d'une graine
+set.seed(0107)
+
+#Taille de l'échantillon
+n <- 2500
+#Echantillon selon une loi normale centrée réduite
+y <- rnorm(n)
+
+#Tirage d'un échantillon de taille n avec remise parmi y 
+#et calcul de la médiane
+replicationMediane <- function(y, nbBoot = 1000){
+  reechFinal <- replicate(nbBoot, 
+                          {reech <- rmultinom(n = 1, size = length(y),
+                                              rep(1/length(y),length(y)))[,1] #Tirage avec remise parmi les n éléments de y
+                          med_reech <- median(rep(y,reech)) #Calcule de la médiane sur le rééchantillon
+                          })
+  return(reechFinal)
+}
+
+
+#Estimation de la variance de l'estimateur de la médiane 
+var(replicationMediane(y,1000))
+
+#Estimation de la variance par Monte-Carlo
+var(replicate(10000,
+              median(rnorm(n))))
+```
+:::
+
+
+## Quand ça ne fonctionne pas ...
+
+::: {.fragment}
+- Soit $(X_1, ..., X_n)$, un $n$-échantillon i.i.d avec $X_1 \sim \mathcal{U}_{[0;20]}$ avec $n = 2500$.
+:::
+
+::: {.fragment}
+- On souhaite estimer la variance de $\displaystyle \hat{\theta} = \max_{k \in \{1,..,n\}} X_k$
+:::
+
+::: {.fragment}
+
+- Approche basée sur 1000 réplications
+
+```{r echo=TRUE}
+#Taille de l'échantillon
+n <- 2500
+#Echantillon selon une loi uniforme
+y <- runif(n,0,20)
+
+#Tirage d'un échantillon de taille n avec remise parmi y 
+#et calcul du maximum
+replicationMax <- function(y, nbBoot = 1000){
+  reechFinal <- replicate(nbBoot, 
+                          {reech <- rmultinom(n = 1, size = length(y),
+                                              rep(1/length(y),length(y)))[,1] #Tirage avec remise parmi les n éléments de y
+                          med_reech <- max(rep(y,reech)) #Calcule de la médiane sur le rééchantillon
+                          })
+  return(reechFinal)
+}
+
+#Estimation de la variance de l'estimateur du maximum 
+var(replicationMax(y,1000))
+#Estimation de la variance par Monte-Carlo
+var(replicate(10000,
+              max(runif(n,0,10))))
+```
+
+:::
+
+## Pourquoi ça ne fonctionne pas ?
+
+::: {.fragment}
+
+- Le bootstrap repose sur des hypothèses.
+:::
+
+::: {.fragment}
+- Il faut montrer que $\mathcal{L}(a_n(\hat{\theta}_n - \theta)) \approx \mathcal{L}(a_n(\hat{\theta}^*_n - \hat{\theta}_n)|X_1, ..., X_n)$ ps.
+:::
+
+::: {.fragment}
+- Dans le deuxième exemple, ce n'est pas le cas :
+  - En prenant $a_n = n$
+:::
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+# Bootstrap en sondage 
+
+## 
+
+::: {.fragment}
+- Les méthodes de bootstrap permettent d'estimer la variance d'un estimateur dans le cas i.i.d. Est-ce le cas en sondage ? 
+:::
+
+::: {.fragment}
+- Dans la suite, une méthode de bootstrap permet d'estimer la variance si l'estimateur obtenu par bootstrap est consistant pour la variance.
+:::
+
+::: {.fragment}
+- La variance estimée est celle liée à l'échantillonnage (approche *design based*).
+:::
+
+
+## Notation
+
+::: {.fragment}
+Dans cette présentation, on notera :
+
+- $\mathcal{U}$, une population finie de taille $N$,
+- $p$, un plan de sondage défini sur $\mathcal{U}$,
+- $S$ un échantillon aléatoire tiré selon le plan $p$.
+:::
+
+::: {.fragment}
+- $\{y_k\}$ : une variable d'intérêt,
+- $\{x_k\}$ : une variable auxiliaire. 
+:::
+
+::: {.fragment}
+Pour l'inférence, il est commode d'introduire : 
+
+- Pour tout individu $k \in \mathcal{U}, ~ \pi_k = \mathbb{P}(k \in S)$ $\to$ probabilité d'inclusion d'ordre 1.
+  - Il s'agit de la probabilité que l'individu $k$ soit dans l'échantillon $S$.
+- Pour tout couple d'individus $(k,l) \in \mathcal{U}^2, ~ \pi_{kl} = \mathbb{P}(k \in S \cap l \in S)$ $\to$ probabilité d'inclusion d'ordre 2.
+  - Il s'agit de la probabilité que les individus $k$ et $l$ soient conjointement dans l'échantillon $S$.
+:::
+
+
+## Cas du sondage aléatoire simple sans remise 
+
+::: {.fragment}
+- On considère ici que $S \sim \text{SASSR}(n;N)$
+
+- On souhaite estimer la variance d'un estimateur $\displaystyle \hat{t}_{y,\text{HT}}(S) = \sum_{k \in S} \frac{y_k}{\pi_k}$ du total $\displaystyle \sum_{k \in \mathcal{U}} y_k$.
+:::
+
+::: {.fragment}
+- Même idée que dans le cas i.i.i : si on avait accès à $B$ estimateurs basés sur $(S_1, ..., S_B) \sim p^{\otimes{B}}$, il serait possible de calculer $\displaystyle \hat{\mathbb{V}}(\hat{t}_{y,\text{HT}}) = \frac{1}{B} \sum_{b = 1}^B \left( \hat{t}_{y,\text{HT}}(S_b) -  \bar{\hat{t}}_{y,\text{HT}}(S_b) \right)^2$
+:::
+
+::: {.fragment}
+- Il faut donc construire $B$ échantillons *artificiels* à partir de $S$ : 
+  - Tirage avec remise (et indépendant) parmi $S$ $\to$ $S^*_1$ 
+  - Tirage avec remise (et indépendant) parmi $S$ $\to$ $S^*_2$
+
+
+L'estimateur de la variance par bootstrap est donnée par $\displaystyle \hat{\mathbb{V}}_\text{boot}(\hat{t}_{y,\text{HT}}) = \frac{1}{B} \sum_{b = 1}^B \left( \hat{t}_{y,\text{HT}}(S^*_b) -  \bar{\hat{t}}_{y,\text{HT}}^* \right)^2$
+:::
+
+::: {.fragment}
+- Dans le cas simple du tirage $\text{SASSR}(n;N)$, $\mathbb{V}(\hat{t}_{y,\text{HT}}(S)) = \frac{N^2}{n}\left(1 - \frac{n}{N} \right) S^2_y$
+:::
+
+::: {.fragment}
+- Comparaison sur un exemple :
+  - $N = 1000$
+  - $n = 600$
+  - $\{y_k\}_{k \in \mathcal{U}}$ est distribuée selon une loi gaussienne standard
+  - $B = 1000$ réplications
+:::
+  
+
+## Estimation bootstrap
+
+
+
+:::: {.columns}
+
+::: {.column width="50%"}
+
+```{r echo=TRUE}
+#Définition d'une graine
+set.seed(0107)
+
+#Taille de la population et de l'échantillon
+N <- 1000
+n <- 600
+#Variable d'intérêt selon une loi normale centrée réduite
+y <- rnorm(n)
+#Variable d'intérêt sur l'échantillon selon une loi normale centrée réduite
+y_ech <- y[sample(1:N, n)]
+
+#Tirage d'un échantillon de taille n avec remise parmi y 
+#et calcul de la médiane
+replicationTotHT <- function(y, nbBoot = 1000, f = n/N){
+  reechFinal <- replicate(nbBoot, 
+                          {reech <- rmultinom(n = 1, size = length(y),
+                                              rep(1/length(y),length(y)))[,1] #Tirage avec remise parmi les n éléments de y
+                          med_reech <- sum(y*reech/f) #Calcule de l'estimateur de HT du total
+                          })
+  return(reechFinal)
+}
+
+
+#Estimation de la variance de l'estimateur de la médiane 
+var_HT_boot <- var(replicationTotHT(y,1000))
+
+#Estimation de la variance exacte
+var_exact <- (N^2)*(1-(n/N))*var(y)/n
+```
+:::
+
+
+::: {.column width="50%"}
+
+
+  
+```{r echo=TRUE}
+print(var_HT_boot/var_exact)
+```
+
+::: {.fragment}
+- L'estimateur par le bootstrap donne une sur-estimation de la variance dans ce cas.
+:::
+
+::: {.fragment}
+- Il est possible de montrer que $\displaystyle \mathbb{E}_{S^*}(\hat{\mathbb{V}}_\text{boot}(\hat{t}_{y,\text{HT}})) = \frac{N^2}{n}S_y$.
+:::
+
+::: {.fragment}
+- L'estimateur par bootstrap proposé conduit à une sur-estimation de la variance d'un facteur $\displaystyle \frac{1}{1 - \frac{n}{N}}$.
+:::
+
+::: {.fragment}
+- Pas de prise en compte du gain à ne pas tirer avec remise ici.
+:::
+
+:::
+
+::::
+
+## Bootstrap pour le $\text{SASSR}$
+
+::: {.fragment}
+- L'estimation par bootstrap naïf conduit à une sur-estimation d'un facteur croissant de $\frac{n}{N}$.
+:::
+
+::: {.fragment}
+- Plusieurs solutions à ce problème :
+  - @mccarthy1985bootstrap : ne pas tirer $n$ individus avec remise dans $S$ mais $n_\text{boot}=\frac{n-1}{1-f}$,
+  - @Rao1988ResamplingIW : utiliser une variable transformée définie pour l'individu $k$ par $\tilde{y_k} = \bar{{y}} +  (\frac{n_\text{boot} (1-\frac{n}{N})}{n-1})(y_k - \bar{y})$ où $n_\text{boot}$ est un nombre d'individus tirés avec remise pour chaque échantillon bootstrap.
+:::
+
+::: {.fragment}
+- Approche populationnelle : 
+  - @gross : créer une population artificielle $\mathcal{U}^*$ en dupliquant $\frac{N}{n}$ fois chaque observation puis tirage d'un échantillon dans $\mathcal{U}^*$ selon un $\text{SASSR}(n;N)$,
+  - Problème : approche nécessitant que $\frac{N}{n}$ entier.
+:::
+
+
+# Utilisation de poids bootstrap en sondage 
+
+## Poids bootstrap
+
+::: {.fragment}
+- Un échantillon $S^*_b$ est tiré avec remise parmi $S$.
+:::
+
+::: {.fragment}
+- Soit $m_b = (m_{b,1}, ..., m_{b,n})$ où $m_{b,j}$ correspond au nombre de fois où l'individu $j$ appartient à l'échantillon $S^*_b$.
+:::
+
+::: {.fragment}
+- L'estimation répliquée basée sur $S^*_b$ est donnée par :
+\begin{align}
+\hat{t}_{y, \text{HT}}(S^*_b) &= \sum_{k \in S^*_b} \frac{y_k}{\pi_k} \\
+&= \sum_{k \in S^*_b \cap S} \frac{y_k}{\pi_k} + \sum_{k \in S / S^*_b} 0 \\
+&= \sum_{k \in S} y_k \frac{m_{b,k}}{\pi_k} \\
+&= \sum_{k \in S} y_k w_{b,k}
+\end{align}
+:::
+
+::: {.fragment}
+- L'estimation répliquée peut être obtenue en calculant un total pondéré par les poids $w_{b,\bullet} = (w_{b,1}, ..., w_{b,n})$ \to :  il s'agit des poids répliqués.
+:::
+
+::: {.fragment}
+- En pratique, pour estimer la variance par bootstrap, l'utilisateur :
+  - reçoit une table dont les colonnes sont $(w_{1,\bullet}| ... | w_{B,\bullet})$,
+  - calcule $B$ estimations en utilisant chacun des $B$ jeux de la table,
+  - estime la variance en utilisant la dispersion des $B$ estimations obtenues.
+:::
+
+
+## Comparaison approche analytique et par bootstrap
+
+::: columns
+::: {.column width="50%"}
+**Approche analytique** :
+
+:white_check_mark:
+
+- Meilleur *contrôle* des approximations effectuées.
+
+:x:
+
+- Nécessite un calcul de linéarisation pour chaque statistique.
+- Implémentation parfois périlleuse (même avec `gustave`).
+- Potentiellement utilisation de données sensibles dans l'estimation $\to$ problème en cas de diffusion.
+:::
+::: {.column width="50%"}
+**Approche bootstrap** :
+
+:white_check_mark:
+
+- Estimation de la variance possible à partir des poids répliqués et des variables d'intérêt $\to$ pas d'informations intermédiaires sensibles.
+- Estimation de la variance d'un paramètre complexe $\to$ implémentation du paramètre sans linéarisation.
+
+:x:
+
+- Calcul des poids répliqués pouvant être chronophage.
+- Prise en compte de spécificité du tirage potentiellement complexe $\to$ plan équilibré avec remise ?
+:::
+::::
+
+
+## Ce qu'il faut retenir 
+
+::: {.fragment}
+- Le bootstrap permet d'estimer la variance d'un estimateur ...
+:::
+
+::: {.fragment}
+- ... en essayant de **mimer** sa distribution asymptotique. 
+:::
+
+::: {.fragment}
+- Le bootstrap dans le cas i.i.d peut ne pas fonctionner.
+:::
+
+::: {.fragment}
+- L'application directe d'un bootstrap naïf au cas des sondages peut conduire à des estimations fausses :
+  - Nécessite d'avoir des méthodes propres à chaque plan de sondage.
+  - @chauvetphd propose une revue des méthodes. 
+:::
+
+::: {.fragment}
+- Une fois les poids répliqués obtenus, il est facile d'avoir une estimation de la variance pour n'importe quel estimateur.
+:::
+
+##
+
+
+
+[^1]: Il s'agit d'un estimateur par maximum de vraisemblance.

@@ -12,7 +12,7 @@ Des coquilles peuvent être cachées dans les documents : n'hésitez pas à le n
 |:--------------:|:--------------:|:-------------------------------------:|:--------------:|:-----------:|:-----------:|
 |20 juin 2024| 13:00 - 15:00  | [Présentation du calcul de variance analytique](presentations/pres_analytique.qmd) | | :x: | |
 |20 juin 2024| 13:00 - 15:00  | [Application avec `gustave`](presentations/var_gustave.qmd) | | :x: | |
-|2 juillet 2024| 13:00 - 15:00 | [Présentation du calcul de variance par bootstrap]() | | :x: | |
+|2 juillet 2024| 13:00 - 15:00 | [Présentation du calcul de variance par bootstrap](presentations/pres_bootstrap.qmd) | | :x: | |
 
 #### Enregistrement au format pdf
 
