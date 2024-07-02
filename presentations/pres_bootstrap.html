@@ -586,12 +586,12 @@ Khaled Larbi
 </div>
 <div class="fragment">
 <ul>
-<li>En réitérant <span class="math inline">\(B-1\)</span> fois, on obtient <span class="math inline">\((\hat{\theta}^*_1, ..., \hat{\theta}^*_n)\)</span></li>
+<li>En réitérant <span class="math inline">\(B-1\)</span> fois, on obtient <span class="math inline">\((\hat{\theta}^*_1, ..., \hat{\theta}^*_B)\)</span></li>
 </ul>
 </div>
 <div class="fragment">
 <ul>
-<li>La variance est estimée par <span class="math inline">\(\displaystyle \hat{\mathbb{V}}_\text{boot}(\hat{\theta}) = \frac{1}{n} \sum_{k = 1}^n \left(\hat{\theta}^*_k - \bar{\hat{\theta}^*} \right)^2\)</span></li>
+<li>La variance est estimée par <span class="math inline">\(\displaystyle \hat{\mathbb{V}}_\text{boot}(\hat{\theta}) = \frac{1}{B} \sum_{k = 1}^{B} \left(\hat{\theta}^*_k - \bar{\hat{\theta}^*} \right)^2\)</span></li>
 </ul>
 </div>
 <div class="fragment">
@@ -728,9 +728,9 @@ Khaled Larbi
 </div>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a></a><span class="co">#Estimation de la variance par Monte-Carlo</span></span>
 <span id="cb7-2"><a></a><span class="fu">var</span>(<span class="fu">replicate</span>(<span class="dv">10000</span>,</span>
-<span id="cb7-3"><a></a>              <span class="fu">max</span>(<span class="fu">runif</span>(n,<span class="dv">0</span>,<span class="dv">10</span>))))</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-3"><a></a>              <span class="fu">max</span>(<span class="fu">runif</span>(n,<span class="dv">0</span>,<span class="dv">20</span>))))</span></code><button title="Copier vers le presse-papier" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 1.608259e-05</code></pre>
+<pre><code>[1] 6.433036e-05</code></pre>
 </div>
 </div>
 </div>
