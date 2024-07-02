@@ -7,6 +7,139 @@
     "text": "Calendrier\nDes coquilles peuvent être cachées dans les documents : n’hésitez pas à le notifier par mail ou faire un pull-request.\n\n\n\nDate\nHeure\nSujet\nLien\nDéfinitifs ?\nCompléments / Corrections\n\n\n\n\n20 juin 2024\n13:00 - 15:00\nPrésentation du calcul de variance analytique\n\n❌\n\n\n\n20 juin 2024\n13:00 - 15:00\nApplication avec gustave\n\n❌\n\n\n\n2 juillet 2024\n13:00 - 15:00\nPrésentation du calcul de variance par bootstrap\n\n❌\n\n\n\n\n\n\nEnregistrement au format pdf\nLes présentations sont disponibles au format html. Cependant, ce format n’est pas le plus optimisé pour l’annotation. Il est possible d’enregistrer au format pdf en :\n\nutilisant Google Chrome ou un autre navigateur,\nappuyant sur la touche e de votre clavier lorsque vous êtes sur la présentation,\nappuyant sur la combinaison CTRL + P et en enregistrant au format pdf.\n\n\n\n\nTransformation de html vers pdf"
   },
   {
+    "objectID": "presentations/pres_bootstrap.html#section",
+    "href": "presentations/pres_bootstrap.html#section",
+    "title": "Atelier du réseau sondage",
+    "section": "",
+    "text": "L’estimation de la variance est centrale en sondage.\n\nRéponse à des impératifs réglementaires.\nComparaison des résultats.\nNécessaire pour certains outils statistiques.\n\n\n\n\n\nTraditionnellement à l’Insee, l’estimation de la variance passe par l’approche analytique :\n\nProposition d’une formule pour l’estimateur de la variance.\n\n\n\n\n\nDes outils simplifient ce calcul : gustave permet le calcul et la diffusion des estimations de variance.\n\n\n\n\nNéanmoins, d’autres approches peuvent être utilisés : les méthodes de bootstrap.\n\n\n\n\nD’autres INS ont une utilisation plus fréquente de ces méthodes."
+  },
+  {
+    "objectID": "presentations/pres_bootstrap.html#cadre-i.i.d",
+    "href": "presentations/pres_bootstrap.html#cadre-i.i.d",
+    "title": "Atelier du réseau sondage",
+    "section": "Cadre i.i.d",
+    "text": "Cadre i.i.d\n\n\nAvant de présenter la problématique du bootstrap dans un cadre de sondage, on considère un cas en population infini.\n\n\n\n\nOn considère une distribution \\(\\mathbb{P}_X\\).\n\nExemple 1 : \\(\\mathbb{P}_X\\) désigne la loi de Bernouilli de paramètre \\(p\\).\nExemple 2 : \\(\\mathbb{P}_X\\) est une loi gaussienne centrée en \\(M\\).\n\n\n\n\n\nCette distribution est considéré comme inconnue …\n\n\n\n\nOn souhaite inférer sur un paramètre \\(\\theta\\) qui est fonction de cette distribution.\n\nExemple 1 : le paramètre \\(p\\).\nExemple 2 : la médiane de la loi gaussienne \\(M\\).\n\n\n\n\n\nOn dispose à la place d’un \\(n-\\)échantillon i.i.d \\((X_1, ..., X_n) \\sim \\mathbb{P}_X\\)"
+  },
+  {
+    "objectID": "presentations/pres_bootstrap.html#section-1",
+    "href": "presentations/pres_bootstrap.html#section-1",
+    "title": "Atelier du réseau sondage",
+    "section": "",
+    "text": "Le paramètre \\(\\theta\\) va être estimé par \\(\\hat{\\theta} = f(X_1, ..., X_n)\\) où \\(f\\) est une fonction mesurable.\n\nExemple 1 : le paramètre \\(p\\) peut être estimé par \\(\\displaystyle \\hat{p} = \\frac{1}{n} \\sum_{k = 1}^n X_k\\)1\nExemple 2 : le paramètre \\(M\\) peut être estimé par \\(\\displaystyle \\hat{M} = \\widehat{\\text{Mediane(}}X_1, ..., X_n)\\).\n\nIntuitivement, l’estimateur va nous permettre d’approximer le paramètre inconnu.\n\n\n\n\nMais est-ce une bonne approximation ?\n\nBiais et variance (asymptotique)\n\n\n\n\n\nDans l’exemple 1, l’estimation de la variance est simple :\n\n\\(\\displaystyle \\hat{\\mathbb{V}}(\\hat{p}) = \\frac{\\hat{p}(1-\\hat{p})}{n}\\) est un estimateur consistant de \\({\\mathbb{V}}(\\hat{p})\\).\n\n\n\n\n\nDans l’exemple 2 …\n\n\nIl s’agit d’un estimateur par maximum de vraisemblance."
+  },
+  {
+    "objectID": "presentations/pres_bootstrap.html#estimation-de-la-variance-de-hatm",
+    "href": "presentations/pres_bootstrap.html#estimation-de-la-variance-de-hatm",
+    "title": "Atelier du réseau sondage",
+    "section": "Estimation de la variance de \\(\\hat{M}\\)",
+    "text": "Estimation de la variance de \\(\\hat{M}\\)\n\n\nPour n’importe quel échantillon i.i.d de taille \\(n \\geq 2,~~ (Y_1, ..., Y_n)\\) désigne un \\(n\\)-échantillon iid suivant une loi \\(\\mathbb{P}_Y\\) admettant un moment d’ordre 2 fini, \\[\\displaystyle \\hat{\\mathbb{V}}(Y) = \\frac{1}{n - 1} \\sum_{k = 1}^n \\left(Y_k - \\bar{Y}_n \\right)^2\\] est un estimateur sans biais et consistant de \\(\\mathbb{V}(Y)\\).\n\n\n\n\nOn souhaite estimer \\(\\mathbb{V}(\\hat{M})\\).\n\nPourquoi ne pas appliquer le raisonnement précédent ?\nParce qu’on a qu’une seule variable \\((\\hat{M})\\)\nMais si on avait accès à B réplications i.i.d \\((\\hat{M}_1, ..., \\hat{M}_B)\\) \\(\\to\\) on pourrait calculer\n\n\n\n\n\nProblème :\n\nPour calculer \\(\\hat{M}_1\\), il faut un premier échantillon \\((X_1, ..., X_n)\\)\nPour calculer \\(\\hat{M}_2\\), il faut un deuxième échantillon \\((X_{n+1}, ..., X_{2n})\\)\nIl faudrait \\(B\\) échantillons de taille \\(n\\) alors qu’en pratique, nous n’avons qu’un échantillon de taille \\(n\\).\n\n\n\n\n\nSolution : idée du bootstrap d’Efron (1979)\n\nCréer \\(B\\) échantillons artificiels de taille \\(n\\) en tirant indépendamment avec remise parmi \\(\\{X_1, ..., X_n\\}\\)."
+  },
+  {
+    "objectID": "presentations/pres_bootstrap.html#echantillon-bootstrap",
+    "href": "presentations/pres_bootstrap.html#echantillon-bootstrap",
+    "title": "Atelier du réseau sondage",
+    "section": "Echantillon bootstrap",
+    "text": "Echantillon bootstrap\n\n\nIl est possible de créer un échantillon artificiel \\((X_{1,1}^*, ..., X_{1,n}^*)\\) en tirant avec remise parmi \\(\\{X_1, ..., X_n\\}\\) \\(\\to\\) Estimateur \\(\\hat{\\theta}^*_1\\).\n\n\n\n\nEn réitérant \\(B-1\\) fois, on obtient \\((\\hat{\\theta}^*_1, ..., \\hat{\\theta}^*_n)\\)\n\n\n\n\nLa variance est estimée par \\(\\displaystyle \\hat{\\mathbb{V}}_\\text{boot}(\\hat{\\theta}) = \\frac{1}{n} \\sum_{k = 1}^n \\left(\\hat{\\theta}^*_k - \\bar{\\hat{\\theta}^*} \\right)^2\\)\n\n\n\n\nApplication avec \\(n = 5\\) individus et un estimateur \\(\\hat{\\theta} = f(X_1, ..., X_n)\\)\n\nEchantillon initial : \\((X_1, X_2, X_3, X_4, X_5)\\)\nEchantillon bootstrap 1 : \\((X_{1,1}^*, ..., X_{1,5}^*) = (X_1, X_3, X_3, X_1, X_4) ~~ \\to \\hat{\\theta}^{*}_1\\)\nEchantillon bootstrap 2 : \\((X_{2,1}^*, ..., X_{2,5}^*) = (X_1, X_4, X_4, X_2, X_3)~~ \\to \\hat{\\theta}^{*}_2\\)\nEchantillon bootstrap 3 : \\((X_{3,1}^*, ..., X_{3,5}^*) = (X_5, X_1, X_1, X_2, X_3)~~ \\to \\hat{\\theta}^{*}_3\\)\n…"
+  },
+  {
+    "objectID": "presentations/pres_bootstrap.html#construction-dun-intervalle-de-confiance",
+    "href": "presentations/pres_bootstrap.html#construction-dun-intervalle-de-confiance",
+    "title": "Atelier du réseau sondage",
+    "section": "Construction d’un intervalle de confiance",
+    "text": "Construction d’un intervalle de confiance\n\n\nIl est possible de construire un intervalle de confiance de plusieurs manières en utilisant une méthode par bootstrap.\n\n\n\n\nMéthode 1 : estimation de la variance puis utilisation de l’hypothèse de normalité asymptotique de l’estimateur.\n\n\n\nUn intervalle de confiance de niveau \\(1-\\alpha\\) est donné par :\n\\[[\\hat{\\theta} - q_{1 - {\\frac{\\alpha}{2}}} \\hat{\\mathbb{V}}_\\text{boot}^{\\frac{1}{2}}(\\hat{\\theta}); \\hat{\\theta} + q_{1 - {\\frac{\\alpha}{2}}} \\hat{\\mathbb{V}}^{\\frac{1}{2}}_\\text{boot}(\\hat{\\theta})] \\]\n\n\n\nMéthode 2 : estimation de l’intervalle de confiance basée sur la distribution bootstrap.\n\nUn intervalle de confiance de niveau \\(1-\\alpha\\) est donné par :\n\\[[q^*_{{\\frac{\\alpha}{2}}}; q^*_{1 - \\frac{\\alpha}{2}}] \\] où \\(q^*_\\beta\\) désigne le quantile empirique d’ordre \\(\\beta\\) de \\((\\hat{\\theta}^{*}_1, ..., \\hat{\\theta}^{*}_B)\\)"
+  },
+  {
+    "objectID": "presentations/pres_bootstrap.html#résumé",
+    "href": "presentations/pres_bootstrap.html#résumé",
+    "title": "Atelier du réseau sondage",
+    "section": "Résumé",
+    "text": "Résumé"
+  },
+  {
+    "objectID": "presentations/pres_bootstrap.html#application-à-la-médiane",
+    "href": "presentations/pres_bootstrap.html#application-à-la-médiane",
+    "title": "Atelier du réseau sondage",
+    "section": "Application à la médiane",
+    "text": "Application à la médiane\n\n\nSoit \\((X_1, ..., X_n)\\), un \\(n\\)-échantillon i.i.d avec \\(X_1 \\sim \\mathcal{N}(0,1)\\) avec \\(n = 1000\\).\n\n\n\n\nOn souhaite aussi estimer la variance de \\(\\widehat{\\text{Mediane}}(X_1, ..., X_n)\\).\n\n\n\n\nApproche basée sur 1000 réplications\n\n\n\n\n#Définition d'une graine\nset.seed(0107)\n\n#Taille de l'échantillon\nn &lt;- 2500\n#Echantillon selon une loi normale centrée réduite\ny &lt;- rnorm(n)\n\n#Tirage d'un échantillon de taille n avec remise parmi y \n#et calcul de la médiane\nreplicationMediane &lt;- function(y, nbBoot = 1000){\n  reechFinal &lt;- replicate(nbBoot, \n                          {reech &lt;- rmultinom(n = 1, size = length(y),\n                                              rep(1/length(y),length(y)))[,1] #Tirage avec remise parmi les n éléments de y\n                          med_reech &lt;- median(rep(y,reech)) #Calcule de la médiane sur le rééchantillon\n                          })\n  return(reechFinal)\n}\n\n\n#Estimation de la variance de l'estimateur de la médiane \nvar(replicationMediane(y,1000))\n\n[1] 0.000667837\n\n#Estimation de la variance par Monte-Carlo\nvar(replicate(10000,\n              median(rnorm(n))))\n\n[1] 0.0006317483"
+  },
+  {
+    "objectID": "presentations/pres_bootstrap.html#quand-ça-ne-fonctionne-pas",
+    "href": "presentations/pres_bootstrap.html#quand-ça-ne-fonctionne-pas",
+    "title": "Atelier du réseau sondage",
+    "section": "Quand ça ne fonctionne pas …",
+    "text": "Quand ça ne fonctionne pas …\n\n\nSoit \\((X_1, ..., X_n)\\), un \\(n\\)-échantillon i.i.d avec \\(X_1 \\sim \\mathcal{U}_{[0;20]}\\) avec \\(n = 2500\\).\n\n\n\n\nOn souhaite estimer la variance de \\(\\displaystyle \\hat{\\theta} = \\max_{k \\in \\{1,..,n\\}} X_k\\)\n\n\n\n\nApproche basée sur 1000 réplications\n\n\n#Taille de l'échantillon\nn &lt;- 2500\n#Echantillon selon une loi uniforme\ny &lt;- runif(n,0,20)\n\n#Tirage d'un échantillon de taille n avec remise parmi y \n#et calcul du maximum\nreplicationMax &lt;- function(y, nbBoot = 1000){\n  reechFinal &lt;- replicate(nbBoot, \n                          {reech &lt;- rmultinom(n = 1, size = length(y),\n                                              rep(1/length(y),length(y)))[,1] #Tirage avec remise parmi les n éléments de y\n                          med_reech &lt;- max(rep(y,reech)) #Calcule de la médiane sur le rééchantillon\n                          })\n  return(reechFinal)\n}\n\n#Estimation de la variance de l'estimateur du maximum \nvar(replicationMax(y,1000))\n\n[1] 0.0001172419\n\n#Estimation de la variance par Monte-Carlo\nvar(replicate(10000,\n              max(runif(n,0,10))))\n\n[1] 1.608259e-05"
+  },
+  {
+    "objectID": "presentations/pres_bootstrap.html#pourquoi-ça-ne-fonctionne-pas",
+    "href": "presentations/pres_bootstrap.html#pourquoi-ça-ne-fonctionne-pas",
+    "title": "Atelier du réseau sondage",
+    "section": "Pourquoi ça ne fonctionne pas ?",
+    "text": "Pourquoi ça ne fonctionne pas ?\n\n\nLe bootstrap repose sur des hypothèses.\n\n\n\n\nIl faut montrer que \\(\\mathcal{L}(a_n(\\hat{\\theta}_n - \\theta)) \\approx \\mathcal{L}(a_n(\\hat{\\theta}^*_n - \\hat{\\theta}_n)|X_1, ..., X_n)\\) ps.\n\n\n\n\nDans le deuxième exemple, ce n’est pas le cas :\n\nEn prenant \\(a_n = n\\)"
+  },
+  {
+    "objectID": "presentations/pres_bootstrap.html#section-2",
+    "href": "presentations/pres_bootstrap.html#section-2",
+    "title": "Atelier du réseau sondage",
+    "section": "",
+    "text": "Les méthodes de bootstrap permettent d’estimer la variance d’un estimateur dans le cas i.i.d. Est-ce le cas en sondage ?\n\n\n\n\nDans la suite, une méthode de bootstrap permet d’estimer la variance si l’estimateur obtenu par bootstrap est consistant pour la variance.\n\n\n\n\nLa variance estimée est celle liée à l’échantillonnage (approche design based)."
+  },
+  {
+    "objectID": "presentations/pres_bootstrap.html#notation",
+    "href": "presentations/pres_bootstrap.html#notation",
+    "title": "Atelier du réseau sondage",
+    "section": "Notation",
+    "text": "Notation\n\nDans cette présentation, on notera :\n\n\\(\\mathcal{U}\\), une population finie de taille \\(N\\),\n\\(p\\), un plan de sondage défini sur \\(\\mathcal{U}\\),\n\\(S\\) un échantillon aléatoire tiré selon le plan \\(p\\).\n\n\n\n\n\\(\\{y_k\\}\\) : une variable d’intérêt,\n\\(\\{x_k\\}\\) : une variable auxiliaire.\n\n\n\nPour l’inférence, il est commode d’introduire :\n\nPour tout individu \\(k \\in \\mathcal{U}, ~ \\pi_k = \\mathbb{P}(k \\in S)\\) \\(\\to\\) probabilité d’inclusion d’ordre 1.\n\nIl s’agit de la probabilité que l’individu \\(k\\) soit dans l’échantillon \\(S\\).\n\nPour tout couple d’individus \\((k,l) \\in \\mathcal{U}^2, ~ \\pi_{kl} = \\mathbb{P}(k \\in S \\cap l \\in S)\\) \\(\\to\\) probabilité d’inclusion d’ordre 2.\n\nIl s’agit de la probabilité que les individus \\(k\\) et \\(l\\) soient conjointement dans l’échantillon \\(S\\)."
+  },
+  {
+    "objectID": "presentations/pres_bootstrap.html#cas-du-sondage-aléatoire-simple-sans-remise",
+    "href": "presentations/pres_bootstrap.html#cas-du-sondage-aléatoire-simple-sans-remise",
+    "title": "Atelier du réseau sondage",
+    "section": "Cas du sondage aléatoire simple sans remise",
+    "text": "Cas du sondage aléatoire simple sans remise\n\n\nOn considère ici que \\(S \\sim \\text{SASSR}(n;N)\\)\nOn souhaite estimer la variance d’un estimateur \\(\\displaystyle \\hat{t}_{y,\\text{HT}}(S) = \\sum_{k \\in S} \\frac{y_k}{\\pi_k}\\) du total \\(\\displaystyle \\sum_{k \\in \\mathcal{U}} y_k\\).\n\n\n\n\nMême idée que dans le cas i.i.i : si on avait accès à \\(B\\) estimateurs basés sur \\((S_1, ..., S_B) \\sim p^{\\otimes{B}}\\), il serait possible de calculer \\(\\displaystyle \\hat{\\mathbb{V}}(\\hat{t}_{y,\\text{HT}}) = \\frac{1}{B} \\sum_{b = 1}^B \\left( \\hat{t}_{y,\\text{HT}}(S_b) -  \\bar{\\hat{t}}_{y,\\text{HT}}(S_b) \\right)^2\\)\n\n\n\n\nIl faut donc construire \\(B\\) échantillons artificiels à partir de \\(S\\) :\n\nTirage avec remise (et indépendant) parmi \\(S\\) \\(\\to\\) \\(S^*_1\\)\nTirage avec remise (et indépendant) parmi \\(S\\) \\(\\to\\) \\(S^*_2\\)\n\n\nL’estimateur de la variance par bootstrap est donnée par \\(\\displaystyle \\hat{\\mathbb{V}}_\\text{boot}(\\hat{t}_{y,\\text{HT}}) = \\frac{1}{B} \\sum_{b = 1}^B \\left( \\hat{t}_{y,\\text{HT}}(S^*_b) -  \\bar{\\hat{t}}_{y,\\text{HT}}^* \\right)^2\\)\n\n\n\nDans le cas simple du tirage \\(\\text{SASSR}(n;N)\\), \\(\\mathbb{V}(\\hat{t}_{y,\\text{HT}}(S)) = \\frac{N^2}{n}\\left(1 - \\frac{n}{N} \\right) S^2_y\\)\n\n\n\n\nComparaison sur un exemple :\n\n\\(N = 1000\\)\n\\(n = 600\\)\n\\(\\{y_k\\}_{k \\in \\mathcal{U}}\\) est distribuée selon une loi gaussienne standard\n\\(B = 1000\\) réplications"
+  },
+  {
+    "objectID": "presentations/pres_bootstrap.html#estimation-bootstrap",
+    "href": "presentations/pres_bootstrap.html#estimation-bootstrap",
+    "title": "Atelier du réseau sondage",
+    "section": "Estimation bootstrap",
+    "text": "Estimation bootstrap\n\n\n\n#Définition d'une graine\nset.seed(0107)\n\n#Taille de la population et de l'échantillon\nN &lt;- 1000\nn &lt;- 600\n#Variable d'intérêt selon une loi normale centrée réduite\ny &lt;- rnorm(n)\n#Variable d'intérêt sur l'échantillon selon une loi normale centrée réduite\ny_ech &lt;- y[sample(1:N, n)]\n\n#Tirage d'un échantillon de taille n avec remise parmi y \n#et calcul de la médiane\nreplicationTotHT &lt;- function(y, nbBoot = 1000, f = n/N){\n  reechFinal &lt;- replicate(nbBoot, \n                          {reech &lt;- rmultinom(n = 1, size = length(y),\n                                              rep(1/length(y),length(y)))[,1] #Tirage avec remise parmi les n éléments de y\n                          med_reech &lt;- sum(y*reech/f) #Calcule de l'estimateur de HT du total\n                          })\n  return(reechFinal)\n}\n\n\n#Estimation de la variance de l'estimateur de la médiane \nvar_HT_boot &lt;- var(replicationTotHT(y,1000))\n\n#Estimation de la variance exacte\nvar_exact &lt;- (N^2)*(1-(n/N))*var(y)/n\n\n\n\nprint(var_HT_boot/var_exact)\n\n[1] 2.581805\n\n\n\n\nL’estimateur par le bootstrap donne une sur-estimation de la variance dans ce cas.\n\n\n\n\nIl est possible de montrer que \\(\\displaystyle \\mathbb{E}_{S^*}(\\hat{\\mathbb{V}}_\\text{boot}(\\hat{t}_{y,\\text{HT}})) = \\frac{N^2}{n}S_y\\).\n\n\n\n\nL’estimateur par bootstrap proposé conduit à une sur-estimation de la variance d’un facteur \\(\\displaystyle \\frac{1}{1 - \\frac{n}{N}}\\).\n\n\n\n\nPas de prise en compte du gain à ne pas tirer avec remise ici."
+  },
+  {
+    "objectID": "presentations/pres_bootstrap.html#bootstrap-pour-le-textsassr",
+    "href": "presentations/pres_bootstrap.html#bootstrap-pour-le-textsassr",
+    "title": "Atelier du réseau sondage",
+    "section": "Bootstrap pour le \\(\\text{SASSR}\\)",
+    "text": "Bootstrap pour le \\(\\text{SASSR}\\)\n\n\nL’estimation par bootstrap naïf conduit à une sur-estimation d’un facteur croissant de \\(\\frac{n}{N}\\).\n\n\n\n\nPlusieurs solutions à ce problème :\n\nMcCarthy et Snowden (1985) : ne pas tirer \\(n\\) individus avec remise dans \\(S\\) mais \\(n_\\text{boot}=\\frac{n-1}{1-f}\\),\nRao et Wu (1988) : utiliser une variable transformée définie pour l’individu \\(k\\) par \\(\\tilde{y_k} = \\bar{{y}} +  (\\frac{n_\\text{boot} (1-\\frac{n}{N})}{n-1})(y_k - \\bar{y})\\) où \\(n_\\text{boot}\\) est un nombre d’individus tirés avec remise pour chaque échantillon bootstrap.\n\n\n\n\n\nApproche populationnelle :\n\nGross (1980) : créer une population artificielle \\(\\mathcal{U}^*\\) en dupliquant \\(\\frac{N}{n}\\) fois chaque observation puis tirage d’un échantillon dans \\(\\mathcal{U}^*\\) selon un \\(\\text{SASSR}(n;N)\\),\nProblème : approche nécessitant que \\(\\frac{N}{n}\\) entier."
+  },
+  {
+    "objectID": "presentations/pres_bootstrap.html#poids-bootstrap",
+    "href": "presentations/pres_bootstrap.html#poids-bootstrap",
+    "title": "Atelier du réseau sondage",
+    "section": "Poids bootstrap",
+    "text": "Poids bootstrap\n\n\nUn échantillon \\(S^*_b\\) est tiré avec remise parmi \\(S\\).\n\n\n\n\nSoit \\(m_b = (m_{b,1}, ..., m_{b,n})\\) où \\(m_{b,j}\\) correspond au nombre de fois où l’individu \\(j\\) appartient à l’échantillon \\(S^*_b\\).\n\n\n\n\nL’estimation répliquée basée sur \\(S^*_b\\) est donnée par : \\[\\begin{align}\n\\hat{t}_{y, \\text{HT}}(S^*_b) &= \\sum_{k \\in S^*_b} \\frac{y_k}{\\pi_k} \\\\\n&= \\sum_{k \\in S^*_b \\cap S} \\frac{y_k}{\\pi_k} + \\sum_{k \\in S / S^*_b} 0 \\\\\n&= \\sum_{k \\in S} y_k \\frac{m_{b,k}}{\\pi_k} \\\\\n&= \\sum_{k \\in S} y_k w_{b,k}\n\\end{align}\\]\n\n\n\n\nL’estimation répliquée peut être obtenue en calculant un total pondéré par les poids \\(w_{b,\\bullet} = (w_{b,1}, ..., w_{b,n})\\) : il s’agit des poids répliqués.\n\n\n\n\nEn pratique, pour estimer la variance par bootstrap, l’utilisateur :\n\nreçoit une table dont les colonnes sont \\((w_{1,\\bullet}| ... | w_{B,\\bullet})\\),\ncalcule \\(B\\) estimations en utilisant chacun des \\(B\\) jeux de la table,\nestime la variance en utilisant la dispersion des \\(B\\) estimations obtenues."
+  },
+  {
+    "objectID": "presentations/pres_bootstrap.html#comparaison-approche-analytique-et-par-bootstrap",
+    "href": "presentations/pres_bootstrap.html#comparaison-approche-analytique-et-par-bootstrap",
+    "title": "Atelier du réseau sondage",
+    "section": "Comparaison approche analytique et par bootstrap",
+    "text": "Comparaison approche analytique et par bootstrap\n\n\nApproche analytique :\n✅\n\nMeilleur contrôle des approximations effectuées.\n\n❌\n\nNécessite un calcul de linéarisation pour chaque statistique.\nImplémentation parfois périlleuse (même avec gustave).\nPotentiellement utilisation de données sensibles dans l’estimation \\(\\to\\) problème en cas de diffusion.\n\n\nApproche bootstrap :\n✅\n\nEstimation de la variance possible à partir des poids répliqués et des variables d’intérêt \\(\\to\\) pas d’informations intermédiaires sensibles.\nEstimation de la variance d’un paramètre complexe \\(\\to\\) implémentation du paramètre sans linéarisation.\n\n❌\n\nCalcul des poids répliqués pouvant être chronophage.\nPrise en compte de spécificité du tirage potentiellement complexe \\(\\to\\) plan équilibré avec remise ?"
+  },
+  {
+    "objectID": "presentations/pres_bootstrap.html#ce-quil-faut-retenir",
+    "href": "presentations/pres_bootstrap.html#ce-quil-faut-retenir",
+    "title": "Atelier du réseau sondage",
+    "section": "Ce qu’il faut retenir",
+    "text": "Ce qu’il faut retenir\n\n\nLe bootstrap permet d’estimer la variance d’un estimateur …\n\n\n\n\n… en essayant de mimer sa distribution asymptotique.\n\n\n\n\nLe bootstrap dans le cas i.i.d peut ne pas fonctionner.\n\n\n\n\nL’application directe d’un bootstrap naïf au cas des sondages peut conduire à des estimations fausses :\n\nNécessite d’avoir des méthodes propres à chaque plan de sondage.\nChauvet (2007) propose une revue des méthodes.\n\n\n\n\n\nUne fois les poids répliqués obtenus, il est facile d’avoir une estimation de la variance pour n’importe quel estimateur."
+  },
+  {
+    "objectID": "presentations/pres_bootstrap.html#section-3",
+    "href": "presentations/pres_bootstrap.html#section-3",
+    "title": "Atelier du réseau sondage",
+    "section": "",
+    "text": "Chauvet, Guillaume. 2007. « Méthodes de Bootstrap en population finie ».\n\n\nEfron, B. 1979. « Bootstrap Methods: Another Look at the Jackknife ». The Annals of Statistics 7 (1): 1‑26. https://doi.org/10.1214/aos/1176344552.\n\n\nGross, Shulamith. 1980. « Median estimation in sample surveys ». Proceedings of the Section on Survey Research Methods, janvier, 181‑84.\n\n\nMcCarthy, P. J., et C. B. Snowden. 1985. The Bootstrap and Finite Population Sampling. DHHS publication. U.S. Department of Health; Human Services, Public Health Service, National Center for Health Statistics. https://books.google.fr/books?id=0qPjzgEACAAJ.\n\n\nRao, J. N. K., et C. F. Jeff Wu. 1988. « Resampling Inference with Complex Survey Data ». Journal of the American Statistical Association 83: 231‑41. https://api.semanticscholar.org/CorpusID:123074779."
+  },
+  {
     "objectID": "presentations/pres_analytique.html#pourquoi",
     "href": "presentations/pres_analytique.html#pourquoi",
     "title": "Atelier du réseau sondage",
