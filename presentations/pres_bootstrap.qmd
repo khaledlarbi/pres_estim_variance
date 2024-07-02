@@ -137,11 +137,11 @@ from: markdown+emoji
 :::
 
 ::: {.fragment}
-- En réitérant $B-1$ fois, on obtient $(\hat{\theta}^*_1, ..., \hat{\theta}^*_n)$
+- En réitérant $B-1$ fois, on obtient $(\hat{\theta}^*_1, ..., \hat{\theta}^*_B)$
 :::
 
 ::: {.fragment}
-- La variance est estimée par $\displaystyle \hat{\mathbb{V}}_\text{boot}(\hat{\theta}) = \frac{1}{n} \sum_{k = 1}^n \left(\hat{\theta}^*_k - \bar{\hat{\theta}^*} \right)^2$
+- La variance est estimée par $\displaystyle \hat{\mathbb{V}}_\text{boot}(\hat{\theta}) = \frac{1}{B} \sum_{k = 1}^{B} \left(\hat{\theta}^*_k - \bar{\hat{\theta}^*} \right)^2$
 :::
 
 ::: {.fragment}
@@ -265,7 +265,7 @@ replicationMax <- function(y, nbBoot = 1000){
 var(replicationMax(y,1000))
 #Estimation de la variance par Monte-Carlo
 var(replicate(10000,
-              max(runif(n,0,10))))
+              max(runif(n,0,20))))
 ```
 
 :::
